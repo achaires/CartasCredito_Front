@@ -19,7 +19,7 @@ export const AdminSidebarItem = ({ title, href, icon = null, links = [] }: Props
   const [showSubmenu, setShowSubmenu] = useState(false);
   return (
     <li className={`sidebar__list-item`}>
-      {links && (
+      {links && links.length > 0 && (
         <a
           href="#"
           className={showSubmenu ? `active` : ``}
@@ -32,13 +32,13 @@ export const AdminSidebarItem = ({ title, href, icon = null, links = [] }: Props
         </a>
       )}
 
-      {links && (
+      {links && links.length < 1 && (
         <Link to={href}>
           {icon !== null && <FontAwesomeIcon className="fa-fw" icon={icon} />} <span>{title}</span>
         </Link>
       )}
 
-      {links && (
+      {links && links.length > 0 && (
         <ul className={showSubmenu ? `active` : ``}>
           {links.map((item, index) => {
             return (
