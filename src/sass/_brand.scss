@@ -1,0 +1,15 @@
+#dashboard {
+  &__brand {
+    background-color: #fff;
+    color: $brandPrimary;
+    font-size: 2rem;
+    font-weight: bolder;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+
+    padding: 30px 60px;
+  }
+}

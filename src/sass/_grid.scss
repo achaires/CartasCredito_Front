@@ -1,0 +1,91 @@
+#dashboard {
+  // background-color: aqua;
+  display: grid;
+  height: 100vh;
+  grid-template-columns: 280px 1fr;
+  grid-template-rows: 70px 70px 1fr 70px;
+  grid-template-areas:
+    "brand brand"
+    "header header"
+    "main main"
+    "footer footer";
+
+  &__brand {
+    grid-area: brand;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 70px;
+    width: 280px;
+    z-index: 10;
+  }
+
+  &__header {
+    position: relative;
+    grid-area: header;
+  }
+
+  &__sidebar {
+    grid-area: sidenav;
+    display: flex;
+    height: 100%;
+    width: 280px;
+    position: fixed;
+    padding-top: 70px;
+    overflow-y: auto;
+    z-index: 2;
+    transform: translateX(-280px);
+    transition: all .6s ease-in-out;
+
+    .sidebar__inner {
+    }
+
+    &.active {
+      transform: translateX(0);
+    }
+  }
+
+  &__main {
+    grid-area: main;
+  }
+
+  &__footer {
+    grid-area: footer;
+  }
+
+  .menu-icon {
+    position: fixed;
+    display: flex;
+    top: 5px;
+    right: 10px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    z-index: 1;
+    cursor: pointer;
+    padding: 12px;
+    background-color: $brandPrimary;
+
+  }
+
+}
+
+@media only screen and (min-width: 46.875rem) {
+  #dashboard {
+    grid-template-columns: 280px 1fr;
+    grid-template-rows: 70px 1fr 70px;
+    grid-template-areas:
+      "brand header"
+      "sidenav main"
+      "sidenav footer"
+    ;
+
+    &__sidebar {
+      transform: translateX(0);
+    }
+
+    .menu-icon {
+      visibility: hidden;
+    }
+  }
+}

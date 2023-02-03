@@ -1,0 +1,31 @@
+html,body {
+  min-height: 100%;
+  width: 100%;
+}
+
+@font-face {
+  font-family: rubik;
+  src: url(@/assets/fonts/rubik/Rubik-VariableFont_wght.ttf);
+}
+
+@font-face {
+  font-family: "Open Sans";
+  src: url(@/assets/fonts/OpenSans/OpenSans-Regular.ttf);
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px rgba($color: #000000, $alpha: 1.0);
+  border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgba($color: #fff, $alpha: 0.5);
+  border-radius: 10px;
+}

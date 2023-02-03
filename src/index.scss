@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+//@import "react-datepicker/dist/react-datepicker.css";
+
+@import './sass/variables';
+@import './sass/common';
+@import './sass/grid';
+@import './sass/header';
+@import './sass/main';
+@import './sass/brand';
+@import './sass/sidebar';
+@import './sass/footer';
+
+.dx-datagrid-content .dx-datagrid-table .dx-row > td, .dx-datagrid-content .dx-datagrid-table .dx-row > tr > td {
+  vertical-align: middle;
+}
