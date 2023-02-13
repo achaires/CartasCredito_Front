@@ -8,6 +8,7 @@ export const rootApi = createApi({
     "Empresas",
     "AgentesAduanales",
     "Bancos",
+    "CartasCredito",
     "Contactos",
     "Comisiones",
     "Compradores",

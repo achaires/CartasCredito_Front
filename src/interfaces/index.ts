@@ -1,6 +1,7 @@
 export * from "./agenteAduanalInterface";
 export * from "./bancoInterface";
 export * from "./breadcrumbInterface";
+export * from "./cartaComercialInterface";
 export * from "./comisionInterface";
 export * from "./compradorInterface";
 export * from "./contactoInterface";

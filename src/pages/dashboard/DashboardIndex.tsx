@@ -1,3 +1,7 @@
 export const DashboardIndex = () => {
-  return <div>DashboardIndex</div>;
+  return (
+    <>
+      <div className="p-6"></div>
+    </>
+  );
 };

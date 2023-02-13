@@ -33,7 +33,8 @@ import { useAppSelector } from "./store";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Login />,
+    //element: <Login />,
+    element: <DashboardIndex />,
   },
   {
     path: "/recuperar-contrasena",
@@ -43,7 +44,7 @@ const router = createBrowserRouter([
     element: <AdminLayout />,
     children: [
       {
-        path: "/dashboard",
+        index: true,
         element: <DashboardIndex />,
       },
       {
