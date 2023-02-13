@@ -1,0 +1,30 @@
+@baseUrl = https://localhost:44391/api
+@bearer = "";
+
+GET {{baseUrl}}/divisiones
+Content-Type: application/json
+
+###
+
+POST {{baseUrl}}/divisiones
+Content-Type: application/json
+
+{
+  "Nombre": "Prueba División",
+  "Descripcion": "Test",
+}
+
+###
+
+PUT {{baseUrl}}/divisiones/2
+Content-Type: application/json
+
+{
+  "Nombre": "División Update New",
+  "Descripcion": "Test Update",
+}
+
+###
+
+DELETE {{baseUrl}}/divisiones/2
+Content-Type: application/json

@@ -13,10 +13,12 @@ specifiers:
   autoprefixer: ^10.4.13
   csstype: ^3.1.1
   flowbite: ^1.6.3
+  flowbite-datepicker: ^1.2.2
   flowbite-react: ^0.3.8
   postcss: ^8.4.21
   react: ^18.2.0
   react-dom: ^18.2.0
+  react-hook-form: ^7.43.1
   react-hot-toast: ^2.4.0
   react-redux: ^8.0.5
   react-router-dom: ^6.8.0
@@ -35,9 +37,11 @@ dependencies:
   '@reduxjs/toolkit': 1.9.2_k4ae6lp43ej6mezo3ztvx6pykq
   csstype: 3.1.1
   flowbite: 1.6.3
+  flowbite-datepicker: 1.2.2
   flowbite-react: 0.3.8_3ljie2ohr3s4bwgcx6u32r5e5q
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
+  react-hook-form: 7.43.1_react@18.2.0
   react-hot-toast: 2.4.0_owo25xnefcwdq3zjgtohz6dbju
   react-redux: 8.0.5_r7hvvldj6g2s5chfsdsflfq664
   react-router-dom: 6.8.0_biqbaboplfbrettd7655fr4n2y
@@ -952,6 +956,12 @@ packages:
     dependencies:
       to-regex-range: 5.0.1
 
+  /flowbite-datepicker/1.2.2:
+    resolution: {integrity: sha512-qOKDVtwkiOa0RrhD3sRtT45H8efAtyLiswuFIAV0UBhWSRYonzL0g1gAZwHiRRKtSmbET/8RQpQXlSEmAgadkg==}
+    dependencies:
+      flowbite: 1.6.3
+    dev: false
+
   /flowbite-react/0.3.8_3ljie2ohr3s4bwgcx6u32r5e5q:
     resolution: {integrity: sha512-IzbpvnUBDXsdf3HflbYv2W1lmTXITizMaX4G0SYoh/GxSp+25E97yNuwdBItwtCacUU1MJLwqIYXeicAxScRfA==}
     peerDependencies:
@@ -1266,6 +1276,15 @@ packages:
       loose-envify: 1.4.0
       react: 18.2.0
       scheduler: 0.23.0
+    dev: false
+
+  /react-hook-form/7.43.1_react@18.2.0:
+    resolution: {integrity: sha512-+s3+s8LLytRMriwwuSqeLStVjRXFGxgjjx2jED7Z+wz1J/88vpxieRQGvJVvzrzVxshZ0BRuocFERb779m2kNg==}
+    engines: {node: '>=12.22.0'}
+    peerDependencies:
+      react: ^16.8.0 || ^17 || ^18
+    dependencies:
+      react: 18.2.0
     dev: false
 
   /react-hot-toast/2.4.0_owo25xnefcwdq3zjgtohz6dbju:

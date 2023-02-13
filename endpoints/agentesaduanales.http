@@ -1,0 +1,37 @@
+@baseUrl = https://localhost:44391/api
+@bearer = "";
+
+GET {{baseUrl}}/AgentesAduanales
+Content-Type: application/json
+
+###
+
+GET {{baseUrl}}/AgentesAduanales/3
+Content-Type: application/json
+
+###
+
+POST {{baseUrl}}/AgentesAduanales
+Content-Type: application/json
+
+{
+  "Nombre": "Prueba Agente Aduanal 2",
+  "Descripcion": "Test",
+  "EmpresaId": 1
+}
+
+###
+
+PUT {{baseUrl}}/AgentesAduanales/2
+Content-Type: application/json
+
+{
+  "Nombre": "Empresa Update New",
+  "Descripcion": "Test Update",
+  "EmpresaId": 1
+}
+
+###
+
+DELETE {{baseUrl}}/AgentesAduanales/2
+Content-Type: application/json

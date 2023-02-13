@@ -1,0 +1,37 @@
+@baseUrl = https://localhost:44391/api
+@bearer = "";
+
+GET {{baseUrl}}/Bancos
+Content-Type: application/json
+
+###
+
+GET {{baseUrl}}/Bancos/2
+Content-Type: application/json
+
+###
+
+POST {{baseUrl}}/Bancos
+Content-Type: application/json
+
+{
+  "Nombre": "Prueba Banco 2",
+  "Descripcion": "Test",
+  "TotalLinea": 580000.60
+}
+
+###
+
+PUT {{baseUrl}}/Bancos/2
+Content-Type: application/json
+
+{
+  "Nombre": "Banco Update New",
+  "Descripcion": "Test Update",
+  "TotalLinea": 645000.25
+}
+
+###
+
+DELETE {{baseUrl}}/Bancos/2
+Content-Type: application/json
