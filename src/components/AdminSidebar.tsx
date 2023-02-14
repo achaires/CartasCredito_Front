@@ -11,7 +11,7 @@ export const AdminSidebar = ({ showSidebar = false }: Props) => {
     <aside id="dashboard__sidebar" className={showSidebar ? "active" : ""}>
       <div className="sidebar__inner">
         <ul className="sidebar__list">
-          <AdminSidebarItem title={`Dashboard`} href={`#`} icon={faChartArea} />
+          {/* <AdminSidebarItem title={`Dashboard`} href={`#`} icon={faChartArea} />
 
           <AdminSidebarItem
             title={`Usuarios`}
@@ -21,7 +21,7 @@ export const AdminSidebar = ({ showSidebar = false }: Props) => {
               { title: "Roles", href: "/negocios" },
               { title: "Registro", href: "/plantas" },
             ]}
-          />
+          /> */}
 
           <AdminSidebarItem
             title={`Catálogos`}
@@ -50,15 +50,15 @@ export const AdminSidebar = ({ showSidebar = false }: Props) => {
             icon={faArrowsToCircle}
             links={[
               { title: "Cartas de Crédito", href: "/operaciones/cartas-de-credito" },
-              { title: "PFE", href: "/operaciones/pfe" },
+              /* { title: "PFE", href: "/operaciones/pfe" },
               { title: "Enmiendas", href: "/operaciones/" },
               { title: "Pagos", href: "/operaciones/" },
               { title: "Comisiones", href: "/operaciones/" },
-              { title: "Bitácora de Movimientos", href: "/operaciones/" },
+              { title: "Bitácora de Movimientos", href: "/operaciones/" }, */
             ]}
           />
 
-          <AdminSidebarItem title="Reportes" href="#" icon={faChartPie} />
+          {/* <AdminSidebarItem title="Reportes" href="#" icon={faChartPie} /> */}
         </ul>
       </div>
     </aside>

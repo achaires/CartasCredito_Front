@@ -1,6 +1,7 @@
 export interface IComision {
   Id: number;
   BancoId: number;
+  TipoComisionId: number;
   Nombre: string;
   Descripcion: string;
   Costo: number;
@@ -16,6 +17,7 @@ export interface IComision {
 
 export interface IComisionInsert {
   BancoId: number;
+  TipoComisionId: number;
   Nombre: string;
   Descripcion?: string | null;
   Costo: number;

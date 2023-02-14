@@ -81,7 +81,7 @@ export const CartasDeCredito = () => {
       <div className="mb-6">
         <Dropdown label="Nueva Carta de Crédito" dismissOnClick={false}>
           <Dropdown.Item onClick={_handleNuevaCartaComercial}>Nueva Carta Comercial</Dropdown.Item>
-          <Dropdown.Item onClick={_handleNuevaCartaStandBy}>Nueva Carta Stand By</Dropdown.Item>
+          {/* <Dropdown.Item onClick={_handleNuevaCartaStandBy}>Nueva Carta Stand By</Dropdown.Item> */}
         </Dropdown>
       </div>
 

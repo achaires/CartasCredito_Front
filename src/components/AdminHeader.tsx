@@ -1,6 +1,7 @@
 import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useRef, useState } from "react";
+// @ts-ignore
 import useOutsideClick from "@/hooks/useOutsideClick";
 
 export const AdminHeader = () => {
@@ -36,6 +37,7 @@ export const AdminHeader = () => {
       </div>
       <div id="header__tools">
         <button
+          // @ts-ignore
           ref={ref}
           className="flex w-48 items-center justify-end gap-4"
           onClick={(e) => {
@@ -51,7 +53,7 @@ export const AdminHeader = () => {
               <a href="#">Mi Cuenta</a>
             </li>
             <li>
-              <a href="#" onClick={_handleLogout} to="#">
+              <a href="#" onClick={_handleLogout}>
                 Logout
               </a>
             </li>

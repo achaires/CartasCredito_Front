@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { toast, Toaster } from "react-hot-toast";
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { RouterProvider, createBrowserRouter, createHashRouter } from "react-router-dom";
 import { AdminLoadingActivity } from "./components";
 import { AdminLayout } from "./layouts/AdminLayout";
 import {
@@ -30,7 +30,7 @@ import { RolesIndex } from "./pages/usuarios/RolesIndex";
 import { UsuariosIndex } from "./pages/usuarios/UsuariosIndex";
 import { useAppSelector } from "./store";
 
-const router = createBrowserRouter([
+const router = createHashRouter([
   {
     path: "/",
     //element: <Login />,
