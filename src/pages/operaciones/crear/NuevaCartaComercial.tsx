@@ -248,7 +248,9 @@ function NuevaCartaComercial() {
             {catCompradores
               ?.filter((b) => b.Activo)
               .map((item, index) => (
-                <option key={index.toString()}>{item.Nombre}</option>
+                <option value={item.Id} key={index.toString()}>
+                  {item.Nombre}
+                </option>
               ))}
           </Select>
         </div>

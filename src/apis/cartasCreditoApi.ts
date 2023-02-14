@@ -13,6 +13,16 @@ export const cartasCreditoApiSlice = rootApi.injectEndpoints({
         };
       },
     }),
+    filtrarCartasComerciales: builder.query<ICartaComercial[], ICartaCreditoFiltrar>({
+      providesTags: ["CartasCredito"],
+      query: (filtros) => {
+        return {
+          url: `/operaciones/filtrar`,
+          method: "POST",
+          body: filtros,
+        };
+      },
+    }),
     addCartaComercial: builder.mutation<IRespuestaFormato, ICartaComercial>({
       invalidatesTags: ["CartasCredito"],
       query: (data) => {
@@ -45,5 +55,11 @@ export const cartasCreditoApiSlice = rootApi.injectEndpoints({
   }),
 });
 
-export const { useGetCartasComercialesQuery, useLazyGetCartasComercialesQuery, useAddCartaComercialMutation, useUpdateCartaComercialMutation, useToggleCartaComercialMutation } =
-  cartasCreditoApiSlice;
+export const {
+  useGetCartasComercialesQuery,
+  useLazyGetCartasComercialesQuery,
+  useAddCartaComercialMutation,
+  useUpdateCartaComercialMutation,
+  useToggleCartaComercialMutation,
+  useLazyFiltrarCartasComercialesQuery,
+} = cartasCreditoApiSlice;
