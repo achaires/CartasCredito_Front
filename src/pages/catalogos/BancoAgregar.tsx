@@ -64,6 +64,23 @@ export const BancoAgregar = () => {
 
   const _handleSubmit = handleSubmit((formData) => {
     if (editId > 0) {
+      updateModel({ ...formData, Id: editId })
+        .unwrap()
+        .then((rsp) => {
+          if (rsp.DataInt && rsp.DataInt > 0) {
+            if (formData.Contactos[0].Nombre && formData.Contactos[0].ApellidoPaterno) {
+              addContacto({
+                ...formData.Contactos[0],
+                ModelNombre: "Banco",
+                ModelId: rsp.DataInt,
+              });
+            }
+
+            if (formData.Contactos[1].Nombre && formData.Contactos[1].ApellidoPaterno) {
+              addContacto({ ...formData.Contactos[1], ModelNombre: "Banco", ModelId: rsp.DataInt });
+            }
+          }
+        });
     } else {
       addModel({ Nombre: formData.Nombre, Descripcion: formData.Descripcion, TotalLinea: formData.TotalLinea })
         .unwrap()
