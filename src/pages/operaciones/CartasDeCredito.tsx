@@ -8,7 +8,7 @@ import { AdminBreadcrumbs, AdminPageHeader } from "@/components";
 import { ICartaCreditoFiltrar } from "@/interfaces";
 import { useAppDispatch } from "@/store";
 import { addToast } from "@/store/uiSlice";
-import { faFileInvoiceDollar } from "@fortawesome/free-solid-svg-icons";
+import { faEye, faFileInvoiceDollar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Dropdown, Label, Select, Spinner, Table, TextInput, Tooltip } from "flowbite-react";
 import { useCallback, useEffect, useState } from "react";
@@ -237,6 +237,13 @@ export const CartasDeCredito = () => {
                     <Table.Cell className="">{item.Banco}</Table.Cell>
                     <Table.Cell className="">{item.Moneda}</Table.Cell>
                     <Table.Cell className="">$ {item.MontoOriginalLC?.toFixed(2)}</Table.Cell>
+                    <Table.Cell>
+                      <Tooltip content="Ver Detalle">
+                        <Button color="dark" size="sm" onClick={(e) => nav(`/operaciones/cartas-de-credito/${item.Id}`)}>
+                          <FontAwesomeIcon icon={faEye} />
+                        </Button>
+                      </Tooltip>
+                    </Table.Cell>
                   </Table.Row>
                 );
               })}

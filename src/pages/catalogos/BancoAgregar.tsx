@@ -71,13 +71,13 @@ export const BancoAgregar = () => {
             if (formData.Contactos[0].Nombre && formData.Contactos[0].ApellidoPaterno) {
               addContacto({
                 ...formData.Contactos[0],
-                ModelNombre: "Banco",
+                ModelNombre: "Bancos",
                 ModelId: rsp.DataInt,
               });
             }
 
             if (formData.Contactos[1].Nombre && formData.Contactos[1].ApellidoPaterno) {
-              addContacto({ ...formData.Contactos[1], ModelNombre: "Banco", ModelId: rsp.DataInt });
+              addContacto({ ...formData.Contactos[1], ModelNombre: "Bancos", ModelId: rsp.DataInt });
             }
           }
         });
@@ -89,13 +89,13 @@ export const BancoAgregar = () => {
             if (formData.Contactos[0].Nombre && formData.Contactos[0].ApellidoPaterno) {
               addContacto({
                 ...formData.Contactos[0],
-                ModelNombre: "Banco",
+                ModelNombre: "Bancos",
                 ModelId: rsp.DataInt,
               });
             }
 
             if (formData.Contactos[1].Nombre && formData.Contactos[1].ApellidoPaterno) {
-              addContacto({ ...formData.Contactos[1], ModelNombre: "Banco", ModelId: rsp.DataInt });
+              addContacto({ ...formData.Contactos[1], ModelNombre: "Bancos", ModelId: rsp.DataInt });
             }
           }
         })
