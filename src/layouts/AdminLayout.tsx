@@ -46,7 +46,7 @@ export const AdminLayout = () => {
         {ui.isLoading && <AdminLoadingActivity />}
         {!ui.isLoading && <Outlet />}
       </main>
-      <footer id="dashboard__footer">&copy; 2023</footer>
+      {/* <footer id="dashboard__footer">&copy; 2023</footer> */}
     </div>
   );
 };

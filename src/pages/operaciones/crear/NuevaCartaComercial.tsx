@@ -94,7 +94,7 @@ function NuevaCartaComercial() {
   return (
     <>
       <div className="p-6">
-        <div className="mb-6">
+        <div className="mb-4">
           <AdminBreadcrumbs
             links={[
               { name: "Operaciones", href: "#" },
@@ -103,7 +103,7 @@ function NuevaCartaComercial() {
             ]}
           />
         </div>
-        <div className="mb-6">
+        <div className="mb-4">
           <AdminPageHeader title="Cartas de Crédito" subtitle="Crear" icon={faFileInvoiceDollar} />
         </div>
 
@@ -344,23 +344,23 @@ function NuevaCartaComercial() {
       </div>
 
       <div className="bg-yellow-50 py-6 px-6">
-        <div className="mb-6">
+        <div className="mb-4">
           <Label value="Descripción de la Mercancía" />
           <Textarea {...register("DescripcionMercancia")} />
         </div>
-        <div className="mb-6">
+        <div className="mb-4">
           <Label value="Descripción de la Carta de Crédito" />
           <Textarea {...register("DescripcionCartaCredito")} />
         </div>
-        <div className="mb-6">
+        <div className="mb-4">
           <Label value="Pago vs Carta de Aceptación" />
           <Textarea {...register("PagoCartaAceptacion")} />
         </div>
-        <div className="mb-6">
+        <div className="mb-4">
           <Label value="Consignación de la Mercancía" />
           <Textarea {...register("ConsignacionMercancia")} />
         </div>
-        <div className="mb-6">
+        <div className="mb-4">
           <Label value="Consideraciones Adicionales" />
           <Textarea {...register("ConsideracionesAdicionales")} />
         </div>

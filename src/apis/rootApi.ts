@@ -21,6 +21,7 @@ export const rootApi = createApi({
     "TiposComision",
     "TiposCobertura",
     "TiposPersonaFiscal",
+    "CartasCreditoDetalle",
   ],
   baseQuery: fetchBaseQuery({
     baseUrl: `${apiHost}/api`,

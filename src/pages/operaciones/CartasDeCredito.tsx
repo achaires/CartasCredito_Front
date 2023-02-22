@@ -8,13 +8,14 @@ import { AdminBreadcrumbs, AdminPageHeader } from "@/components";
 import { ICartaCreditoFiltrar } from "@/interfaces";
 import { useAppDispatch } from "@/store";
 import { addToast } from "@/store/uiSlice";
-import { faEye, faFileInvoiceDollar } from "@fortawesome/free-solid-svg-icons";
+import { faEye, faFileInvoiceDollar, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Dropdown, Label, Select, Spinner, Table, TextInput, Tooltip } from "flowbite-react";
 import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import Datepicker from "react-tailwindcss-datepicker";
+import numeral from "numeral";
 
 export const CartasDeCredito = () => {
   const nav = useNavigate();
@@ -199,12 +200,12 @@ export const CartasDeCredito = () => {
           <Table.Head>
             <Table.HeadCell>No. Carta Crédito</Table.HeadCell>
             <Table.HeadCell>Tipo</Table.HeadCell>
-            <Table.HeadCell>Activo</Table.HeadCell>
+            {/* <Table.HeadCell>Activo</Table.HeadCell> */}
             <Table.HeadCell>Proveedor</Table.HeadCell>
             <Table.HeadCell>Empresa</Table.HeadCell>
             <Table.HeadCell>Banco</Table.HeadCell>
             <Table.HeadCell>Moneda</Table.HeadCell>
-            <Table.HeadCell>Monto</Table.HeadCell>
+            <Table.HeadCell align="right">Monto</Table.HeadCell>
           </Table.Head>
           <Table.Body className="divide-y">
             {cartasCreditoFiltradas.data &&
@@ -213,13 +214,18 @@ export const CartasDeCredito = () => {
                   <Table.Row key={index.toString()}>
                     <Table.Cell className="">{item.NumCartaCredito}</Table.Cell>
                     <Table.Cell className="">{item.TipoCarta}</Table.Cell>
-                    <Table.Cell className="">{item.TipoActivo}</Table.Cell>
+                    {/* <Table.Cell className="">{item.TipoActivo}</Table.Cell> */}
                     <Table.Cell className="">{item.Proveedor}</Table.Cell>
                     <Table.Cell className="">{item.Empresa}</Table.Cell>
                     <Table.Cell className="">{item.Banco}</Table.Cell>
                     <Table.Cell className="">{item.Moneda}</Table.Cell>
-                    <Table.Cell align="right" className="">
-                      $ {item.MontoOriginalLC?.toFixed(2)}
+                    <Table.Cell align="right">{numeral(item.MontoOriginalLC).format("$0,0.00")}</Table.Cell>
+                    <Table.Cell>
+                      <Tooltip content="Ver Detalle">
+                        <Button color="dark" size="sm" onClick={(e) => nav(`/operaciones/cartas-de-credito/${item.Id}`)}>
+                          <FontAwesomeIcon icon={faMagnifyingGlass} />
+                        </Button>
+                      </Tooltip>
                     </Table.Cell>
                   </Table.Row>
                 );
@@ -231,16 +237,16 @@ export const CartasDeCredito = () => {
                   <Table.Row key={index.toString()}>
                     <Table.Cell className="">{item.NumCartaCredito}</Table.Cell>
                     <Table.Cell className="">{item.TipoCarta}</Table.Cell>
-                    <Table.Cell className="">{item.TipoActivo}</Table.Cell>
+                    {/* <Table.Cell className="">{item.TipoActivo}</Table.Cell> */}
                     <Table.Cell className="">{item.Proveedor}</Table.Cell>
                     <Table.Cell className="">{item.Empresa}</Table.Cell>
                     <Table.Cell className="">{item.Banco}</Table.Cell>
                     <Table.Cell className="">{item.Moneda}</Table.Cell>
-                    <Table.Cell className="">$ {item.MontoOriginalLC?.toFixed(2)}</Table.Cell>
+                    <Table.Cell align="right">{numeral(item.MontoOriginalLC).format("$0,0.00")}</Table.Cell>
                     <Table.Cell>
                       <Tooltip content="Ver Detalle">
                         <Button color="dark" size="sm" onClick={(e) => nav(`/operaciones/cartas-de-credito/${item.Id}`)}>
-                          <FontAwesomeIcon icon={faEye} />
+                          <FontAwesomeIcon icon={faMagnifyingGlass} />
                         </Button>
                       </Tooltip>
                     </Table.Cell>
