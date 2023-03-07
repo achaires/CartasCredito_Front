@@ -5,3 +5,8 @@ export * from "./AdminLoadingActivity";
 export * from "./AdminPageHeader";
 export * from "./AdminSidebar";
 export * from "./AdminSidebarItem";
+export * from "./CartaComisionModal";
+export * from "./CartaPagoManualModal";
+export * from "./CartaPagoModal";
+export * from "./CartaSwiftModal";
+export * from "./ContactoForm";

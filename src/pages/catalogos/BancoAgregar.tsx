@@ -1,32 +1,20 @@
 import { useAddBancoMutation, useLazyGetBancoQuery, useUpdateBancoMutation } from "@/apis/bancosApi";
-import { useAddContactoMutation } from "@/apis/contactosApi";
-import { AdminBreadcrumbs, AdminPageHeader } from "@/components";
+import { useAddContactoMutation, useToggleContactoMutation } from "@/apis/contactosApi";
+import { AdminBreadcrumbs, AdminPageHeader, ContactoForm } from "@/components";
 import { IContactoInsert } from "@/interfaces";
 import { useAppDispatch } from "@/store";
 import { addToast } from "@/store/uiSlice";
 import { faBank, faCircleArrowLeft, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, Label, Textarea, TextInput } from "flowbite-react";
+import { Button, Card, Label, Textarea, TextInput } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
-
-type TContactoFormData = {
-  Nombre: string;
-  ApellidoPaterno: string;
-  ApellidoMaterno: string;
-  Telefono: string;
-  Celular: string;
-  Email: string;
-  Fax: string;
-  Descripcion: string;
-};
 
 type TInsertFormData = {
   Nombre: string;
   TotalLinea: number;
   Descripcion: string;
-  Contactos: Array<IContactoInsert>;
 };
 
 export const BancoAgregar = () => {
@@ -43,20 +31,27 @@ export const BancoAgregar = () => {
 
   const dispatch = useAppDispatch();
 
-  const [getBancoDetalle, { isSuccess: bancoDetalleSuccess, isError: bancoDetalleError }] = useLazyGetBancoQuery();
+  const [getBancoDetalle, { data: bancoDetalle, isSuccess: bancoDetalleSuccess, isError: bancoDetalleError }] = useLazyGetBancoQuery();
   const [addModel, { data: addModelData, isSuccess: isAddModelSuccess, isLoading: isAddModelLoading, isError: isAddModelError, error: addModelError }] = useAddBancoMutation();
   const [updateModel, { data: updModelData, isSuccess: isUpdModelSuccess, isLoading: isUpdModelLoading, isError: isUpdModelError, error: updModelError }] =
     useUpdateBancoMutation();
-  const [addContacto, { error: addContactoError, data: rspContacto, isSuccess: addContactSuccess }] = useAddContactoMutation();
+  const [toggleContacto] = useToggleContactoMutation();
 
   const [editId, setEditId] = useState(0);
   const [verb, setVerb] = useState<"Agregar" | "Editar">("Agregar");
+  const [showAddContactForm, setShowAddContactForm] = useState(false);
 
   useEffect(() => {
     if (isAddModelSuccess) {
       dispatch(addToast({ message: "Registro agregado correctamente", title: "Registro agregado", type: "success" }));
+      _handleBack();
     }
-  }, [addModelData, isAddModelSuccess, isAddModelLoading, isAddModelError, addModelError, addContactSuccess]);
+
+    if (isUpdModelSuccess) {
+      dispatch(addToast({ message: "Registro actualizado correctamente", title: "Registro actualizado", type: "success" }));
+      _handleBack();
+    }
+  }, [addModelData, isAddModelSuccess, isUpdModelSuccess, isAddModelLoading, isAddModelError, addModelError]);
 
   const _handleBack = () => {
     nav("/catalogos/bancos");
@@ -64,44 +59,9 @@ export const BancoAgregar = () => {
 
   const _handleSubmit = handleSubmit((formData) => {
     if (editId > 0) {
-      updateModel({ ...formData, Id: editId })
-        .unwrap()
-        .then((rsp) => {
-          if (rsp.DataInt && rsp.DataInt > 0) {
-            if (formData.Contactos[0].Nombre && formData.Contactos[0].ApellidoPaterno) {
-              addContacto({
-                ...formData.Contactos[0],
-                ModelNombre: "Bancos",
-                ModelId: rsp.DataInt,
-              });
-            }
-
-            if (formData.Contactos[1].Nombre && formData.Contactos[1].ApellidoPaterno) {
-              addContacto({ ...formData.Contactos[1], ModelNombre: "Bancos", ModelId: rsp.DataInt });
-            }
-          }
-        });
+      updateModel({ ...formData, Id: editId });
     } else {
-      addModel({ Nombre: formData.Nombre, Descripcion: formData.Descripcion, TotalLinea: formData.TotalLinea })
-        .unwrap()
-        .then((rsp) => {
-          if (rsp.DataInt && rsp.DataInt > 0) {
-            if (formData.Contactos[0].Nombre && formData.Contactos[0].ApellidoPaterno) {
-              addContacto({
-                ...formData.Contactos[0],
-                ModelNombre: "Bancos",
-                ModelId: rsp.DataInt,
-              });
-            }
-
-            if (formData.Contactos[1].Nombre && formData.Contactos[1].ApellidoPaterno) {
-              addContacto({ ...formData.Contactos[1], ModelNombre: "Bancos", ModelId: rsp.DataInt });
-            }
-          }
-        })
-        .then(() => {
-          nav("/catalogos/bancos");
-        });
+      addModel({ Nombre: formData.Nombre, Descripcion: formData.Descripcion, TotalLinea: formData.TotalLinea });
     }
   });
 
@@ -115,9 +75,6 @@ export const BancoAgregar = () => {
           setValue("Nombre", rsp.Nombre);
           setValue("TotalLinea", rsp.TotalLinea);
           setValue("Descripcion", rsp.Descripcion);
-          if (rsp.Contactos) {
-            setValue("Contactos", rsp.Contactos);
-          }
         })
         .catch((err) => {
           console.error(err);
@@ -129,16 +86,6 @@ export const BancoAgregar = () => {
       setVerb("Agregar");
     };
   }, [routeParams]);
-
-  /* const _handleSubmit = () => {
-    if (nombre.length < 2) dispatch(addToast({ message: "Ingrese un nombre válido", title: "Error", type: "error" }));
-
-    addModel({
-      Nombre: nombre,
-      TotalLinea: totalLinea,
-      Descripcion: descripcion,
-    });
-  }; */
 
   return (
     <>
@@ -185,90 +132,83 @@ export const BancoAgregar = () => {
                 </div>
               </div>
             </div>
-            <hr />
-            <div className="my-6">
-              <h4 className="text-sm font-medium mb-6">CONTACTOS</h4>
-              <div className="mb-6">
-                <div className="md:grid md:grid-cols-12 md:gap-6 mb-2">
-                  <div className="md:col-span-4">
-                    <Label value="Nombre (s)" />
-                    <TextInput {...register(`Contactos.${0}.Nombre`)} />
-                  </div>
-                  <div className="md:col-span-4">
-                    <Label value="Apellido Paterno" />
-                    <TextInput {...register(`Contactos.${0}.ApellidoPaterno`)} />
-                  </div>
-                  <div className="md:col-span-4">
-                    <Label value="Apellido Materno" />
-                    <TextInput {...register(`Contactos.${0}.ApellidoMaterno`)} />
-                  </div>
-                </div>
-                <div className="md:grid md:grid-cols-12 md:gap-6 mb-2">
-                  <div className="md:col-span-3">
-                    <Label value="Email" />
-                    <TextInput {...register(`Contactos.${0}.Email`)} />
-                  </div>
-                  <div className="md:col-span-3">
-                    <Label value="Celular" />
-                    <TextInput {...register(`Contactos.${0}.Celular`)} />
-                  </div>
-                  <div className="md:col-span-3">
-                    <Label value="Teléfono" />
-                    <TextInput {...register(`Contactos.${0}.Telefono`)} />
-                  </div>
-                  <div className="md:col-span-3">
-                    <Label value="Fax" />
-                    <TextInput {...register(`Contactos.${0}.Fax`)} />
-                  </div>
-                </div>
-                <div>
-                  <Label value="Notas" />
-                  <Textarea placeholder="" required={false} rows={4} {...register(`Contactos.${0}.Descripcion`)} />
-                </div>
-              </div>
-              <div className="mb-6">
-                <div className="md:grid md:grid-cols-12 md:gap-6 mb-2">
-                  <div className="md:col-span-4">
-                    <Label value="Nombre (s)" />
-                    <TextInput {...register(`Contactos.${1}.Nombre`)} />
-                  </div>
-                  <div className="md:col-span-4">
-                    <Label value="Apellido Paterno" />
-                    <TextInput {...register(`Contactos.${1}.ApellidoPaterno`)} />
-                  </div>
-                  <div className="md:col-span-4">
-                    <Label value="Apellido Materno" />
-                    <TextInput {...register(`Contactos.${1}.ApellidoMaterno`)} />
-                  </div>
-                </div>
-                <div className="md:grid md:grid-cols-12 md:gap-6 mb-2">
-                  <div className="md:col-span-3">
-                    <Label value="Email" />
-                    <TextInput {...register(`Contactos.${1}.Email`)} />
-                  </div>
-                  <div className="md:col-span-3">
-                    <Label value="Celular" />
-                    <TextInput {...register(`Contactos.${1}.Celular`)} />
-                  </div>
-                  <div className="md:col-span-3">
-                    <Label value="Teléfono" />
-                    <TextInput {...register(`Contactos.${1}.Telefono`)} />
-                  </div>
-                  <div className="md:col-span-3">
-                    <Label value="Fax" />
-                    <TextInput {...register(`Contactos.${1}.Fax`)} />
-                  </div>
-                </div>
-                <div>
-                  <Label value="Notas" />
-                  <Textarea placeholder="" required={false} rows={4} {...register(`Contactos.${1}.Descripcion`)} />
-                </div>
-              </div>
-            </div>
-            <div>
-              <Button type="submit">Guardar</Button>
+            <div className="mb-6 md:flex">
+              <Button className="bg-brandDark hover:bg-brandPrimary" type="submit">
+                Guardar
+              </Button>
             </div>
           </form>
+          {bancoDetalle && bancoDetalle.Id > 0 && (
+            <>
+              <hr />
+              <div className="my-6">
+                <h4 className="text-sm font-medium mb-2">CONTACTOS</h4>
+                <Button size="xs" color="dark" className="mb-6" onClick={(e) => setShowAddContactForm(true)}>
+                  Agregar Contacto
+                </Button>
+                {showAddContactForm && (
+                  <ContactoForm
+                    ModelNombre="Bancos"
+                    ModelId={bancoDetalle?.Id}
+                    onCancel={() => {
+                      setShowAddContactForm(false);
+                    }}
+                  />
+                )}
+
+                {bancoDetalle &&
+                  bancoDetalle.Contactos &&
+                  bancoDetalle.Contactos.length > 0 &&
+                  bancoDetalle.Contactos.filter((c) => c.Activo).map((item, index) => (
+                    <Card key={index.toString()} className="mb-6">
+                      <div>
+                        <div className="md:grid md:grid-cols-12 md:gap-6 mb-2">
+                          <div className="md:col-span-4">
+                            <Label value="Nombre (s)" />
+                            <TextInput defaultValue={item.Nombre ? item.Nombre : ""} disabled />
+                          </div>
+                          <div className="md:col-span-4">
+                            <Label value="Apellido Paterno" />
+                            <TextInput defaultValue={item.ApellidoPaterno ? item.ApellidoPaterno : ""} disabled />
+                          </div>
+                          <div className="md:col-span-4">
+                            <Label value="Apellido Materno" />
+                            <TextInput defaultValue={item.ApellidoMaterno ? item.ApellidoMaterno : ""} disabled />
+                          </div>
+                        </div>
+                        <div className="md:grid md:grid-cols-12 md:gap-6 mb-2">
+                          <div className="md:col-span-3">
+                            <Label value="Email" />
+                            <TextInput defaultValue={item.Email ? item.Email : ""} disabled />
+                          </div>
+                          <div className="md:col-span-3">
+                            <Label value="Celular" />
+                            <TextInput defaultValue={item.Celular ? item.Celular : ""} disabled />
+                          </div>
+                          <div className="md:col-span-3">
+                            <Label value="Teléfono" />
+                            <TextInput defaultValue={item.Telefono ? item.Telefono : ""} disabled />
+                          </div>
+                          <div className="md:col-span-3">
+                            <Label value="Fax" />
+                            <TextInput defaultValue={item.Fax ? item.Fax : ""} disabled />
+                          </div>
+                        </div>
+                        <div className="mb-2">
+                          <Label value="Notas" />
+                          <Textarea defaultValue={item.Descripcion} required={false} rows={4} disabled className="text-sm" />
+                        </div>
+                        <div>
+                          <Button color="failure" size="xs" onClick={(e) => toggleContacto(item.Id)}>
+                            Eliminar
+                          </Button>
+                        </div>
+                      </div>
+                    </Card>
+                  ))}
+              </div>
+            </>
+          )}
         </div>
       </div>
     </>

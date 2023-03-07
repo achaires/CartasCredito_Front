@@ -1,45 +1,59 @@
 import { useLazyGetCartaComercialQuery, useUpdateCartaComercialEstatusMutation } from "@/apis/cartasCreditoApi";
-import { AdminBreadcrumbs, AdminPageHeader } from "@/components";
-import { ICartaComercial } from "@/interfaces";
+import { AdminBreadcrumbs, AdminPageHeader, CartaSwiftModal } from "@/components";
 import { useAppDispatch } from "@/store";
 import { addToast } from "@/store/uiSlice";
-import {
-  faFileInvoiceDollar,
-  faCircleArrowLeft,
-  faPencil,
-  faUpload,
-  faDollarSign,
-  faPlusCircle,
-  faCheckCircle,
-  faCalendarAlt,
-  faPrint,
-} from "@fortawesome/free-solid-svg-icons";
+import { faFileInvoiceDollar, faCircleArrowLeft, faUpload, faDollarSign, faCheckCircle, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Alert, Button, Label, Modal, TextInput, Textarea } from "flowbite-react";
-import React, { useCallback, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import numeral from "numeral";
+import { useCallback, useEffect, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 type EstatusButtonProps = {
   estatus: number;
 };
 
-const EstatusButton = ({ estatus }: EstatusButtonProps) => {
-  var btn = <Button className="bg-brandPrimary">Registrada</Button>;
+export const EstatusButton = ({ estatus }: EstatusButtonProps) => {
+  var btn = (
+    <Button size="sm" className="bg-brandPrimary">
+      Registrada
+    </Button>
+  );
   switch (estatus) {
     case 1:
-      btn = <Button className="bg-brandPrimary">Registrada</Button>;
+      btn = (
+        <Button size="sm" className="bg-brandPrimary">
+          Registrada
+        </Button>
+      );
       break;
     case 2:
-      btn = <Button color="dark">Emitida</Button>;
+      btn = (
+        <Button size="sm" color="dark">
+          Emitida
+        </Button>
+      );
       break;
     case 3:
-      btn = <Button color="warning">Enmienda Pendiente</Button>;
+      btn = (
+        <Button size="sm" color="warning">
+          Enmienda Pendiente
+        </Button>
+      );
       break;
     case 4:
-      btn = <Button color="success">Pagada</Button>;
+      btn = (
+        <Button size="sm" color="success">
+          Pagada
+        </Button>
+      );
       break;
     case 5:
-      btn = <Button className="bg-brandPrimary">Registrada</Button>;
+      btn = (
+        <Button size="sm" className="bg-brandPrimary">
+          Registrada
+        </Button>
+      );
       break;
   }
 
@@ -51,6 +65,7 @@ export const CartasDeCreditoDetalle = () => {
   const nav = useNavigate();
 
   const [showCartaPagadaModal, setShowCartaPagadaModal] = useState(false);
+  const [showSwiftModal, setShowSwiftModal] = useState(false);
 
   const dispatch = useAppDispatch();
 
@@ -58,7 +73,7 @@ export const CartasDeCreditoDetalle = () => {
   const [updateEstatus, { data: updatedCartaCredito, isSuccess: updateEstatusSuccess, isError: updateEstatusError }] = useUpdateCartaComercialEstatusMutation();
 
   const _handleBack = useCallback(() => {
-    nav(-1);
+    nav(`/operaciones/cartas-de-credito`);
   }, []);
 
   useEffect(() => {
@@ -112,15 +127,21 @@ export const CartasDeCreditoDetalle = () => {
 
       <div className="md:grid md:grid-cols-12 md:gap-4 mb-6 px-6">
         <div className="col-span-3">{cartaCreditoDetalle && cartaCreditoDetalle.Estatus && <EstatusButton estatus={cartaCreditoDetalle.Estatus} />}</div>
-        <div className="col-span-3 text-right">
-          {/* @if (Model.DocumentoSwift != "")
+        {cartaCreditoDetalle && cartaCreditoDetalle.DocumentoSwift !== "" && (
+          <div className="col-span-9 text-right">
+            <a target="_blank" className="bg-brandPrimary p-2 rounded text-white" href={cartaCreditoDetalle.DocumentoSwift}>
+              Descargar Archivo Swift
+            </a>
+          </div>
+        )}
+
+        {/* @if (Model.DocumentoSwift != "")
                     {
                         <a target="_blank" className="btn btn-dark" href="@Utility.HostUrl/Uploads/@Model.DocumentoSwift">Descargar Archivo Swift</a>
                     } */}
-          {/* <button type="submit" className="btn btn-dark">
+        {/* <button type="submit" className="btn btn-dark">
             Clonar
           </button> */}
-        </div>
       </div>
 
       <form className="pb-24">
@@ -183,31 +204,31 @@ export const CartasDeCreditoDetalle = () => {
           </div>
           <div className="md:col-span-3">
             <Label value="Costo de Apertura:" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle?.CostoApertura} disabled />
+            <TextInput type="text" defaultValue={numeral(cartaCreditoDetalle?.CostoApertura).format("$0,0.00")} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Monto Orden de Compra:" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle?.MontoOrdenCompra} disabled />
+            <TextInput type="text" defaultValue={numeral(cartaCreditoDetalle?.MontoOrdenCompra).format("$0,0.00")} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Monto Original L/C:" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle?.MontoOriginalLC} disabled />
+            <TextInput type="text" defaultValue={numeral(cartaCreditoDetalle?.MontoOriginalLC).format("$0,0.00")} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Pagos Efectuados:" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle?.PagosEfectuados} disabled />
+            <TextInput type="text" defaultValue={numeral(cartaCreditoDetalle?.PagosEfectuados).format("$0,0.00")} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Pagos Programados:" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle?.PagosProgramados} disabled />
+            <TextInput type="text" defaultValue={numeral(cartaCreditoDetalle?.PagosProgramados).format("$0,0.00")} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Monto Dispuesto:" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle?.MontoDispuesto} disabled />
+            <TextInput type="text" defaultValue={numeral(cartaCreditoDetalle?.MontoDispuesto).format("$0,0.00")} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Saldo Insoluto:" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle?.SaldoInsoluto} disabled />
+            <TextInput type="text" defaultValue={numeral(cartaCreditoDetalle?.SaldoInsoluto).format("$0,0.00")} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Fecha de Apertura:" />
@@ -311,23 +332,32 @@ export const CartasDeCreditoDetalle = () => {
       </form>
 
       <div id="controles-footer" className="fixed bottom-0 left-0 w-full bg-brandPrimary p-6 text-white flex items-center justify-center gap-12">
-        <a href="#" className="flex flex-col items-center justify-around gap-2">
+        {/* <a href="#" className="flex flex-col items-center justify-around gap-2">
           <FontAwesomeIcon icon={faPencil} className="h-6" />
           <span className="text-sm">Editar Solicitud</span>
         </a>
-        <a href="#" className="flex flex-col items-center justify-around gap-2">
-          <FontAwesomeIcon icon={faUpload} className="h-6" />
-          <span className="text-sm">Archivo Swift</span>
-        </a>
+        */}
+        {cartaCreditoDetalle && cartaCreditoDetalle.Estatus && Number(cartaCreditoDetalle.Estatus) === 1 && (
+          <a
+            href="#"
+            onClick={(e) => {
+              e.preventDefault();
+              setShowSwiftModal(true);
+            }}
+            className="flex flex-col items-center justify-around gap-2">
+            <FontAwesomeIcon icon={faUpload} className="h-6" />
+            <span className="text-sm">Archivo Swift</span>
+          </a>
+        )}
 
-        <a href="#" className="flex flex-col items-center justify-around gap-2">
+        <Link to={`/operaciones/cartas-de-credito/${cartaCreditoDetalle?.Id}/pagos`} className="flex flex-col items-center justify-around gap-2">
           <FontAwesomeIcon icon={faDollarSign} className="h-6" />
           <span className="text-sm">Pagos</span>
-        </a>
-        <a href="#" className="flex flex-col items-center justify-around gap-2">
+        </Link>
+        <Link to={`/operaciones/cartas-de-credito/${cartaCreditoDetalle?.Id}/comisiones`} className="flex flex-col items-center justify-around gap-2">
           <FontAwesomeIcon icon={faPlusCircle} className="h-6" />
           <span className="text-sm">Comisiones</span>
-        </a>
+        </Link>
         <a
           href="#"
           onClick={(e) => {
@@ -338,15 +368,19 @@ export const CartasDeCreditoDetalle = () => {
           <FontAwesomeIcon icon={faCheckCircle} className="h-6" />
           <span className="text-sm">Registrar Pagada</span>
         </a>
-        <a href="#" className="flex flex-col items-center justify-around gap-2">
+        {/* <a href="#" className="flex flex-col items-center justify-around gap-2">
           <FontAwesomeIcon icon={faCalendarAlt} className="h-6" />
           <span className="text-sm">Enmiendas</span>
         </a>
         <a href="#" className="flex flex-col items-center justify-around gap-2">
           <FontAwesomeIcon icon={faPrint} className="h-6" />
           <span className="text-sm">Imprimir</span>
-        </a>
+        </a> */}
       </div>
+
+      {cartaCreditoDetalle && cartaCreditoDetalle.Id && (
+        <CartaSwiftModal show={showSwiftModal} handleClose={() => setShowSwiftModal(false)} cartaCreditoId={cartaCreditoDetalle.Id} />
+      )}
 
       <Modal dismissible={true} show={showCartaPagadaModal} onClose={() => setShowCartaPagadaModal(false)}>
         <Modal.Header>Confirmar</Modal.Header>

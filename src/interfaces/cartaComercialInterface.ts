@@ -1,3 +1,6 @@
+import { ICartaCreditoComision } from "./cartaComisionesInterface";
+import { IPago } from "./cartaPagoInterface";
+
 export interface ICartaComercial {
   Consecutive?: number;
   Id?: string;
@@ -62,6 +65,8 @@ export interface ICartaComercial {
   CreadoPor?: string;
   Estatus?: number;
   Activo?: boolean;
+  Pagos?: IPago[] | null;
+  Comisiones?: ICartaCreditoComision[] | null;
 }
 
 export interface ICartaCreditoFiltrar {
@@ -76,4 +81,10 @@ export interface ICartaCreditoFiltrar {
   Estatus?: string | null;
   FechaInicio?: string | null;
   FechaFin?: string | null;
+}
+
+export interface ISwiftNumCartaRequest {
+  CartaCreditoId: string;
+  NumCarta: string;
+  SwiftFile: FileList;
 }

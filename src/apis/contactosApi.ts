@@ -8,7 +8,7 @@ export const contactosApiSlice = rootApi.injectEndpoints({
       query: () => `/contactos`,
     }),
     addContacto: builder.mutation<IRespuestaFormato, IContactoInsert>({
-      invalidatesTags: ["Contactos", "AgentesAduanales"],
+      invalidatesTags: ["Contactos", "AgentesAduanales", "Bancos"],
       query: (data) => {
         return {
           url: `/contactos`,
@@ -18,7 +18,7 @@ export const contactosApiSlice = rootApi.injectEndpoints({
       },
     }),
     updateContacto: builder.mutation<IRespuestaFormato, IContactoUpdate>({
-      invalidatesTags: ["Contactos", "AgentesAduanales"],
+      invalidatesTags: ["Contactos", "AgentesAduanales", "Bancos"],
       query: (data) => {
         return {
           url: `/contactos/${data.Id}`,
@@ -28,7 +28,7 @@ export const contactosApiSlice = rootApi.injectEndpoints({
       },
     }),
     toggleContacto: builder.mutation<IRespuestaFormato, number>({
-      invalidatesTags: ["Contactos"],
+      invalidatesTags: ["Contactos", "Bancos"],
       query: (data) => {
         return {
           url: `/contactos/${data.toString()}`,

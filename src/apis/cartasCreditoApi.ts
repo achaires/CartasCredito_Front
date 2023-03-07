@@ -1,4 +1,4 @@
-import { ICartaComercial, ICartaCreditoFiltrar, IRespuestaFormato } from "@/interfaces";
+import { ICartaComercial, ICartaCreditoFiltrar, IRespuestaFormato, ISwiftNumCartaRequest } from "@/interfaces";
 import { rootApi } from "./rootApi";
 
 export const cartasCreditoApiSlice = rootApi.injectEndpoints({
@@ -7,9 +7,9 @@ export const cartasCreditoApiSlice = rootApi.injectEndpoints({
       providesTags: ["CartasCredito"],
       query: (data) => {
         return {
-          url: `/cartascredito`,
-          method: "GET",
-          params: data,
+          url: `/operaciones/filtrar`,
+          method: "POST",
+          body: data,
         };
       },
     }),
@@ -71,6 +71,26 @@ export const cartasCreditoApiSlice = rootApi.injectEndpoints({
         };
       },
     }),
+    addSwiftNumCarta: builder.mutation<IRespuestaFormato, ISwiftNumCartaRequest>({
+      query: (data) => {
+        let fd = new FormData();
+        fd.append("CartaCreditoId", data.CartaCreditoId);
+        fd.append("NumCarta", data.NumCarta);
+
+        if (data.SwiftFile.length > 0) {
+          fd.append("SwiftFile", data.SwiftFile[0]);
+        }
+
+        return {
+          url: `/operaciones/adjuntarswift/${data.CartaCreditoId}`,
+          method: "POST",
+          body: fd,
+          /* headers: {
+            "content-type": "multipart/form-data",
+          }, */
+        };
+      },
+    }),
   }),
 });
 
@@ -83,4 +103,5 @@ export const {
   useLazyFiltrarCartasComercialesQuery,
   useLazyGetCartaComercialQuery,
   useUpdateCartaComercialEstatusMutation,
+  useAddSwiftNumCartaMutation,
 } = cartasCreditoApiSlice;

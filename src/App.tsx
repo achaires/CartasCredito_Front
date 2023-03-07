@@ -22,7 +22,7 @@ import {
 } from "./pages/catalogos";
 import { DashboardIndex } from "./pages/dashboard/DashboardIndex";
 import { Login } from "./pages/Login";
-import { CartasDeCredito, CartasDeCreditoDetalle, PFE } from "./pages/operaciones";
+import { CartasCreditoComisiones, CartasDeCredito, CartasDeCreditoDetalle, CartasDeCreditoPagos, PFE } from "./pages/operaciones";
 import NuevaCartaComercial from "./pages/operaciones/crear/NuevaCartaComercial";
 import { NuevaCartaStandBy } from "./pages/operaciones/crear/NuevaCartaStandBy";
 import { Recover } from "./pages/Recover";
@@ -141,7 +141,20 @@ const router = createHashRouter([
               },
               {
                 path: ":cartaCreditoId",
-                element: <CartasDeCreditoDetalle />,
+                children: [
+                  {
+                    index: true,
+                    element: <CartasDeCreditoDetalle />,
+                  },
+                  {
+                    path: "pagos",
+                    element: <CartasDeCreditoPagos />,
+                  },
+                  {
+                    path: "comisiones",
+                    element: <CartasCreditoComisiones />,
+                  },
+                ],
               },
               {
                 path: "nueva-carta-comercial",

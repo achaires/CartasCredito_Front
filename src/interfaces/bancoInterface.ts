@@ -6,10 +6,10 @@ export interface IBanco {
   Descripcion: string;
   TotalLinea: number;
   Activo: boolean;
-  CreadoPor: string;
-  Creado: string;
-  Actualizado: string;
-  Eliminado: string;
+  CreadoPor?: string;
+  Creado?: string;
+  Actualizado?: string;
+  Eliminado?: string;
   Contactos?: IContacto[];
 }
 

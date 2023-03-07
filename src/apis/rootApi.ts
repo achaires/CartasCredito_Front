@@ -22,16 +22,20 @@ export const rootApi = createApi({
     "TiposCobertura",
     "TiposPersonaFiscal",
     "CartasCreditoDetalle",
+    "Pagos",
+    "CartaCreditoComisiones",
   ],
   baseQuery: fetchBaseQuery({
     baseUrl: `${apiHost}/api`,
     credentials: "same-origin",
-    prepareHeaders: (headers, { getState }) => {
-      headers.set("Accept", "application/json");
-      headers.set("Content-Type", "application/json");
+    /* prepareHeaders: (headers, { getState }) => {
+      if (!headers.has("content-type")) {
+        headers.set("accept", "application/json");
+        headers.set("content-type", "application/json");
+      }
 
       return headers;
-    },
+    }, */
   }),
   endpoints: (builder) => ({}),
 });

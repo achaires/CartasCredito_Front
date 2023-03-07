@@ -13,13 +13,25 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Dropdown, Label, Select, Spinner, Table, TextInput, Tooltip } from "flowbite-react";
 import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Datepicker from "react-tailwindcss-datepicker";
 import numeral from "numeral";
+
+const currentDate = new Date();
+const firstMonthDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
 
 export const CartasDeCredito = () => {
   const nav = useNavigate();
   const dispatch = useAppDispatch();
+
+  const [dateStart, setDateStart] = useState(firstMonthDate);
+  const [dateEnd, setDateEnd] = useState(currentDate);
+
+  // @ts-ignore
+  const _handleDateChange = (newValue) => {
+    setDateStart(newValue.startDate);
+    setDateEnd(newValue.endDate);
+  };
 
   const {
     reset,
@@ -51,7 +63,8 @@ export const CartasDeCredito = () => {
       return;
     }
 
-    filtrarCartasCredito(formData);
+    // @ts-ignore
+    filtrarCartasCredito({ ...formData, FechaInicio: dateStart, FechaFin: dateEnd });
   });
 
   useEffect(() => {
@@ -87,16 +100,16 @@ export const CartasDeCredito = () => {
       </div>
 
       <div className="mb-6 md:grid md:grid-cols-12 md:gap-4">
-        {/* <div className="md:col-span-3">
+        <div className="md:col-span-3">
           <Label value="Rango de Fecha" />
           <Datepicker
             displayFormat="YYYY-MM-DD"
-            value={dateFilters}
+            value={{ startDate: dateStart, endDate: dateEnd }}
             onChange={_handleDateChange}
             showFooter={true}
             configs={{ footer: { cancel: "Cancelar", apply: "Aplicar" } }}
           />
-        </div> */}
+        </div>
         <div className="md:col-span-3">
           <Label value="No. Carta Crédito" />
           <TextInput {...register("NumCarta")} />
@@ -222,9 +235,10 @@ export const CartasDeCredito = () => {
                     <Table.Cell align="right">{numeral(item.MontoOriginalLC).format("$0,0.00")}</Table.Cell>
                     <Table.Cell>
                       <Tooltip content="Ver Detalle">
-                        <Button color="dark" size="sm" onClick={(e) => nav(`/operaciones/cartas-de-credito/${item.Id}`)}>
+                        <Link to={`/operaciones/cartas-de-credito/${item.Id}`}>Detalle</Link>
+                        {/* <Button color="dark" size="sm" onClick={(e) => nav(`/operaciones/cartas-de-credito/${item.Id}`)}>
                           <FontAwesomeIcon icon={faMagnifyingGlass} />
-                        </Button>
+                        </Button> */}
                       </Tooltip>
                     </Table.Cell>
                   </Table.Row>
@@ -245,9 +259,10 @@ export const CartasDeCredito = () => {
                     <Table.Cell align="right">{numeral(item.MontoOriginalLC).format("$0,0.00")}</Table.Cell>
                     <Table.Cell>
                       <Tooltip content="Ver Detalle">
-                        <Button color="dark" size="sm" onClick={(e) => nav(`/operaciones/cartas-de-credito/${item.Id}`)}>
+                        <Link to={`/operaciones/cartas-de-credito/${item.Id}`}>Detalle</Link>
+                        {/* <Button color="dark" size="sm" onClick={(e) => nav(`/operaciones/cartas-de-credito/${item.Id}`)}>
                           <FontAwesomeIcon icon={faMagnifyingGlass} />
-                        </Button>
+                        </Button> */}
                       </Tooltip>
                     </Table.Cell>
                   </Table.Row>
