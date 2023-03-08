@@ -2,6 +2,7 @@ import { useAddMonedaMutation, useGetMonedasQuery, useToggleMonedaMutation, useU
 import { AdminBreadcrumbs, AdminPageHeader } from "@/components";
 import { useAppDispatch } from "@/store";
 import { addToast } from "@/store/uiSlice";
+import { apiHost } from "@/utils/apiConfig";
 import { faCoins, faPencil, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Label, Modal, Select, Table, Textarea, TextInput, ToggleSwitch, Tooltip } from "flowbite-react";
@@ -99,7 +100,7 @@ export const Monedas = () => {
           <AdminBreadcrumbs
             links={[
               { name: "Catálogos", href: "#" },
-              { name: "Monedas", href: "/catalogos/monedas" },
+              { name: "Monedas", href: `${apiHost}/#/catalogos/monedas` },
             ]}
           />
         </div>

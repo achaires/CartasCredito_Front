@@ -6,6 +6,7 @@ import { AdminBreadcrumbs, AdminPageHeader } from "@/components";
 import { IProveedorInsert, IProveedorUpdate } from "@/interfaces";
 import { useAppDispatch } from "@/store";
 import { addToast } from "@/store/uiSlice";
+import { apiHost } from "@/utils/apiConfig";
 import { faIdCard, faPencil, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Label, Modal, Select, Table, Textarea, TextInput, ToggleSwitch, Tooltip } from "flowbite-react";
@@ -107,7 +108,7 @@ export const Proveedores = () => {
           <AdminBreadcrumbs
             links={[
               { name: "Catálogos", href: "#" },
-              { name: "Proveedores", href: "/catalogos/proveedores" },
+              { name: "Proveedores", href: `${apiHost}/#/catalogos/proveedores` },
             ]}
           />
         </div>

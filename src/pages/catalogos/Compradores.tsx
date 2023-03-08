@@ -4,6 +4,7 @@ import { useGetTiposPersonaFiscalQuery } from "@/apis/tiposPersonaFiscal";
 import { AdminBreadcrumbs, AdminPageHeader } from "@/components";
 import { useAppDispatch } from "@/store";
 import { addToast } from "@/store/uiSlice";
+import { apiHost } from "@/utils/apiConfig";
 import { faIdCard, faPencil, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Label, Modal, Select, Table, Textarea, TextInput, ToggleSwitch, Tooltip } from "flowbite-react";
@@ -107,7 +108,7 @@ export const Compradores = () => {
           <AdminBreadcrumbs
             links={[
               { name: "Catálogos", href: "#" },
-              { name: "Compradores", href: "/catalogos/compradores" },
+              { name: "Compradores", href: `${apiHost}/#/catalogos/compradores` },
             ]}
           />
         </div>

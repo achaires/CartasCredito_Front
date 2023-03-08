@@ -3,6 +3,7 @@ import { useAddEmpresaMutation, useGetEmpresasQuery, useToggleEmpresaMutation, u
 import { AdminBreadcrumbs, AdminPageHeader } from "@/components";
 import { useAppDispatch } from "@/store";
 import { addToast } from "@/store/uiSlice";
+import { apiHost } from "@/utils/apiConfig";
 import { faBuilding, faPencil, faPlus, faPlusCircle, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Label, Modal, Select, Table, Textarea, TextInput, ToggleSwitch, Tooltip } from "flowbite-react";
@@ -109,7 +110,7 @@ export const Empresas = () => {
           <AdminBreadcrumbs
             links={[
               { name: "Catálogos", href: "#" },
-              { name: "Empresas", href: "/catalogos/empresas" },
+              { name: "Empresas", href: `${apiHost}/#/catalogos/empresas` },
             ]}
           />
         </div>

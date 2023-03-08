@@ -2,6 +2,7 @@ import { useAddTipoActivoMutation, useGetTiposActivoQuery, useToggleTipoActivoMu
 import { AdminBreadcrumbs, AdminPageHeader } from "@/components";
 import { useAppDispatch } from "@/store";
 import { addToast } from "@/store/uiSlice";
+import { apiHost } from "@/utils/apiConfig";
 import { faPencil, faPlusCircle, faRectangleList } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Label, Modal, Select, Table, Textarea, TextInput, ToggleSwitch, Tooltip } from "flowbite-react";
@@ -99,7 +100,7 @@ export const TiposDeActivo = () => {
           <AdminBreadcrumbs
             links={[
               { name: "Catálogos", href: "#" },
-              { name: "Tipos de Activo", href: "/catalogos/tipos-de-activo" },
+              { name: "Tipos de Activo", href: `${apiHost}/#/catalogos/tipos-de-activo` },
             ]}
           />
         </div>

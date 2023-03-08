@@ -16,6 +16,7 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import Datepicker from "react-tailwindcss-datepicker";
 import numeral from "numeral";
+import { apiHost } from "@/utils/apiConfig";
 
 const currentDate = new Date();
 const firstMonthDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
@@ -84,7 +85,7 @@ export const CartasDeCredito = () => {
         <AdminBreadcrumbs
           links={[
             { name: "Operaciones", href: "#" },
-            { name: "Cartas de Crédito", href: "/operaciones/cartas-de-credito" },
+            { name: "Cartas de Crédito", href: `${apiHost}/#/operaciones/cartas-de-credito` },
           ]}
         />
       </div>

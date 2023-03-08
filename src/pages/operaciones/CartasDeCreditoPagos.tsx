@@ -10,6 +10,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import numeral from "numeral";
 import { EstatusButton } from "./CartasDeCreditoDetalle";
 import { IPago } from "@/interfaces";
+import { apiHost } from "@/utils/apiConfig";
 
 export const CartasDeCreditoPagos = () => {
   const routeParams = useParams();
@@ -45,7 +46,7 @@ export const CartasDeCreditoPagos = () => {
           <AdminBreadcrumbs
             links={[
               { name: "Operaciones", href: "#" },
-              { name: "Cartas de Crédito", href: "/operaciones/cartas-de-credito" },
+              { name: "Cartas de Crédito", href: `${apiHost}/#/operaciones/cartas-de-credito` },
               { name: "Detalle de Carta", href: "#" },
               { name: "Pagos", href: "#" },
             ]}
@@ -206,7 +207,9 @@ export const CartasDeCreditoPagos = () => {
         </a>  */}
       </div>
 
-      {cartaCreditoDetalle && cartaCreditoDetalle.Id && <CartaPagoModal show={showPagoModal} handleClose={() => setShowPagoModal(false)} cartaCreditoId={cartaCreditoDetalle.Id} />}
+      {cartaCreditoDetalle && cartaCreditoDetalle.Id && (
+        <CartaPagoModal show={showPagoModal} handleClose={() => setShowPagoModal(false)} cartaCreditoId={cartaCreditoDetalle.Id} />
+      )}
       {cartaCreditoDetalle && cartaCreditoDetalle.Id && selectedPago && (
         <CartaPagoManualModal
           moneda={cartaCreditoDetalle.Moneda ? cartaCreditoDetalle.Moneda : ""}

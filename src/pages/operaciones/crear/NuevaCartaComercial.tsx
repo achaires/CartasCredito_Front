@@ -12,6 +12,7 @@ import { AdminBreadcrumbs, AdminLoadingActivity, AdminPageHeader } from "@/compo
 import { ICartaComercial } from "@/interfaces";
 import { useAppDispatch } from "@/store";
 import { addToast } from "@/store/uiSlice";
+import { apiHost } from "@/utils/apiConfig";
 import { faCircleArrowLeft, faFileInvoiceDollar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Alert, Button, Label, Select, Table, Textarea, TextInput } from "flowbite-react";
@@ -98,8 +99,8 @@ function NuevaCartaComercial() {
           <AdminBreadcrumbs
             links={[
               { name: "Operaciones", href: "#" },
-              { name: "Cartas de Crédito", href: "/operaciones/cartas-de-credito" },
-              { name: "Nueva Carta de Crédito Comercial", href: "/operaciones/cartas-de-credito/nueva-carta-comercial" },
+              { name: "Cartas de Crédito", href: `${apiHost}/#/operaciones/cartas-de-credito` },
+              { name: "Nueva Carta de Crédito Comercial", href: `${apiHost}/#/operaciones/cartas-de-credito/nueva-carta-comercial` },
             ]}
           />
         </div>
@@ -136,11 +137,13 @@ function NuevaCartaComercial() {
           <Label value="Tipo de Activo" />
           <Select {...register("TipoActivoId")}>
             <option value={0}>Seleccione Opción</option>
-            {catTiposActivo?.map((item, index) => (
-              <option value={item.Id} key={index.toString()}>
-                {item.Nombre}
-              </option>
-            ))}
+            {catTiposActivo
+              ?.filter((ta) => ta.Activo)
+              .map((item, index) => (
+                <option value={item.Id} key={index.toString()}>
+                  {item.Nombre}
+                </option>
+              ))}
           </Select>
         </div>
         <div className="md:col-span-3">
@@ -444,19 +447,21 @@ function NuevaCartaComercial() {
             <Table.HeadCell>Originales</Table.HeadCell>
           </Table.Head>
           <Table.Body>
-            {catDocumentos?.map((item, index) => {
-              return (
-                <Table.Row key={index.toString()}>
-                  <Table.Cell width="60%">{item.Nombre}</Table.Cell>
-                  <Table.Cell>
-                    <TextInput type="number" />
-                  </Table.Cell>
-                  <Table.Cell>
-                    <TextInput type="number" />
-                  </Table.Cell>
-                </Table.Row>
-              );
-            })}
+            {catDocumentos
+              ?.filter((doc) => doc.Activo)
+              .map((item, index) => {
+                return (
+                  <Table.Row key={index.toString()}>
+                    <Table.Cell width="60%">{item.Nombre}</Table.Cell>
+                    <Table.Cell>
+                      <TextInput type="number" />
+                    </Table.Cell>
+                    <Table.Cell>
+                      <TextInput type="number" />
+                    </Table.Cell>
+                  </Table.Row>
+                );
+              })}
           </Table.Body>
         </Table>
 

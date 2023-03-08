@@ -2,6 +2,7 @@ import { useAddDivisionMutation, useGetDivisionesQuery, useToggleDivisionMutatio
 import { AdminBreadcrumbs, AdminPageHeader } from "@/components";
 import { useAppDispatch } from "@/store";
 import { addToast } from "@/store/uiSlice";
+import { apiHost } from "@/utils/apiConfig";
 import { faBuilding, faPencil, faPlus, faPlusCircle, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Label, Modal, Table, Textarea, TextInput, ToggleSwitch, Tooltip } from "flowbite-react";
@@ -95,7 +96,7 @@ export const Divisiones = () => {
           <AdminBreadcrumbs
             links={[
               { name: "Catálogos", href: "#" },
-              { name: "Divisiones", href: "/catalogos/divisiones" },
+              { name: "Divisiones", href: `${apiHost}/#/catalogos/divisiones` },
             ]}
           />
         </div>

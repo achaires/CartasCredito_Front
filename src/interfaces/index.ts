@@ -10,6 +10,7 @@ export * from "./contactoInterface";
 export * from "./divisionInterface";
 export * from "./documentoInterface";
 export * from "./empresaInterface";
+export * from "./enmiendasInterface";
 export * from "./lineaDeCreditoInterface";
 export * from "./monedaInterface";
 export * from "./proveedorInterface";

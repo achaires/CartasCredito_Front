@@ -2,6 +2,7 @@ import { useAddBancoMutation, useGetBancosQuery, useToggleBancoMutation, useUpda
 import { AdminBreadcrumbs, AdminPageHeader } from "@/components";
 import { useAppDispatch } from "@/store";
 import { addToast } from "@/store/uiSlice";
+import { apiHost } from "@/utils/apiConfig";
 import { faBank, faFileInvoice, faPencil, faPlus, faPlusCircle, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Label, Modal, Table, Textarea, TextInput, ToggleSwitch, Tooltip } from "flowbite-react";
@@ -108,7 +109,7 @@ export const Bancos = () => {
           <AdminBreadcrumbs
             links={[
               { name: "Catálogos", href: "#" },
-              { name: "Bancos", href: "/catalogos/bancos" },
+              { name: "Bancos", href: `${apiHost}/#/catalogos/bancos` },
             ]}
           />
         </div>

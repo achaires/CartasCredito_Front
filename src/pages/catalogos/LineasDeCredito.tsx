@@ -4,6 +4,7 @@ import { useAddLineaDeCreditoMutation, useGetLineasDeCreditoQuery, useToggleLine
 import { AdminBreadcrumbs, AdminPageHeader } from "@/components";
 import { useAppDispatch } from "@/store";
 import { addToast } from "@/store/uiSlice";
+import { apiHost } from "@/utils/apiConfig";
 import { faPencil, faPlusCircle, faRectangleList } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Label, Modal, Select, Table, Textarea, TextInput, ToggleSwitch, Tooltip } from "flowbite-react";
@@ -103,7 +104,7 @@ export const LineasDeCredito = () => {
           <AdminBreadcrumbs
             links={[
               { name: "Catálogos", href: "#" },
-              { name: "Líneas de Crédito", href: "/catalogos/lineas-de-credito" },
+              { name: "Líneas de Crédito", href: `${apiHost}/#/catalogos/lineas-de-credito` },
             ]}
           />
         </div>
@@ -169,11 +170,13 @@ export const LineasDeCredito = () => {
               <Select value={empresaId} onChange={(e) => setEmpresaId(Number(e.target.value))}>
                 <option value={0}>Seleccione opción</option>
                 {empresasCat &&
-                  empresasCat.map((item, index) => (
-                    <option value={item.Id} key={index.toString()}>
-                      {item.Nombre}
-                    </option>
-                  ))}
+                  empresasCat
+                    .filter((emp) => emp.Activo)
+                    .map((item, index) => (
+                      <option value={item.Id} key={index.toString()}>
+                        {item.Nombre}
+                      </option>
+                    ))}
               </Select>
             </div>
 
@@ -182,11 +185,13 @@ export const LineasDeCredito = () => {
               <Select value={bancoId} onChange={(e) => setBancoId(Number(e.target.value))}>
                 <option value={0}>Seleccione opción</option>
                 {bancosCat &&
-                  bancosCat.map((item, index) => (
-                    <option value={item.Id} key={index.toString()}>
-                      {item.Nombre}
-                    </option>
-                  ))}
+                  bancosCat
+                    .filter((b) => b.Activo)
+                    .map((item, index) => (
+                      <option value={item.Id} key={index.toString()}>
+                        {item.Nombre}
+                      </option>
+                    ))}
               </Select>
             </div>
 

@@ -11,6 +11,7 @@ import numeral from "numeral";
 import { EstatusButton } from "./CartasDeCreditoDetalle";
 import { ICartaCreditoComision, IPago } from "@/interfaces";
 import { CartaComisionPagoModal } from "@/components/CartaComisionPagoModal";
+import { apiHost } from "@/utils/apiConfig";
 
 export const CartasCreditoComisiones = () => {
   const routeParams = useParams();
@@ -45,7 +46,7 @@ export const CartasCreditoComisiones = () => {
           <AdminBreadcrumbs
             links={[
               { name: "Operaciones", href: "#" },
-              { name: "Cartas de Crédito", href: "/operaciones/cartas-de-credito" },
+              { name: "Cartas de Crédito", href: `${apiHost}/#/operaciones/cartas-de-credito` },
               { name: "Detalle de Carta", href: "#" },
               { name: "Comisiones", href: "#" },
             ]}
@@ -168,7 +169,7 @@ export const CartasCreditoComisiones = () => {
                   <Table.Cell>{item.FechaCargo}</Table.Cell>
                   <Table.Cell align="right">{numeral(item.Monto).format("$0,0.00")}</Table.Cell>
                   <Table.Cell>{item.Moneda}</Table.Cell>
-                  <Table.Cell>{item.TipoCambio}</Table.Cell>
+                  <Table.Cell>{numeral(item.TipoCambio).format("$0,0.00")}</Table.Cell>
                   <Table.Cell>{item.FechaPago}</Table.Cell>
                   <Table.Cell align="right">{numeral(item.MontoPagado).format("$0,0.00")}</Table.Cell>
                   <Table.Cell align="right">{item.PagoId && item.PagoId > 0 ? item.PagoId : ""}</Table.Cell>
@@ -218,7 +219,12 @@ export const CartasCreditoComisiones = () => {
       </div>
 
       {cartaCreditoDetalle && cartaCreditoDetalle.BancoId && cartaCreditoDetalle.Id && (
-        <CartaComisionModal show={showPagoModal} handleClose={() => setShowPagoModal(false)} cartaCreditoId={cartaCreditoDetalle.Id} cartaBancoId={cartaCreditoDetalle.BancoId} />
+        <CartaComisionModal
+          show={showPagoModal}
+          handleClose={() => setShowPagoModal(false)}
+          cartaCreditoId={cartaCreditoDetalle.Id}
+          cartaBancoId={cartaCreditoDetalle.BancoId}
+        />
       )}
 
       {cartaCreditoDetalle && cartaCreditoDetalle.Id && selectedCartaComision && (

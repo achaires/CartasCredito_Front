@@ -2,6 +2,7 @@ import { useAddTipoCoberturaMutation, useGetTiposCoberturaQuery, useToggleTipoCo
 import { AdminBreadcrumbs, AdminPageHeader } from "@/components";
 import { useAppDispatch } from "@/store";
 import { addToast } from "@/store/uiSlice";
+import { apiHost } from "@/utils/apiConfig";
 import { faPencil, faPeopleRoof, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Label, Modal, Select, Table, Textarea, TextInput, ToggleSwitch, Tooltip } from "flowbite-react";
@@ -96,7 +97,7 @@ export const TiposDeCobertura = () => {
           <AdminBreadcrumbs
             links={[
               { name: "Catálogos", href: "#" },
-              { name: "Tipos de Cobertura", href: "/catalogos/tipos-de-cobertura" },
+              { name: "Tipos de Cobertura", href: `${apiHost}/#/catalogos/tipos-de-cobertura` },
             ]}
           />
         </div>

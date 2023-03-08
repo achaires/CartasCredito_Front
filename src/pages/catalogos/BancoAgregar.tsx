@@ -4,6 +4,7 @@ import { AdminBreadcrumbs, AdminPageHeader, ContactoForm } from "@/components";
 import { IContactoInsert } from "@/interfaces";
 import { useAppDispatch } from "@/store";
 import { addToast } from "@/store/uiSlice";
+import { apiHost } from "@/utils/apiConfig";
 import { faBank, faCircleArrowLeft, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Card, Label, Textarea, TextInput } from "flowbite-react";
@@ -94,7 +95,7 @@ export const BancoAgregar = () => {
           <AdminBreadcrumbs
             links={[
               { name: "Catálogos", href: "#" },
-              { name: "Bancos", href: "/catalogos/bancos" },
+              { name: "Bancos", href: `${apiHost}/#/catalogos/bancos` },
               { name: verb, href: `#` },
             ]}
           />

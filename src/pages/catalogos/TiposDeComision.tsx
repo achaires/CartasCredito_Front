@@ -3,6 +3,7 @@ import { useAddTipoComisionMutation, useGetTiposComisionQuery, useToggleTipoComi
 import { AdminBreadcrumbs, AdminPageHeader } from "@/components";
 import { useAppDispatch } from "@/store";
 import { addToast } from "@/store/uiSlice";
+import { apiHost } from "@/utils/apiConfig";
 import { faFileInvoice, faPencil, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Label, Modal, Select, Table, Textarea, TextInput, ToggleSwitch, Tooltip } from "flowbite-react";
@@ -101,7 +102,7 @@ export const Comisiones = () => {
           <AdminBreadcrumbs
             links={[
               { name: "Catálogos", href: "#" },
-              { name: "Tipos de Comisión", href: "/catalogos/tipos-de-comision" },
+              { name: "Tipos de Comisión", href: `${apiHost}/#/catalogos/tipos-de-comision` },
             ]}
           />
         </div>

@@ -2,7 +2,18 @@ import { useLazyGetCartaComercialQuery, useUpdateCartaComercialEstatusMutation }
 import { AdminBreadcrumbs, AdminPageHeader, CartaSwiftModal } from "@/components";
 import { useAppDispatch } from "@/store";
 import { addToast } from "@/store/uiSlice";
-import { faFileInvoiceDollar, faCircleArrowLeft, faUpload, faDollarSign, faCheckCircle, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
+import { apiHost } from "@/utils/apiConfig";
+import {
+  faFileInvoiceDollar,
+  faCircleArrowLeft,
+  faUpload,
+  faDollarSign,
+  faCheckCircle,
+  faPlusCircle,
+  faPenToSquare,
+  faPenSquare,
+  faFilePen,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Alert, Button, Label, Modal, TextInput, Textarea } from "flowbite-react";
 import numeral from "numeral";
@@ -108,7 +119,7 @@ export const CartasDeCreditoDetalle = () => {
           <AdminBreadcrumbs
             links={[
               { name: "Operaciones", href: "#" },
-              { name: "Cartas de Crédito", href: "/operaciones/cartas-de-credito" },
+              { name: "Cartas de Crédito", href: `${apiHost}/#/operaciones/cartas-de-credito` },
               { name: "Detalle de Carta", href: "#" },
             ]}
           />
@@ -346,28 +357,36 @@ export const CartasDeCreditoDetalle = () => {
             }}
             className="flex flex-col items-center justify-around gap-2">
             <FontAwesomeIcon icon={faUpload} className="h-6" />
-            <span className="text-sm">Archivo Swift</span>
+            <span className="text-xs">Archivo Swift</span>
           </a>
         )}
 
-        <Link to={`/operaciones/cartas-de-credito/${cartaCreditoDetalle?.Id}/pagos`} className="flex flex-col items-center justify-around gap-2">
-          <FontAwesomeIcon icon={faDollarSign} className="h-6" />
-          <span className="text-sm">Pagos</span>
-        </Link>
-        <Link to={`/operaciones/cartas-de-credito/${cartaCreditoDetalle?.Id}/comisiones`} className="flex flex-col items-center justify-around gap-2">
-          <FontAwesomeIcon icon={faPlusCircle} className="h-6" />
-          <span className="text-sm">Comisiones</span>
-        </Link>
-        <a
-          href="#"
-          onClick={(e) => {
-            e.preventDefault();
-            setShowCartaPagadaModal(true);
-          }}
-          className="flex flex-col items-center justify-around gap-2">
-          <FontAwesomeIcon icon={faCheckCircle} className="h-6" />
-          <span className="text-sm">Registrar Pagada</span>
-        </a>
+        {cartaCreditoDetalle && cartaCreditoDetalle.Estatus && Number(cartaCreditoDetalle.Estatus) === 2 && (
+          <>
+            <Link to={`/operaciones/cartas-de-credito/${cartaCreditoDetalle?.Id}/pagos`} className="flex flex-col items-center justify-around gap-2">
+              <FontAwesomeIcon icon={faDollarSign} className="h-6" />
+              <span className="text-xs">Registro de Pagos</span>
+            </Link>
+            <Link to={`/operaciones/cartas-de-credito/${cartaCreditoDetalle?.Id}/comisiones`} className="flex flex-col items-center justify-around gap-2">
+              <FontAwesomeIcon icon={faPlusCircle} className="h-6" />
+              <span className="text-xs">Registro de Comisiones</span>
+            </Link>
+            <a
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                setShowCartaPagadaModal(true);
+              }}
+              className="flex flex-col items-center justify-around gap-2">
+              <FontAwesomeIcon icon={faCheckCircle} className="h-6" />
+              <span className="text-xs">Registrar como Pagada</span>
+            </a>
+            <Link to={`/operaciones/cartas-de-credito/${cartaCreditoDetalle?.Id}/enmiendas`} className="flex flex-col items-center justify-around gap-2">
+              <FontAwesomeIcon icon={faFilePen} className="h-6" />
+              <span className="text-xs">Registrar Enmienda</span>
+            </Link>
+          </>
+        )}
         {/* <a href="#" className="flex flex-col items-center justify-around gap-2">
           <FontAwesomeIcon icon={faCalendarAlt} className="h-6" />
           <span className="text-sm">Enmiendas</span>

@@ -4,6 +4,7 @@ import { AdminBreadcrumbs, AdminPageHeader } from "@/components";
 import { IProyectoInsert, IProyectoUpdate } from "@/interfaces";
 import { useAppDispatch } from "@/store";
 import { addToast } from "@/store/uiSlice";
+import { apiHost } from "@/utils/apiConfig";
 import { faListCheck, faPencil, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Label, Modal, Select, Table, Textarea, TextInput, ToggleSwitch, Tooltip } from "flowbite-react";
@@ -105,7 +106,7 @@ export const Proyectos = () => {
           <AdminBreadcrumbs
             links={[
               { name: "Catálogos", href: "#" },
-              { name: "Proyectos", href: "/catalogos/proyectos" },
+              { name: "Proyectos", href: `${apiHost}/#/catalogos/proyectos` },
             ]}
           />
         </div>

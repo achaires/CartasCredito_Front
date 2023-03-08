@@ -12,6 +12,7 @@ export const rootApi = createApi({
     "Contactos",
     "Comisiones",
     "Compradores",
+    "Enmiendas",
     "LineasDeCredito",
     "Documentos",
     "Monedas",

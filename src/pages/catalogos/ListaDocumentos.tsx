@@ -2,6 +2,7 @@ import { useAddDocumentoMutation, useGetDocumentosQuery, useToggleDocumentoMutat
 import { AdminBreadcrumbs, AdminPageHeader } from "@/components";
 import { useAppDispatch } from "@/store";
 import { addToast } from "@/store/uiSlice";
+import { apiHost } from "@/utils/apiConfig";
 import { faFileLines, faPencil, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Label, Modal, Select, Table, Textarea, TextInput, ToggleSwitch, Tooltip } from "flowbite-react";
@@ -96,7 +97,7 @@ export const ListaDocumentos = () => {
           <AdminBreadcrumbs
             links={[
               { name: "Catálogos", href: "#" },
-              { name: "Documentos", href: "/catalogos/documentos" },
+              { name: "Documentos", href: `${apiHost}/#/catalogos/documentos` },
             ]}
           />
         </div>

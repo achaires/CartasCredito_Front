@@ -1,5 +1,6 @@
 import { ICartaCreditoComision } from "./cartaComisionesInterface";
 import { IPago } from "./cartaPagoInterface";
+import { IEnmienda } from "./enmiendasInterface";
 
 export interface ICartaComercial {
   Consecutive?: number;
@@ -67,6 +68,7 @@ export interface ICartaComercial {
   Activo?: boolean;
   Pagos?: IPago[] | null;
   Comisiones?: ICartaCreditoComision[] | null;
+  Enmiendas?: IEnmienda[] | null;
 }
 
 export interface ICartaCreditoFiltrar {

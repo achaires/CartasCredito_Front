@@ -4,6 +4,7 @@ import { useGetEmpresasQuery } from "@/apis/empresasApi";
 import { AdminBreadcrumbs, AdminPageHeader } from "@/components";
 import { useAppDispatch } from "@/store";
 import { addToast } from "@/store/uiSlice";
+import { apiHost } from "@/utils/apiConfig";
 import { faPencil, faPerson, faPersonBooth, faPersonMilitaryPointing, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Label, Modal, Select, Table, Textarea, TextInput, ToggleSwitch, Tooltip } from "flowbite-react";
@@ -104,7 +105,7 @@ export const AgentesAduanales = () => {
             } else {
               addContacto({
                 ModelId: rsp.DataInt,
-                ModelNombre: "AgenteAduanal",
+                ModelNombre: "Agente",
                 Nombre: formData.Contacto.Nombre,
                 ApellidoPaterno: formData.Contacto.ApellidoPaterno,
                 ApellidoMaterno: formData.Contacto.ApellidoMaterno,
@@ -122,7 +123,7 @@ export const AgentesAduanales = () => {
           if (rsp.DataInt && rsp.DataInt > 0) {
             addContacto({
               ModelId: rsp.DataInt,
-              ModelNombre: "AgenteAduanal",
+              ModelNombre: "Agente",
               Nombre: formData.Contacto.Nombre,
               ApellidoPaterno: formData.Contacto.ApellidoPaterno,
               ApellidoMaterno: formData.Contacto.ApellidoMaterno,
@@ -172,7 +173,7 @@ export const AgentesAduanales = () => {
           <AdminBreadcrumbs
             links={[
               { name: "Catálogos", href: "#" },
-              { name: "Agentes Aduanales", href: "/catalogos/agentesaduanales" },
+              { name: "Agentes Aduanales", href: `${apiHost}/#/catalogos/agentes-aduanales` },
             ]}
           />
         </div>

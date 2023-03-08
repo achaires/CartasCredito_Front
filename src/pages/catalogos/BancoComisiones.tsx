@@ -4,6 +4,7 @@ import { AdminBreadcrumbs, AdminPageHeader } from "@/components";
 import { IBanco, IComisionInsert, IComisionUpdate } from "@/interfaces";
 import { useAppDispatch } from "@/store";
 import { addToast } from "@/store/uiSlice";
+import { apiHost } from "@/utils/apiConfig";
 import { faBank, faCircleArrowLeft, faListCheck, faPencil, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Label, Modal, Select, Table, Textarea, TextInput, ToggleSwitch, Tooltip } from "flowbite-react";
@@ -117,7 +118,7 @@ export const BancoComisiones = () => {
           <AdminBreadcrumbs
             links={[
               { name: "Catálogos", href: "#" },
-              { name: "Bancos", href: "/catalogos/bancos" },
+              { name: "Bancos", href: `${apiHost}/catalogos/bancos` },
               { name: "Comisiones", href: "#" },
             ]}
           />
@@ -190,11 +191,13 @@ export const BancoComisiones = () => {
                   <Select {...register("TipoComisionId")}>
                     <option value={0}>Seleccione</option>
                     {catalogoTiposComision &&
-                      catalogoTiposComision.map((item, index) => (
-                        <option value={item.Id} key={index.toString()}>
-                          {item.Nombre}
-                        </option>
-                      ))}
+                      catalogoTiposComision
+                        .filter((tc) => tc.Activo)
+                        .map((item, index) => (
+                          <option value={item.Id} key={index.toString()}>
+                            {item.Nombre}
+                          </option>
+                        ))}
                   </Select>
                 </div>
               </div>
