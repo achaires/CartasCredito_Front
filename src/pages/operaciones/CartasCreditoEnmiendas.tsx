@@ -9,12 +9,23 @@ import React, { useCallback, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import numeral from "numeral";
 import { useAddEnmiendaMutation } from "@/apis/enmiendasApi";
+import { useForm } from "react-hook-form";
+import { IEnmienda, IEnmiendaInsert } from "@/interfaces";
+import { addToast } from "@/store/uiSlice";
 
 export const CartasCreditoEnmiendas = () => {
   const routeParams = useParams();
   const nav = useNavigate();
 
   const dispatch = useAppDispatch();
+
+  const {
+    reset,
+    register,
+    setValue,
+    handleSubmit,
+    formState: { errors: formErrors },
+  } = useForm<IEnmiendaInsert>();
 
   const [getCartaComercial, { data: cartaCreditoDetalle, isLoading }] = useLazyGetCartaComercialQuery();
   const [addEnmienda, { data, isSuccess, isError }] = useAddEnmiendaMutation();
@@ -23,13 +34,51 @@ export const CartasCreditoEnmiendas = () => {
     nav(`/operaciones/cartas-de-credito/${cartaCreditoDetalle?.Id}`);
   }, [cartaCreditoDetalle]);
 
-  const _handleSubmit = () => {};
+  const _handleSubmit = handleSubmit((formData) => {
+    if (cartaCreditoDetalle && cartaCreditoDetalle.Id) {
+      addEnmienda({ ...formData, CartaCreditoId: cartaCreditoDetalle.Id });
+    }
+  });
 
   useEffect(() => {
     if (routeParams.cartaCreditoId) {
       getCartaComercial(routeParams.cartaCreditoId);
     }
   }, [routeParams]);
+
+  useEffect(() => {
+    if (isSuccess && data) {
+      if (data.DataInt && data.DataInt > 0) {
+        dispatch(
+          addToast({
+            title: "Información",
+            type: "success",
+            message: "Solicitud de enmienda enviada correctamente",
+          })
+        );
+
+        _handleBack();
+      } else {
+        dispatch(
+          addToast({
+            title: "Información",
+            type: "error",
+            message: data.Errors && data.Errors[0] ? data.Errors[0] : "Ocurrió un error desconocido",
+          })
+        );
+      }
+    }
+
+    if (isError && data && data.Errors) {
+      dispatch(
+        addToast({
+          title: "Información",
+          type: "error",
+          message: data.Errors[0],
+        })
+      );
+    }
+  }, [isSuccess, data, isError]);
 
   if (isLoading || !cartaCreditoDetalle) {
     return <AdminLoadingActivity />;
@@ -59,7 +108,7 @@ export const CartasCreditoEnmiendas = () => {
           </Button>
         </div>
 
-        <form className="mb-12">
+        <form className="mb-12" onSubmit={_handleSubmit}>
           <Card className="mb-4">
             <h3 className="text-lg font-bold">Registro - Edición de Enmienda</h3>
             <div className="md:grid md:grid-cols-12 md:gap-12">
@@ -90,7 +139,7 @@ export const CartasCreditoEnmiendas = () => {
               </div>
               <div className="md:col-span-5 md:col-start-7 flex items-center justify-between gap-4">
                 <Label value="Nuevo Importe de L/C" />
-                <TextInput />
+                <TextInput {...register("ImporteLC")} required />
               </div>
             </div>
 
@@ -101,7 +150,7 @@ export const CartasCreditoEnmiendas = () => {
               </div>
               <div className="md:col-span-5 md:col-start-7 flex items-center justify-between gap-4">
                 <Label value="Nueva Fecha de Vencimiento" />
-                <TextInput />
+                <TextInput type="date" {...register("FechaVencimiento")} required />
               </div>
             </div>
 
@@ -112,7 +161,7 @@ export const CartasCreditoEnmiendas = () => {
               </div>
               <div className="md:col-span-5 md:col-start-7 flex items-center justify-between gap-4">
                 <Label value="Nueva Fecha Límite de Embarque" />
-                <TextInput />
+                <TextInput type="date" {...register("FechaLimiteEmbarque")} required />
               </div>
             </div>
           </Card>
@@ -126,7 +175,7 @@ export const CartasCreditoEnmiendas = () => {
               </div>
               <div className="md:col-span-6">
                 <Label value="Debe Decir" />
-                <Textarea />
+                <Textarea {...register("DescripcionMercancia")} required />
               </div>
             </div>
           </Card>
@@ -140,7 +189,7 @@ export const CartasCreditoEnmiendas = () => {
               </div>
               <div className="md:col-span-6">
                 <Label value="Debe Decir" />
-                <Textarea />
+                <Textarea {...register("ConsideracionesAdicionales")} required />
               </div>
             </div>
           </Card>
@@ -154,17 +203,17 @@ export const CartasCreditoEnmiendas = () => {
               </div>
               <div className="md:col-span-6">
                 <Label value="Debe Decir" />
-                <Textarea />
+                <Textarea {...register("InstruccionesEspeciales")} required />
               </div>
             </div>
           </Card>
 
           <div className="flex items-center gap-4">
-            <Button color="failure">
+            <Button color="failure" onClick={_handleBack}>
               <FontAwesomeIcon icon={faClose} className="mr-2" />
               Cancelar
             </Button>
-            <Button>
+            <Button type="submit">
               <FontAwesomeIcon icon={faSave} className="mr-2" />
               Guardar
             </Button>

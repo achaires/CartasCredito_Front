@@ -22,3 +22,13 @@ export interface IEnmienda {
   Eliminado: string;
   Activo: boolean;
 }
+
+export interface IEnmiendaInsert {
+  CartaCreditoId: string;
+  ConsideracionesAdicionales: string;
+  DescripcionMercancia: string;
+  FechaLimiteEmbarque: string;
+  FechaVencimiento: string;
+  ImporteLC: number;
+  InstruccionesEspeciales: string;
+}
