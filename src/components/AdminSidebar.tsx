@@ -50,8 +50,8 @@ export const AdminSidebar = ({ showSidebar = false }: Props) => {
             icon={faArrowsToCircle}
             links={[
               { title: "Cartas de Crédito", href: "/operaciones/cartas-de-credito" },
-              /* { title: "PFE", href: "/operaciones/pfe" },
-              { title: "Enmiendas", href: "/operaciones/" },
+              { title: "PFE", href: "/operaciones/pfe" },
+              /* { title: "Enmiendas", href: "/operaciones/" },
               { title: "Pagos", href: "/operaciones/" },
               { title: "Comisiones", href: "/operaciones/" },
               { title: "Bitácora de Movimientos", href: "/operaciones/" }, */

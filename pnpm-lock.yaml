@@ -5,6 +5,7 @@ specifiers:
   '@fortawesome/free-solid-svg-icons': ^6.2.1
   '@fortawesome/react-fontawesome': ^0.2.0
   '@heroicons/react': ^2.0.14
+  '@hookform/resolvers': ^2.9.11
   '@reduxjs/toolkit': ^1.9.2
   '@types/node': ^18.11.18
   '@types/numeral': ^2.0.2
@@ -32,12 +33,14 @@ specifiers:
   tailwindcss: ^3.2.4
   typescript: ^4.9.3
   vite: ^4.0.0
+  zod: ^3.21.4
 
 dependencies:
   '@fortawesome/fontawesome-svg-core': 6.2.1
   '@fortawesome/free-solid-svg-icons': 6.2.1
   '@fortawesome/react-fontawesome': 0.2.0_z27bm67dtmuyyvss23ckjdrcuy
   '@heroicons/react': 2.0.14_react@18.2.0
+  '@hookform/resolvers': 2.9.11_react-hook-form@7.43.1
   '@reduxjs/toolkit': 1.9.2_k4ae6lp43ej6mezo3ztvx6pykq
   '@types/numeral': 2.0.2
   csstype: 3.1.1
@@ -55,6 +58,7 @@ dependencies:
   react-secure-storage: 1.0.22
   react-tailwindcss-datepicker: 1.4.2_dayjs@1.11.7+react@18.2.0
   redux: 4.2.1
+  zod: 3.21.4
 
 devDependencies:
   '@types/node': 18.11.18
@@ -577,6 +581,14 @@ packages:
       react: '>= 16'
     dependencies:
       react: 18.2.0
+    dev: false
+
+  /@hookform/resolvers/2.9.11_react-hook-form@7.43.1:
+    resolution: {integrity: sha512-bA3aZ79UgcHj7tFV7RlgThzwSSHZgvfbt2wprldRkYBcMopdMvHyO17Wwp/twcJasNFischFfS7oz8Katz8DdQ==}
+    peerDependencies:
+      react-hook-form: ^7.0.0
+    dependencies:
+      react-hook-form: 7.43.1_react@18.2.0
     dev: false
 
   /@jridgewell/gen-mapping/0.1.1:
@@ -1657,3 +1669,7 @@ packages:
   /yaml/1.10.2:
     resolution: {integrity: sha512-r3vXyErRCYJ7wg28yvBY5VSoAF8ZvlcW9/BwUzEtUsjvX/DKs24dIkuwjtuprwJJHsbyUbLApepYTR1BN4uHrg==}
     engines: {node: '>= 6'}
+
+  /zod/3.21.4:
+    resolution: {integrity: sha512-m46AKbrzKVzOzs/DZgVnG5H55N1sv1M8qZU3A8RIKbs3mrACDNeIOeilDymVb2HdmP8uwshOCF4uJ8uM9rCqJw==}
+    dev: false

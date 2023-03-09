@@ -1,3 +1,23 @@
+import { AdminBreadcrumbs, AdminPageHeader } from "@/components";
+import { apiHost } from "@/utils/apiConfig";
+import { faFileInvoiceDollar } from "@fortawesome/free-solid-svg-icons";
+
 export const PFE = () => {
-  return <div>PFE</div>;
+  return (
+    <>
+      <div className="p-6">
+        <div className="mb-6">
+          <AdminBreadcrumbs
+            links={[
+              { name: "Operaciones", href: "#" },
+              { name: "Pagos PFE", href: `${apiHost}/#/operaciones/pfe` },
+            ]}
+          />
+        </div>
+        <div className="mb-6">
+          <AdminPageHeader title="Programación de Pagos PFE" icon={faFileInvoiceDollar} />
+        </div>
+      </div>
+    </>
+  );
 };

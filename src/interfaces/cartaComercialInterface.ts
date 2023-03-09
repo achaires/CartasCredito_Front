@@ -36,10 +36,10 @@ export interface ICartaComercial {
   PagosProgramados?: number;
   MontoDispuesto?: number;
   SaldoInsoluto?: number;
-  FechaApertura?: string;
+  FechaApertura?: Date;
   Incoterm?: string;
-  FechaLimiteEmbarque?: string;
-  FechaVencimiento?: string;
+  FechaLimiteEmbarque?: Date;
+  FechaVencimiento?: Date;
   EmbarquesParciales?: string;
   Transbordos?: string;
   PuntoEmbarque?: string;
@@ -81,8 +81,8 @@ export interface ICartaCreditoFiltrar {
   EmpresaId?: string | null;
   BancoId?: string | null;
   Estatus?: string | null;
-  FechaInicio?: string | null;
-  FechaFin?: string | null;
+  FechaInicio?: Date | null;
+  FechaFin?: Date | null;
 }
 
 export interface ISwiftNumCartaRequest {
