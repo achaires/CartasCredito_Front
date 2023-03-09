@@ -1,5 +1,5 @@
 import { useLazyGetCartaComercialQuery, useUpdateCartaComercialEstatusMutation } from "@/apis/cartasCreditoApi";
-import { AdminBreadcrumbs, AdminPageHeader, CartaSwiftModal } from "@/components";
+import { AdminBreadcrumbs, AdminLoadingActivity, AdminPageHeader, CartaSwiftModal } from "@/components";
 import { useAppDispatch } from "@/store";
 import { addToast } from "@/store/uiSlice";
 import { apiHost } from "@/utils/apiConfig";
@@ -87,7 +87,7 @@ export const CartasDeCreditoDetalle = () => {
 
   const dispatch = useAppDispatch();
 
-  const [getCartaComercial, { data: cartaCreditoDetalle }] = useLazyGetCartaComercialQuery();
+  const [getCartaComercial, { data: cartaCreditoDetalle, isLoading }] = useLazyGetCartaComercialQuery();
   const [updateEstatus, { data: updatedCartaCredito, isSuccess: updateEstatusSuccess, isError: updateEstatusError }] = useUpdateCartaComercialEstatusMutation();
 
   const _handleBack = useCallback(() => {
@@ -118,6 +118,10 @@ export const CartasDeCreditoDetalle = () => {
       dispatch(addToast({ title: "Error", message: "Ocurrió un problema al actualizar", type: "error" }));
     }
   }, [updateEstatusSuccess, updateEstatusError, updatedCartaCredito]);
+
+  if (isLoading || !cartaCreditoDetalle) {
+    return <AdminLoadingActivity />;
+  }
 
   return (
     <>
@@ -250,19 +254,19 @@ export const CartasDeCreditoDetalle = () => {
           </div>
           <div className="md:col-span-3">
             <Label value="Fecha de Apertura:" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle?.FechaApertura} disabled />
+            <TextInput type="text" defaultValue={cartaCreditoDetalle.FechaApertura?.toString()} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Icoterm:" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle?.Incoterm} disabled />
+            <TextInput type="text" defaultValue={cartaCreditoDetalle.Incoterm?.toString()} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Fecha Límite de Embarque:" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle?.FechaLimiteEmbarque} disabled />
+            <TextInput type="text" defaultValue={cartaCreditoDetalle.FechaLimiteEmbarque?.toString()} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Fecha de Vencimiento:" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle?.FechaVencimiento} disabled />
+            <TextInput type="text" defaultValue={cartaCreditoDetalle.FechaVencimiento?.toString()} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Embarques Parciales:" />
@@ -398,6 +402,14 @@ export const CartasDeCreditoDetalle = () => {
               <span className="text-xs">Registrar Enmienda</span>
             </Link>
           )}
+
+          {cartaCreditoDetalle && cartaCreditoDetalle.Estatus && Number(cartaCreditoDetalle.Estatus) === 21 && (
+            <Link to={`/operaciones/cartas-de-credito/${cartaCreditoDetalle?.Id}/enmiendas`} className="flex flex-col items-center justify-around gap-2">
+              <FontAwesomeIcon icon={faFilePen} className="h-6" />
+              <span className="text-xs">Enmienda Pendiente</span>
+            </Link>
+          )}
+
           {/* <a href="#" className="flex flex-col items-center justify-around gap-2">
           <FontAwesomeIcon icon={faCalendarAlt} className="h-6" />
           <span className="text-sm">Enmiendas</span>

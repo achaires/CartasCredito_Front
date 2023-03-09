@@ -6,7 +6,7 @@ export const PFE = () => {
   return (
     <>
       <div className="p-6">
-        <div className="mb-6">
+        <div className="mb-4">
           <AdminBreadcrumbs
             links={[
               { name: "Operaciones", href: "#" },
@@ -14,9 +14,11 @@ export const PFE = () => {
             ]}
           />
         </div>
-        <div className="mb-6">
+        <div className="mb-4">
           <AdminPageHeader title="Programación de Pagos PFE" icon={faFileInvoiceDollar} />
         </div>
+
+        <div className="mb-4"></div>
       </div>
     </>
   );

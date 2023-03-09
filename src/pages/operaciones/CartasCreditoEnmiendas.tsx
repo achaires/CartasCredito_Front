@@ -27,7 +27,7 @@ export const CartasCreditoEnmiendas = () => {
     formState: { errors: formErrors },
   } = useForm<IEnmiendaInsert>();
 
-  const [getCartaComercial, { data: cartaCreditoDetalle, isLoading }] = useLazyGetCartaComercialQuery();
+  const [getCartaComercial, { data: cartaCreditoDetalle, isLoading, isSuccess: isGetDetalleSuccess }] = useLazyGetCartaComercialQuery();
   const [addEnmienda, { data, isSuccess, isError }] = useAddEnmiendaMutation();
 
   const _handleBack = useCallback(() => {
@@ -45,6 +45,18 @@ export const CartasCreditoEnmiendas = () => {
       getCartaComercial(routeParams.cartaCreditoId);
     }
   }, [routeParams]);
+
+  useEffect(() => {
+    console.log(isGetDetalleSuccess);
+    if (isGetDetalleSuccess && cartaCreditoDetalle && cartaCreditoDetalle.Enmiendas && cartaCreditoDetalle.Enmiendas[0]) {
+      setValue("ImporteLC", cartaCreditoDetalle.Enmiendas[0].ImporteLC);
+      setValue("FechaVencimiento", cartaCreditoDetalle.Enmiendas[0].FechaVencimiento);
+      setValue("FechaLimiteEmbarque", cartaCreditoDetalle.Enmiendas[0].FechaLimiteEmbarque);
+      setValue("DescripcionMercancia", cartaCreditoDetalle.Enmiendas[0].DescripcionMercancia);
+      setValue("ConsideracionesAdicionales", cartaCreditoDetalle.Enmiendas[0].ConsideracionesAdicionales);
+      setValue("InstruccionesEspeciales", cartaCreditoDetalle.Enmiendas[0].InstruccionesEspeciales);
+    }
+  }, [isGetDetalleSuccess]);
 
   useEffect(() => {
     if (isSuccess && data) {
@@ -146,7 +158,7 @@ export const CartasCreditoEnmiendas = () => {
             <div className="md:grid md:grid-cols-12 md:gap-12">
               <div className="md:col-span-5 flex items-center justify-between gap-4">
                 <Label value="Fecha de Vencimiento" />
-                <TextInput value={cartaCreditoDetalle.FechaVencimiento} disabled />
+                <TextInput value={cartaCreditoDetalle.FechaVencimiento?.toString()} disabled />
               </div>
               <div className="md:col-span-5 md:col-start-7 flex items-center justify-between gap-4">
                 <Label value="Nueva Fecha de Vencimiento" />
@@ -157,7 +169,7 @@ export const CartasCreditoEnmiendas = () => {
             <div className="md:grid md:grid-cols-12 md:gap-12">
               <div className="md:col-span-5 flex items-center justify-between gap-4">
                 <Label value="Fecha Límite de Embarque" />
-                <TextInput value={cartaCreditoDetalle.FechaLimiteEmbarque} disabled />
+                <TextInput value={cartaCreditoDetalle.FechaLimiteEmbarque?.toString()} disabled />
               </div>
               <div className="md:col-span-5 md:col-start-7 flex items-center justify-between gap-4">
                 <Label value="Nueva Fecha Límite de Embarque" />
