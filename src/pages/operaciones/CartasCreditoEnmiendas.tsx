@@ -2,13 +2,13 @@ import { useLazyGetCartaComercialQuery } from "@/apis";
 import { AdminLoadingActivity, AdminBreadcrumbs, AdminPageHeader } from "@/components";
 import { useAppDispatch } from "@/store";
 import { apiHost } from "@/utils/apiConfig";
-import { faFileInvoiceDollar, faCircleArrowLeft, faSave, faClose } from "@fortawesome/free-solid-svg-icons";
+import { faFileInvoiceDollar, faCircleArrowLeft, faSave, faClose, faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Card, Label, TextInput, Textarea } from "flowbite-react";
 import React, { useCallback, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import numeral from "numeral";
-import { useAddEnmiendaMutation } from "@/apis/enmiendasApi";
+import { useAddEnmiendaMutation, useApproveEnmiendaMutation } from "@/apis/enmiendasApi";
 import { useForm } from "react-hook-form";
 import { IEnmienda, IEnmiendaInsert } from "@/interfaces";
 import { addToast } from "@/store/uiSlice";
@@ -29,6 +29,7 @@ export const CartasCreditoEnmiendas = () => {
 
   const [getCartaComercial, { data: cartaCreditoDetalle, isLoading, isSuccess: isGetDetalleSuccess }] = useLazyGetCartaComercialQuery();
   const [addEnmienda, { data, isSuccess, isError }] = useAddEnmiendaMutation();
+  const [approveEnmienda, { data: approveData, isSuccess: approveIsSuccess, isError: approveIsError }] = useApproveEnmiendaMutation();
 
   const _handleBack = useCallback(() => {
     nav(`/operaciones/cartas-de-credito/${cartaCreditoDetalle?.Id}`);
@@ -36,10 +37,13 @@ export const CartasCreditoEnmiendas = () => {
 
   const _handleSubmit = handleSubmit((formData) => {
     if (cartaCreditoDetalle && cartaCreditoDetalle.Id) {
-      addEnmienda({ ...formData, CartaCreditoId: cartaCreditoDetalle.Id });
+      if (cartaCreditoDetalle.Estatus === 21 && cartaCreditoDetalle.Enmiendas) {
+        approveEnmienda({ ...formData, CartaCreditoId: cartaCreditoDetalle.Id, Estatus: 2, Id: cartaCreditoDetalle.Enmiendas[0].Id });
+      } else {
+        addEnmienda({ ...formData, CartaCreditoId: cartaCreditoDetalle.Id });
+      }
     }
   });
-
   useEffect(() => {
     if (routeParams.cartaCreditoId) {
       getCartaComercial(routeParams.cartaCreditoId);
@@ -47,7 +51,6 @@ export const CartasCreditoEnmiendas = () => {
   }, [routeParams]);
 
   useEffect(() => {
-    console.log(isGetDetalleSuccess);
     if (isGetDetalleSuccess && cartaCreditoDetalle && cartaCreditoDetalle.Enmiendas && cartaCreditoDetalle.Enmiendas[0]) {
       setValue("ImporteLC", cartaCreditoDetalle.Enmiendas[0].ImporteLC);
       setValue("FechaVencimiento", cartaCreditoDetalle.Enmiendas[0].FechaVencimiento);
@@ -57,6 +60,40 @@ export const CartasCreditoEnmiendas = () => {
       setValue("InstruccionesEspeciales", cartaCreditoDetalle.Enmiendas[0].InstruccionesEspeciales);
     }
   }, [isGetDetalleSuccess]);
+
+  useEffect(() => {
+    if (approveIsSuccess && approveData) {
+      if (approveData.DataInt && approveData.DataInt > 0) {
+        dispatch(
+          addToast({
+            title: "Información",
+            type: "success",
+            message: "Solicitud de enmienda aprobada correctamente",
+          })
+        );
+
+        _handleBack();
+      } else {
+        dispatch(
+          addToast({
+            title: "Información",
+            type: "error",
+            message: approveData.Errors && approveData.Errors[0] ? approveData.Errors[0] : "Ocurrió un error desconocido",
+          })
+        );
+      }
+    }
+
+    if (approveIsError && approveData && approveData.Errors) {
+      dispatch(
+        addToast({
+          title: "Información",
+          type: "error",
+          message: approveData.Errors[0],
+        })
+      );
+    }
+  }, [approveIsSuccess, approveData, approveIsError]);
 
   useEffect(() => {
     if (isSuccess && data) {
@@ -151,7 +188,7 @@ export const CartasCreditoEnmiendas = () => {
               </div>
               <div className="md:col-span-5 md:col-start-7 flex items-center justify-between gap-4">
                 <Label value="Nuevo Importe de L/C" />
-                <TextInput {...register("ImporteLC")} required />
+                <TextInput {...register("ImporteLC")} required readOnly={cartaCreditoDetalle.Estatus === 21} />
               </div>
             </div>
 
@@ -162,7 +199,7 @@ export const CartasCreditoEnmiendas = () => {
               </div>
               <div className="md:col-span-5 md:col-start-7 flex items-center justify-between gap-4">
                 <Label value="Nueva Fecha de Vencimiento" />
-                <TextInput type="date" {...register("FechaVencimiento")} required />
+                <TextInput type="date" {...register("FechaVencimiento")} required readOnly={cartaCreditoDetalle.Estatus === 21} />
               </div>
             </div>
 
@@ -173,7 +210,7 @@ export const CartasCreditoEnmiendas = () => {
               </div>
               <div className="md:col-span-5 md:col-start-7 flex items-center justify-between gap-4">
                 <Label value="Nueva Fecha Límite de Embarque" />
-                <TextInput type="date" {...register("FechaLimiteEmbarque")} required />
+                <TextInput type="date" {...register("FechaLimiteEmbarque")} required readOnly={cartaCreditoDetalle.Estatus === 21} />
               </div>
             </div>
           </Card>
@@ -183,11 +220,11 @@ export const CartasCreditoEnmiendas = () => {
             <div className="md:grid md:grid-cols-12 md:gap-12">
               <div className="md:col-span-6">
                 <Label value="Actual" />
-                <Textarea value={cartaCreditoDetalle.DescripcionMercancia} disabled />
+                <Textarea value={cartaCreditoDetalle.DescripcionMercancia ? cartaCreditoDetalle.DescripcionMercancia : ""} disabled />
               </div>
               <div className="md:col-span-6">
                 <Label value="Debe Decir" />
-                <Textarea {...register("DescripcionMercancia")} required />
+                <Textarea {...register("DescripcionMercancia")} required readOnly={cartaCreditoDetalle.Estatus === 21} />
               </div>
             </div>
           </Card>
@@ -197,11 +234,11 @@ export const CartasCreditoEnmiendas = () => {
             <div className="md:grid md:grid-cols-12 md:gap-12">
               <div className="md:col-span-6">
                 <Label value="Actual" />
-                <Textarea value={cartaCreditoDetalle.ConsideracionesAdicionales} disabled />
+                <Textarea value={cartaCreditoDetalle.ConsideracionesAdicionales ? cartaCreditoDetalle.ConsideracionesAdicionales : ""} disabled />
               </div>
               <div className="md:col-span-6">
                 <Label value="Debe Decir" />
-                <Textarea {...register("ConsideracionesAdicionales")} required />
+                <Textarea {...register("ConsideracionesAdicionales")} required readOnly={cartaCreditoDetalle.Estatus === 21} />
               </div>
             </div>
           </Card>
@@ -211,11 +248,11 @@ export const CartasCreditoEnmiendas = () => {
             <div className="md:grid md:grid-cols-12 md:gap-12">
               <div className="md:col-span-6">
                 <Label value="Actual" />
-                <Textarea value={cartaCreditoDetalle.InstruccionesEspeciales} disabled />
+                <Textarea value={cartaCreditoDetalle.InstruccionesEspeciales ? cartaCreditoDetalle.InstruccionesEspeciales : ""} disabled />
               </div>
               <div className="md:col-span-6">
                 <Label value="Debe Decir" />
-                <Textarea {...register("InstruccionesEspeciales")} required />
+                <Textarea {...register("InstruccionesEspeciales")} required readOnly={cartaCreditoDetalle.Estatus === 21} />
               </div>
             </div>
           </Card>
@@ -225,10 +262,19 @@ export const CartasCreditoEnmiendas = () => {
               <FontAwesomeIcon icon={faClose} className="mr-2" />
               Cancelar
             </Button>
-            <Button type="submit">
-              <FontAwesomeIcon icon={faSave} className="mr-2" />
-              Guardar
-            </Button>
+            {cartaCreditoDetalle.Estatus !== 21 && (
+              <Button type="submit">
+                <FontAwesomeIcon icon={faSave} className="mr-2" />
+                Guardar
+              </Button>
+            )}
+
+            {cartaCreditoDetalle.Estatus === 21 && (
+              <Button type="submit" color="success">
+                <FontAwesomeIcon icon={faCheckCircle} className="mr-2" />
+                Aprobar Solicitud de Enmienda
+              </Button>
+            )}
           </div>
         </form>
       </div>

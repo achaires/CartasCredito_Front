@@ -26,10 +26,7 @@ import { z } from "zod";
 
 const validationSchema = z.object({
   TipoCartaId: z.number().min(1),
-  TipoActivoId: z
-    .number()
-    .min(1)
-    .refine((tid) => Number(tid)),
+  TipoActivoId: z.number().min(1),
   ProyectoId: z.number().min(1),
   BancoId: z.number().min(1),
   ProveedorId: z.number().min(1),
@@ -143,6 +140,8 @@ function NuevaCartaComercial() {
     }
   }, [isSuccess, isError, isLoading, error, responseData]);
 
+  console.log(formErrors);
+
   return (
     <>
       <div className="p-6">
@@ -182,16 +181,16 @@ function NuevaCartaComercial() {
         <div className="md:col-span-3">
           <Label value="Tipo de Carta de Crédito" />
           <TextInput defaultValue="Comercial" type="text" disabled />
-          <input type="hidden" value={1} {...register("TipoCartaId")} />
+          <input type="hidden" value={1} {...register("TipoCartaId", { valueAsNumber: true })} />
         </div>
         <div className="md:col-span-3">
           <Label value="Tipo de Activo" />
-          <Select {...register("TipoActivoId")} color={`${formErrors.TipoActivoId && "failure"}`}>
+          <Select {...register("TipoActivoId", { valueAsNumber: true })} color={`${formErrors.TipoActivoId && "failure"}`}>
             <option value={0}>Seleccione Opción</option>
             {catTiposActivo
               ?.filter((ta) => ta.Activo)
               .map((item, index) => (
-                <option value={Number(item.Id)} key={index.toString()}>
+                <option value={item.Id} key={index.toString()}>
                   {item.Nombre}
                 </option>
               ))}
@@ -199,7 +198,7 @@ function NuevaCartaComercial() {
         </div>
         <div className="md:col-span-3">
           <Label value="Proyecto" />
-          <Select {...register("ProyectoId")} color={`${formErrors.ProyectoId && "failure"}`}>
+          <Select {...register("ProyectoId", { valueAsNumber: true })} color={`${formErrors.ProyectoId && "failure"}`}>
             <option value={0}>Seleccione Opción</option>
             {catProyectos
               ?.filter((c) => c.Activo)
@@ -212,7 +211,7 @@ function NuevaCartaComercial() {
         </div>
         <div className="md:col-span-3">
           <Label value="Banco" />
-          <Select {...register("BancoId")} color={`${formErrors.BancoId && "failure"}`}>
+          <Select {...register("BancoId", { valueAsNumber: true })} color={`${formErrors.BancoId && "failure"}`}>
             <option value={0}>Seleccione Opción</option>
             {catBancos
               ?.filter((c) => c.Activo)
@@ -226,7 +225,7 @@ function NuevaCartaComercial() {
 
         <div className="md:col-span-3">
           <Label value="Proveedor" />
-          <Select {...register("ProveedorId")}>
+          <Select {...register("ProveedorId", { valueAsNumber: true })}>
             <option value={0}>Seleccione Opción</option>
             {catProveedores
               ?.filter((c) => c.Activo)
@@ -240,7 +239,7 @@ function NuevaCartaComercial() {
 
         <div className="md:col-span-3">
           <Label value="Empresa" />
-          <Select {...register("EmpresaId")}>
+          <Select {...register("EmpresaId", { valueAsNumber: true })}>
             <option value={0}>Seleccione Opción</option>
             {catEmpresas
               ?.filter((b) => b.Activo)
@@ -254,7 +253,7 @@ function NuevaCartaComercial() {
 
         <div className="md:col-span-3">
           <Label value="Agente Aduanal" />
-          <Select {...register("AgenteAduanalId")}>
+          <Select {...register("AgenteAduanalId", { valueAsNumber: true })}>
             <option value={0}>Seleccione Opción</option>
             {catAgentesAduanales
               ?.filter((b) => b.Activo)
@@ -268,7 +267,7 @@ function NuevaCartaComercial() {
 
         <div className="md:col-span-3">
           <Label value="Moneda" />
-          <Select {...register("MonedaId")}>
+          <Select {...register("MonedaId", { valueAsNumber: true })}>
             <option value={0}>Seleccione Opción</option>
             {catMonedas
               ?.filter((b) => b.Activo)
@@ -283,7 +282,7 @@ function NuevaCartaComercial() {
         <div className="md:col-span-3">
           <Label value="Tipo de Pago" />
           <Select {...register("TipoPago")}>
-            <option value={0}>Seleccione Opción</option>
+            <option value="0">Seleccione Opción</option>
             <option value="Estándar">Estándar</option>
             <option value="A Terceros">A Terceros</option>
             <option value="Otros">Otros</option>
@@ -297,7 +296,7 @@ function NuevaCartaComercial() {
 
         <div className="md:col-span-3">
           <Label value="Comprador" />
-          <Select {...register("CompradorId")} {...register("CompradorId")}>
+          <Select {...register("CompradorId", { valueAsNumber: true })} {...register("CompradorId")}>
             <option value={0}>Seleccione Opción</option>
             {catCompradores
               ?.filter((b) => b.Activo)
@@ -313,7 +312,7 @@ function NuevaCartaComercial() {
       <div className="md:grid md:grid-cols-12 md:gap-6 mb-6 px-6 bg-yellow-50 py-6">
         <div className="md:col-span-3">
           <Label value="% Tolerancia" />
-          <TextInput type="text" {...register("PorcentajeTolerancia")} />
+          <TextInput type="number" {...register("PorcentajeTolerancia", { valueAsNumber: true })} />
         </div>
         <div className="md:col-span-3">
           <Label value="No. Orden de Compra" />
@@ -321,16 +320,16 @@ function NuevaCartaComercial() {
         </div>
         <div className="md:col-span-3">
           <Label value="Costo Apertura" />
-          <TextInput {...register("CostoApertura")} />
+          <TextInput type="number" {...register("CostoApertura", { valueAsNumber: true })} />
         </div>
         <div className="md:col-span-3">
           <Label value="Monto Orden de Compra" />
-          <TextInput {...register("MontoOrdenCompra")} />
+          <TextInput type="number" {...register("MontoOrdenCompra", { valueAsNumber: true })} />
         </div>
 
         <div className="md:col-span-3">
           <Label value="Monto Original LC" />
-          <TextInput {...register("MontoOriginalLC")} />
+          <TextInput type="number" {...register("MontoOriginalLC", { valueAsNumber: true })} />
         </div>
 
         <div className="md:col-span-3">
@@ -357,15 +356,15 @@ function NuevaCartaComercial() {
       <div className="md:grid md:grid-cols-12 md:gap-6 mb-6 px-6">
         <div className="md:col-span-3">
           <Label value="Fecha Apertura" />
-          <TextInput type="date" {...register("FechaApertura")} />
+          <TextInput type="date" {...register("FechaApertura", { valueAsDate: true })} />
         </div>
         <div className="md:col-span-3">
           <Label value="Fecha Límite de Embarque" />
-          <TextInput type="date" {...register("FechaLimiteEmbarque")} />
+          <TextInput type="date" {...register("FechaLimiteEmbarque", { valueAsDate: true })} />
         </div>
         <div className="md:col-span-3">
           <Label value="Fecha de Vencimiento" />
-          <TextInput type="date" {...register("FechaVencimiento")} />
+          <TextInput type="date" {...register("FechaVencimiento", { valueAsDate: true })} />
         </div>
         <div className="md:col-span-3">
           <Label value="Incoterm" />
@@ -423,11 +422,11 @@ function NuevaCartaComercial() {
       <div className="md:grid md:grid-cols-12 md:gap-6 mb-6 p-6">
         <div className="md:col-span-3">
           <Label value="Días para presentar documentos" />
-          <TextInput type="number" {...register("DiasParaPresentarDocumentos")} />
+          <TextInput type="number" {...register("DiasParaPresentarDocumentos", { valueAsNumber: true })} />
         </div>
         <div className="md:col-span-3">
           <Label value="Días de plazo proveedor" />
-          <TextInput type="number" {...register("DiasPlazoProveedor")} />
+          <TextInput type="number" {...register("DiasPlazoProveedor", { valueAsNumber: true })} />
         </div>
         <div className="md:col-span-3">
           <Label value="Condiciones de Pago" />
@@ -440,11 +439,11 @@ function NuevaCartaComercial() {
         </div>
         <div className="md:col-span-3">
           <Label value="Número de Periodos" />
-          <TextInput type="number" {...register("NumeroPeriodos")} />
+          <TextInput type="number" {...register("NumeroPeriodos", { valueAsNumber: true })} />
         </div>
         <div className="md:col-span-3">
           <Label value="Banco Corresponsal" />
-          <Select {...register("BancoCorresponsalId")}>
+          <Select {...register("BancoCorresponsalId", { valueAsNumber: true })}>
             <option value={0}>Seleccione Opción</option>
             {catBancos
               ?.filter((c) => c.Activo)

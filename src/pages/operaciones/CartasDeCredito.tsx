@@ -220,6 +220,7 @@ export const CartasDeCredito = () => {
             <Table.HeadCell>Banco</Table.HeadCell>
             <Table.HeadCell>Moneda</Table.HeadCell>
             <Table.HeadCell align="right">Monto</Table.HeadCell>
+            <Table.HeadCell align="right">Ver</Table.HeadCell>
           </Table.Head>
           <Table.Body className="divide-y">
             {cartasCreditoFiltradas.data &&
@@ -236,7 +237,9 @@ export const CartasDeCredito = () => {
                     <Table.Cell align="right">{numeral(item.MontoOriginalLC).format("$0,0.00")}</Table.Cell>
                     <Table.Cell>
                       <Tooltip content="Ver Detalle">
-                        <Link to={`/operaciones/cartas-de-credito/${item.Id}`}>Detalle</Link>
+                        <Link to={`/operaciones/cartas-de-credito/${item.Id}`}>
+                          <FontAwesomeIcon icon={faMagnifyingGlass} />
+                        </Link>
                         {/* <Button color="dark" size="sm" onClick={(e) => nav(`/operaciones/cartas-de-credito/${item.Id}`)}>
                           <FontAwesomeIcon icon={faMagnifyingGlass} />
                         </Button> */}
@@ -260,7 +263,9 @@ export const CartasDeCredito = () => {
                     <Table.Cell align="right">{numeral(item.MontoOriginalLC).format("$0,0.00")}</Table.Cell>
                     <Table.Cell>
                       <Tooltip content="Ver Detalle">
-                        <Link to={`/operaciones/cartas-de-credito/${item.Id}`}>Detalle</Link>
+                        <Link to={`/operaciones/cartas-de-credito/${item.Id}`}>
+                          <FontAwesomeIcon icon={faMagnifyingGlass} />
+                        </Link>
                         {/* <Button color="dark" size="sm" onClick={(e) => nav(`/operaciones/cartas-de-credito/${item.Id}`)}>
                           <FontAwesomeIcon icon={faMagnifyingGlass} />
                         </Button> */}

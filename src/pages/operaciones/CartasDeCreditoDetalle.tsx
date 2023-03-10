@@ -151,7 +151,7 @@ export const CartasDeCreditoDetalle = () => {
         <div className="col-span-3">{cartaCreditoDetalle && cartaCreditoDetalle.Estatus && <EstatusButton estatus={cartaCreditoDetalle.Estatus} />}</div>
         {cartaCreditoDetalle && cartaCreditoDetalle.DocumentoSwift !== "" && (
           <div className="col-span-9 text-right">
-            <a target="_blank" className="bg-brandPrimary p-2 rounded text-white" href={cartaCreditoDetalle.DocumentoSwift}>
+            <a target="_blank" className="bg-brandPrimary p-2 rounded text-white text-sm" href={cartaCreditoDetalle.DocumentoSwift}>
               Descargar Archivo Swift
             </a>
           </div>
@@ -170,87 +170,87 @@ export const CartasDeCreditoDetalle = () => {
         <div className="md:grid md:grid-cols-12 md:gap-4 mb-6 px-6">
           <div className="md:col-span-3">
             <Label value="No. Carta de Crédito:" />
-            <TextInput type="text" name="numCarta" defaultValue={cartaCreditoDetalle?.NumCartaCredito} disabled />
+            <TextInput type="text" name="numCarta" defaultValue={cartaCreditoDetalle.NumCartaCredito} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Tipo de Carta:" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle?.TipoCarta} disabled />
+            <TextInput type="text" defaultValue={cartaCreditoDetalle.TipoCarta} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Tipo de Activo:" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle?.TipoActivo} disabled />
+            <TextInput type="text" defaultValue={cartaCreditoDetalle.TipoActivo} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Proyecto:" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle?.Proyecto} disabled />
+            <TextInput type="text" defaultValue={cartaCreditoDetalle.Proyecto} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Banco:" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle?.Banco} disabled />
+            <TextInput type="text" defaultValue={cartaCreditoDetalle.Banco} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Proveedor:" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle?.Proveedor} disabled />
+            <TextInput type="text" defaultValue={cartaCreditoDetalle.Proveedor} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Empresa:" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle?.Empresa} disabled />
+            <TextInput type="text" defaultValue={cartaCreditoDetalle.Empresa} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Agente Aduanal:" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle?.AgenteAduanal} disabled />
+            <TextInput type="text" defaultValue={cartaCreditoDetalle.AgenteAduanal} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Moneda:" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle?.Moneda} disabled />
+            <TextInput type="text" defaultValue={cartaCreditoDetalle.Moneda} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Tipo de Pago:" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle?.TipoPago} disabled />
+            <TextInput type="text" defaultValue={cartaCreditoDetalle.TipoPago} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Responsable:" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle?.Responsable} disabled />
+            <TextInput type="text" defaultValue={cartaCreditoDetalle.Responsable} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Comprador:" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle?.Comprador} disabled />
+            <TextInput type="text" defaultValue={cartaCreditoDetalle.Comprador} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="% Tolerancia:" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle?.PorcentajeTolerancia} disabled />
+            <TextInput type="text" defaultValue={cartaCreditoDetalle.PorcentajeTolerancia} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="No. Orden de Compra:" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle?.NumOrdenCompra} disabled />
+            <TextInput type="text" defaultValue={cartaCreditoDetalle.NumOrdenCompra} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Costo de Apertura:" />
-            <TextInput type="text" defaultValue={numeral(cartaCreditoDetalle?.CostoApertura).format("$0,0.00")} disabled />
+            <TextInput type="text" defaultValue={numeral(cartaCreditoDetalle.CostoApertura).format("$0,0.00")} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Monto Orden de Compra:" />
-            <TextInput type="text" defaultValue={numeral(cartaCreditoDetalle?.MontoOrdenCompra).format("$0,0.00")} disabled />
+            <TextInput type="text" defaultValue={numeral(cartaCreditoDetalle.MontoOrdenCompra).format("$0,0.00")} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Monto Original L/C:" />
-            <TextInput type="text" defaultValue={numeral(cartaCreditoDetalle?.MontoOriginalLC).format("$0,0.00")} disabled />
+            <TextInput type="text" defaultValue={numeral(cartaCreditoDetalle.MontoOriginalLC).format("$0,0.00")} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Pagos Efectuados:" />
-            <TextInput type="text" defaultValue={numeral(cartaCreditoDetalle?.PagosEfectuados).format("$0,0.00")} disabled />
+            <TextInput type="text" defaultValue={numeral(cartaCreditoDetalle.PagosEfectuados).format("$0,0.00")} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Pagos Programados:" />
-            <TextInput type="text" defaultValue={numeral(cartaCreditoDetalle?.PagosProgramados).format("$0,0.00")} disabled />
+            <TextInput type="text" defaultValue={numeral(cartaCreditoDetalle.PagosProgramados).format("$0,0.00")} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Monto Dispuesto:" />
-            <TextInput type="text" defaultValue={numeral(cartaCreditoDetalle?.MontoDispuesto).format("$0,0.00")} disabled />
+            <TextInput type="text" defaultValue={numeral(cartaCreditoDetalle.MontoDispuesto).format("$0,0.00")} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Saldo Insoluto:" />
-            <TextInput type="text" defaultValue={numeral(cartaCreditoDetalle?.SaldoInsoluto).format("$0,0.00")} disabled />
+            <TextInput type="text" defaultValue={numeral(cartaCreditoDetalle.SaldoInsoluto).format("$0,0.00")} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Fecha de Apertura:" />
@@ -270,90 +270,90 @@ export const CartasDeCreditoDetalle = () => {
           </div>
           <div className="md:col-span-3">
             <Label value="Embarques Parciales:" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle?.EmbarquesParciales} disabled />
+            <TextInput type="text" defaultValue={cartaCreditoDetalle.EmbarquesParciales} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Transbordos:" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle?.Transbordos} disabled />
+            <TextInput type="text" defaultValue={cartaCreditoDetalle.Transbordos} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Punto de Embarque:" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle?.PuntoEmbarque} disabled />
+            <TextInput type="text" defaultValue={cartaCreditoDetalle.PuntoEmbarque} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Punto de Desembarque:" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle?.PuntoDesembarque} disabled />
+            <TextInput type="text" defaultValue={cartaCreditoDetalle.PuntoDesembarque} disabled />
           </div>
         </div>
 
         <div className="bg-yellow-50 py-6 px-6">
           <div className="mb-4">
             <Label value="Descripción de Mercancía:" />
-            <Textarea disabled defaultValue={cartaCreditoDetalle?.DescripcionMercancia} />
+            <Textarea disabled defaultValue={cartaCreditoDetalle.DescripcionMercancia ? cartaCreditoDetalle.DescripcionMercancia : ""} />
           </div>
 
           <div className="mb-4">
             <Label value="Descripción de la carta de crédito:" />
-            <Textarea disabled defaultValue={cartaCreditoDetalle?.DescripcionCartaCredito} />
+            <Textarea disabled defaultValue={cartaCreditoDetalle.DescripcionCartaCredito ? cartaCreditoDetalle.DescripcionCartaCredito : ""} />
           </div>
 
           <div className="mb-4">
             <Label value="Pago vs carta de aceptación:" />
-            <Textarea disabled defaultValue={cartaCreditoDetalle?.PagoCartaAceptacion} />
+            <Textarea disabled defaultValue={cartaCreditoDetalle.PagoCartaAceptacion ? cartaCreditoDetalle.PagoCartaAceptacion : ""} />
           </div>
 
           <div className="mb-4">
             <Label value="Consignación de mercancía:" />
-            <Textarea disabled defaultValue={cartaCreditoDetalle?.ConsignacionMercancia} />
+            <Textarea disabled defaultValue={cartaCreditoDetalle.ConsignacionMercancia ? cartaCreditoDetalle.ConsignacionMercancia : ""} />
           </div>
 
           <div className="mb-4">
             <Label value="Consideraciones adicionales:" />
-            <Textarea disabled defaultValue={cartaCreditoDetalle?.ConsideracionesAdicionales} />
+            <Textarea disabled defaultValue={cartaCreditoDetalle.ConsideracionesAdicionales ? cartaCreditoDetalle.ConsideracionesAdicionales : ""} />
           </div>
         </div>
 
         <div className="md:grid md:grid-cols-12 md:gap-4 mb-6 p-6">
           <div className="md:col-span-3">
             <Label value="Días para presentar documentos:" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle?.DiasParaPresentarDocumentos} disabled />
+            <TextInput type="text" defaultValue={cartaCreditoDetalle.DiasParaPresentarDocumentos} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Días de plazo proveedor:" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle?.DiasPlazoProveedor} disabled />
+            <TextInput type="text" defaultValue={cartaCreditoDetalle.DiasPlazoProveedor} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Condiciones de pago:" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle?.CondicionesPago} disabled />
+            <TextInput type="text" defaultValue={cartaCreditoDetalle.CondicionesPago} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Número de periodos:" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle?.NumeroPeriodos} disabled />
+            <TextInput type="text" defaultValue={cartaCreditoDetalle.NumeroPeriodos} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Banco Corresponsal:" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle?.BancoCorresponsal} disabled />
+            <TextInput type="text" defaultValue={cartaCreditoDetalle.BancoCorresponsal} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Seguro por Cuenta:" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle?.SeguroPorCuenta} disabled />
+            <TextInput type="text" defaultValue={cartaCreditoDetalle.SeguroPorCuenta} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Gastos y Comisiones de Corresponsal:" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle?.GastosComisionesCorresponsal} disabled />
+            <TextInput type="text" defaultValue={cartaCreditoDetalle.GastosComisionesCorresponsal} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Confirmar Banco Notificador" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle?.ConfirmacionBancoNotificador} disabled />
+            <TextInput type="text" defaultValue={cartaCreditoDetalle.ConfirmacionBancoNotificador} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Tipo de Emisión" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle?.TipoEmision} disabled />
+            <TextInput type="text" defaultValue={cartaCreditoDetalle.TipoEmision} disabled />
           </div>
         </div>
       </form>
 
-      {cartaCreditoDetalle?.Estatus !== 4 && (
+      {cartaCreditoDetalle.Estatus !== 4 && (
         <div id="controles-footer" className="fixed bottom-0 left-0 w-full bg-brandPrimary p-6 text-white flex items-center justify-center gap-12">
           {/* <a href="#" className="flex flex-col items-center justify-around gap-2">
           <FontAwesomeIcon icon={faPencil} className="h-6" />
@@ -375,11 +375,11 @@ export const CartasDeCreditoDetalle = () => {
 
           {cartaCreditoDetalle && cartaCreditoDetalle.Estatus && Number(cartaCreditoDetalle.Estatus) > 1 && (
             <>
-              <Link to={`/operaciones/cartas-de-credito/${cartaCreditoDetalle?.Id}/pagos`} className="flex flex-col items-center justify-around gap-2">
+              <Link to={`/operaciones/cartas-de-credito/${cartaCreditoDetalle.Id}/pagos`} className="flex flex-col items-center justify-around gap-2">
                 <FontAwesomeIcon icon={faDollarSign} className="h-6" />
                 <span className="text-xs">Registro de Pagos</span>
               </Link>
-              <Link to={`/operaciones/cartas-de-credito/${cartaCreditoDetalle?.Id}/comisiones`} className="flex flex-col items-center justify-around gap-2">
+              <Link to={`/operaciones/cartas-de-credito/${cartaCreditoDetalle.Id}/comisiones`} className="flex flex-col items-center justify-around gap-2">
                 <FontAwesomeIcon icon={faPlusCircle} className="h-6" />
                 <span className="text-xs">Registro de Comisiones</span>
               </Link>
@@ -397,14 +397,14 @@ export const CartasDeCreditoDetalle = () => {
           )}
 
           {cartaCreditoDetalle && cartaCreditoDetalle.Estatus && Number(cartaCreditoDetalle.Estatus) !== 21 && (
-            <Link to={`/operaciones/cartas-de-credito/${cartaCreditoDetalle?.Id}/enmiendas`} className="flex flex-col items-center justify-around gap-2">
+            <Link to={`/operaciones/cartas-de-credito/${cartaCreditoDetalle.Id}/enmiendas`} className="flex flex-col items-center justify-around gap-2">
               <FontAwesomeIcon icon={faFilePen} className="h-6" />
               <span className="text-xs">Registrar Enmienda</span>
             </Link>
           )}
 
           {cartaCreditoDetalle && cartaCreditoDetalle.Estatus && Number(cartaCreditoDetalle.Estatus) === 21 && (
-            <Link to={`/operaciones/cartas-de-credito/${cartaCreditoDetalle?.Id}/enmiendas`} className="flex flex-col items-center justify-around gap-2">
+            <Link to={`/operaciones/cartas-de-credito/${cartaCreditoDetalle.Id}/enmiendas`} className="flex flex-col items-center justify-around gap-2">
               <FontAwesomeIcon icon={faFilePen} className="h-6" />
               <span className="text-xs">Enmienda Pendiente</span>
             </Link>

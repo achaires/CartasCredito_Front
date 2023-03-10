@@ -32,3 +32,8 @@ export interface IEnmiendaInsert {
   ImporteLC: number;
   InstruccionesEspeciales: string;
 }
+
+export interface IEnmiendaUpdate extends IEnmiendaInsert {
+  Id: number;
+  Estatus: number;
+}
