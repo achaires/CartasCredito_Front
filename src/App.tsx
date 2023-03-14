@@ -1,7 +1,7 @@
+import "devextreme/dist/css/dx.light.css";
 import { useEffect } from "react";
 import { toast, Toaster } from "react-hot-toast";
-import { RouterProvider, createBrowserRouter, createHashRouter } from "react-router-dom";
-import { AdminLoadingActivity } from "./components";
+import { RouterProvider, createHashRouter } from "react-router-dom";
 import { AdminLayout } from "./layouts/AdminLayout";
 import {
   AgentesAduanales,
@@ -21,7 +21,6 @@ import {
   TiposDeCobertura,
 } from "./pages/catalogos";
 import { DashboardIndex } from "./pages/dashboard/DashboardIndex";
-import { Login } from "./pages/Login";
 import { CartasCreditoComisiones, CartasCreditoEnmiendas, CartasDeCredito, CartasDeCreditoDetalle, CartasDeCreditoPagos, PFE } from "./pages/operaciones";
 import NuevaCartaComercial from "./pages/operaciones/crear/NuevaCartaComercial";
 import { NuevaCartaStandBy } from "./pages/operaciones/crear/NuevaCartaStandBy";

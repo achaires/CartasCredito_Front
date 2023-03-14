@@ -5,11 +5,11 @@ export const pagosApiSlice = rootApi.injectEndpoints({
   endpoints: (builder) => ({
     getPagosVencidos: builder.query<IPago[], void>({
       providesTags: ["Pagos"],
-      query: () => `/pagosvencidos`,
+      query: () => `/dashboard/pagosvencidos`,
     }),
     getPagosProgramados: builder.query<IPago[], void>({
       providesTags: ["Pagos"],
-      query: () => `/pagosprogramados`,
+      query: () => `/dashboard/pagosprogramados`,
     }),
     addPago: builder.mutation<IRespuestaFormato, IPagoInsert>({
       invalidatesTags: ["Pagos"],

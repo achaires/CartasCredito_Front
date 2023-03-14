@@ -11,7 +11,9 @@ export const AdminSidebar = ({ showSidebar = false }: Props) => {
     <aside id="dashboard__sidebar" className={showSidebar ? "active" : ""}>
       <div className="sidebar__inner">
         <ul className="sidebar__list">
-          {/* <AdminSidebarItem title={`Dashboard`} href={`#`} icon={faChartArea} />
+          <AdminSidebarItem title={`Dashboard`} href={`/`} icon={faChartArea} />
+
+          {/*
 
           <AdminSidebarItem
             title={`Usuarios`}
