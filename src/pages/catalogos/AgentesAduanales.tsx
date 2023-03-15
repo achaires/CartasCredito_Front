@@ -7,9 +7,11 @@ import { addToast } from "@/store/uiSlice";
 import { apiHost } from "@/utils/apiConfig";
 import { faPencil, faPerson, faPersonBooth, faPersonMilitaryPointing, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, Label, Modal, Select, Table, Textarea, TextInput, ToggleSwitch, Tooltip } from "flowbite-react";
+import { Button as FButton, Label, Modal, Select, Table, Textarea, TextInput, ToggleSwitch, Tooltip } from "flowbite-react";
 import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import DataGrid, { Column, Export, HeaderFilter, Paging, SearchPanel, Selection } from "devextreme-react/data-grid";
+import { ColumnCellTemplateData } from "devextreme/ui/data_grid";
 
 type TContactoFormData = {
   Nombre: string;
@@ -25,6 +27,12 @@ type TInsertFormData = {
   Nombre: string;
   Descripcion: string;
   Contacto: TContactoFormData;
+};
+
+const txtsExport = {
+  exportAll: "Exportar Todo",
+  exportSelectedRows: "Exportar Selección",
+  exportTo: "Exportar A",
 };
 
 export const AgentesAduanales = () => {
@@ -60,6 +68,7 @@ export const AgentesAduanales = () => {
 
   const _handleHideModal = useCallback(() => {
     setShowAddForm(false);
+    reset();
   }, [showAddForm]);
 
   const _handleToggleActivo = useCallback((modelId: number) => {
@@ -166,6 +175,34 @@ export const AgentesAduanales = () => {
     }
   }, [rsp, addError, updateRsp]);
 
+  const _toggleCellComponent = useCallback(
+    (rowData: ColumnCellTemplateData) => {
+      return (
+        <ToggleSwitch
+          label={rowData.data.Activo ? "Activo" : "Inactivo"}
+          checked={rowData.data.Activo}
+          onChange={(e) => {
+            _handleToggleActivo(rowData.data.Id);
+          }}
+        />
+      );
+    },
+    [catEmpresas, catalogoData]
+  );
+
+  const _editCellComponent = useCallback(
+    (rowData: ColumnCellTemplateData) => {
+      return (
+        <Tooltip content="Editar">
+          <FButton color="dark" size="sm" onClick={(e) => _handleEdit(rowData.data.Id)}>
+            <FontAwesomeIcon icon={faPencil} />
+          </FButton>
+        </Tooltip>
+      );
+    },
+    [catEmpresas, catalogoData]
+  );
+
   return (
     <>
       <div className="p-6">
@@ -183,14 +220,27 @@ export const AgentesAduanales = () => {
         </div>
 
         <div className="mb-6">
-          <Button size="xs" onClick={_handleShowModal}>
+          <FButton size="xs" onClick={_handleShowModal}>
             <FontAwesomeIcon icon={faPlusCircle} className="mr-2" />
             Agregar
-          </Button>
+          </FButton>
         </div>
 
         <div className="mb-6">
-          <Table>
+          <DataGrid showBorders={true} showColumnLines={true} showRowLines={true} keyExpr="Id" dataSource={catalogoData}>
+            <Paging defaultPageSize={10} />
+            <HeaderFilter visible={true} />
+            <SearchPanel visible={true} />
+            <Selection mode="multiple" showCheckBoxesMode="always" />
+            <Export enabled={true} texts={txtsExport} allowExportSelectedData={true} />
+            <Column dataField="Nombre" />
+            <Column dataField="Empresa" />
+            <Column dataField="Descripcion" />
+            <Column caption="" cellRender={_toggleCellComponent} width={200} alignment="center" allowExporting={false} />
+            <Column caption="" cellRender={_editCellComponent} width={60} alignment="center" allowExporting={false} />
+          </DataGrid>
+
+          {/* <Table>
             <Table.Head>
               <Table.HeadCell>Agente Aduanal</Table.HeadCell>
               <Table.HeadCell>Dirección</Table.HeadCell>
@@ -206,9 +256,9 @@ export const AgentesAduanales = () => {
                       <Table.Cell>{item.Descripcion}</Table.Cell>
                       <Table.Cell align="right" className="flex flex-wrap items-center gap-2">
                         <Tooltip content="Editar">
-                          <Button color="dark" size="sm" onClick={(e) => _handleEdit(item.Id)}>
+                          <FButton color="dark" size="sm" onClick={(e) => _handleEdit(item.Id)}>
                             <FontAwesomeIcon icon={faPencil} />
-                          </Button>
+                          </FButton>
                         </Tooltip>
                       </Table.Cell>
                       <Table.Cell>
@@ -224,7 +274,7 @@ export const AgentesAduanales = () => {
                   );
                 })}
             </Table.Body>
-          </Table>
+          </Table> */}
         </div>
 
         <Modal show={showAddForm} size="4xl" onClose={_handleHideModal} dismissible={true}>
@@ -294,10 +344,10 @@ export const AgentesAduanales = () => {
               </div>
             </Modal.Body>
             <Modal.Footer>
-              <Button type="submit">Guardar</Button>
-              <Button color="failure" onClick={_handleHideModal}>
+              <FButton type="submit">Guardar</FButton>
+              <FButton color="failure" onClick={_handleHideModal}>
                 Cancelar
-              </Button>
+              </FButton>
             </Modal.Footer>
           </form>
         </Modal>

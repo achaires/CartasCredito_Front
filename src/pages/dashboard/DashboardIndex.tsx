@@ -1,13 +1,24 @@
 import { useGetPagosProgramadosQuery, useGetPagosVencidosQuery } from "@/apis";
 import { AdminBreadcrumbs, AdminPageHeader } from "@/components";
 import { faFileInvoiceDollar } from "@fortawesome/free-solid-svg-icons";
-import DataGrid from "devextreme-react/data-grid";
+import DataGrid, { Export, Selection, Button, Column, FilterRow, Grouping, GroupPanel, HeaderFilter, Pager, Paging, SearchPanel } from "devextreme-react/data-grid";
+import { useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 
-const columns = ["FechaVencimiento", "Empresa"];
+const txtsExport = {
+  exportAll: "Exportar Todo",
+  exportSelectedRows: "Exportar Selección",
+  exportTo: "Exportar A",
+};
 
 export const DashboardIndex = () => {
+  const nav = useNavigate();
   const { data: pagosProgramados } = useGetPagosProgramadosQuery();
   const { data: pagosVencidos } = useGetPagosVencidosQuery();
+
+  const _handleDetalleClick = useCallback((e: any) => {
+    nav(`/operaciones/cartas-de-credito/${e.row.data.CartaCredito.Id}`);
+  }, []);
 
   return (
     <>
@@ -21,7 +32,20 @@ export const DashboardIndex = () => {
         </div>
 
         <div className="mb-6">
-          <DataGrid showBorders={true} showColumnLines={true} showRowLines={true} defaultColumns={columns} keyExpr="Id" dataSource={pagosProgramados} />
+          <DataGrid showBorders={true} showColumnLines={true} showRowLines={true} keyExpr="Id" dataSource={pagosProgramados}>
+            <HeaderFilter visible={true} />
+            <Paging defaultPageSize={10} />
+            <Selection mode="multiple" showCheckBoxesMode="always" />
+            <Export enabled={true} texts={txtsExport} allowExportSelectedData={true} />
+            <Column dataField="CartaCredito.NumCartaCredito" caption="Num. Carta Crédito" />
+            <Column dataField="CartaCredito.DescripcionCartaCredito" caption="Descripción" />
+            <Column dataField="FechaVencimiento" caption="Fecha Vencimiento" />
+            <Column dataField="MontoPago" caption="Monto Programado" format="currency" dataType="number" alignment="right" />
+            <Column dataField="Moneda" caption="Moneda" />
+            <Column type="buttons">
+              <Button name="Detalle" icon="find" hint="Ver Detalle" onClick={_handleDetalleClick} />
+            </Column>
+          </DataGrid>
         </div>
 
         <div className="mb-6">
@@ -29,7 +53,17 @@ export const DashboardIndex = () => {
         </div>
 
         <div className="mb-6">
-          <DataGrid showBorders={true} showColumnLines={true} showRowLines={true} defaultColumns={columns} keyExpr="Id" dataSource={pagosVencidos} />
+          <DataGrid showBorders={true} showColumnLines={true} showRowLines={true} keyExpr="Id" dataSource={pagosVencidos}>
+            <HeaderFilter visible={true} />
+            <Column dataField="CartaCredito.NumCartaCredito" caption="Num. Carta Crédito" />
+            <Column dataField="CartaCredito.DescripcionCartaCredito" caption="Descripción" />
+            <Column dataField="FechaVencimiento" caption="Fecha Vencimiento" />
+            <Column dataField="MontoPago" caption="Monto Programado" format="currency" dataType="number" alignment="right" />
+            <Column dataField="Moneda" caption="Moneda" />
+            <Column type="buttons">
+              <Button name="Detalle" icon="find" hint="Ver Detalle" onClick={_handleDetalleClick} />
+            </Column>
+          </DataGrid>
         </div>
       </div>
     </>

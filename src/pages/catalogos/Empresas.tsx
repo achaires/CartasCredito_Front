@@ -8,6 +8,14 @@ import { faBuilding, faPencil, faPlus, faPlusCircle, faTrash } from "@fortawesom
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Label, Modal, Select, Table, Textarea, TextInput, ToggleSwitch, Tooltip } from "flowbite-react";
 import { useCallback, useEffect, useState } from "react";
+import DataGrid, { Column, Export, HeaderFilter, Paging, SearchPanel, Selection } from "devextreme-react/data-grid";
+import { ColumnCellTemplateData } from "devextreme/ui/data_grid";
+
+const txtsExport = {
+  exportAll: "Exportar Todo",
+  exportSelectedRows: "Exportar Selección",
+  exportTo: "Exportar A",
+};
 
 export const Empresas = () => {
   const { data: divisiones } = useGetDivisionesQuery();
@@ -103,6 +111,34 @@ export const Empresas = () => {
     }
   }, [rsp, addError, updateRsp]);
 
+  const _toggleCellComponent = useCallback(
+    (rowData: ColumnCellTemplateData) => {
+      return (
+        <ToggleSwitch
+          label={rowData.data.Activo ? "Activo" : "Inactivo"}
+          checked={rowData.data.Activo}
+          onChange={(e) => {
+            _handleToggleActivo(rowData.data.Id);
+          }}
+        />
+      );
+    },
+    [divisiones, empresas]
+  );
+
+  const _editCellComponent = useCallback(
+    (rowData: ColumnCellTemplateData) => {
+      return (
+        <Tooltip content="Editar">
+          <Button color="dark" size="sm" onClick={(e) => _handleEdit(rowData.data.Id)}>
+            <FontAwesomeIcon icon={faPencil} />
+          </Button>
+        </Tooltip>
+      );
+    },
+    [divisiones, empresas]
+  );
+
   return (
     <>
       <div className="p-6">
@@ -127,43 +163,18 @@ export const Empresas = () => {
         </div>
 
         <div className="mb-6">
-          <Table>
-            <Table.Head>
-              <Table.HeadCell>Empresa</Table.HeadCell>
-              <Table.HeadCell>División</Table.HeadCell>
-              <Table.HeadCell>RFC</Table.HeadCell>
-              <Table.HeadCell></Table.HeadCell>
-              <Table.HeadCell></Table.HeadCell>
-            </Table.Head>
-            <Table.Body className="divide-y">
-              {empresas &&
-                empresas.map((item, index) => {
-                  return (
-                    <Table.Row key={index.toString()}>
-                      <Table.Cell className="">{item.Nombre}</Table.Cell>
-                      <Table.Cell>{item.Division}</Table.Cell>
-                      <Table.Cell>{item.RFC}</Table.Cell>
-                      <Table.Cell align="right" className="flex flex-wrap items-center gap-2">
-                        <Tooltip content="Editar">
-                          <Button color="dark" size="sm" onClick={(e) => _handleEdit(item.Id)}>
-                            <FontAwesomeIcon icon={faPencil} />
-                          </Button>
-                        </Tooltip>
-                      </Table.Cell>
-                      <Table.Cell>
-                        <ToggleSwitch
-                          checked={item.Activo}
-                          label="Activo"
-                          onChange={(e) => {
-                            _handleToggleActivo(item.Id);
-                          }}
-                        />
-                      </Table.Cell>
-                    </Table.Row>
-                  );
-                })}
-            </Table.Body>
-          </Table>
+          <DataGrid showBorders={true} showColumnLines={true} showRowLines={true} keyExpr="Id" dataSource={empresas}>
+            <Paging defaultPageSize={10} />
+            <HeaderFilter visible={true} />
+            <SearchPanel visible={true} />
+            <Selection mode="multiple" showCheckBoxesMode="always" />
+            <Export enabled={true} texts={txtsExport} allowExportSelectedData={true} />
+            <Column dataField="Nombre" />
+            <Column dataField="Division" />
+            <Column dataField="RFC" />
+            <Column caption="" cellRender={_toggleCellComponent} width={200} alignment="center" allowExporting={false} />
+            <Column caption="" cellRender={_editCellComponent} width={60} alignment="center" allowExporting={false} />
+          </DataGrid>
         </div>
 
         <Modal show={showAddForm} size="md" onClose={_handleHideModal} dismissible={true}>

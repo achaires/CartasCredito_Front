@@ -8,6 +8,14 @@ import { faFileInvoice, faPencil, faPlusCircle } from "@fortawesome/free-solid-s
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Label, Modal, Select, Table, Textarea, TextInput, ToggleSwitch, Tooltip } from "flowbite-react";
 import { useCallback, useEffect, useState } from "react";
+import DataGrid, { Column, Export, HeaderFilter, Paging, SearchPanel, Selection } from "devextreme-react/data-grid";
+import { ColumnCellTemplateData } from "devextreme/ui/data_grid";
+
+const txtsExport = {
+  exportAll: "Exportar Todo",
+  exportSelectedRows: "Exportar Selección",
+  exportTo: "Exportar A",
+};
 
 export const Comisiones = () => {
   const { data: catalogoData, isLoading, error } = useGetTiposComisionQuery();
@@ -95,6 +103,34 @@ export const Comisiones = () => {
     }
   }, [rsp, addError, updateRsp]);
 
+  const _toggleCellComponent = useCallback(
+    (rowData: ColumnCellTemplateData) => {
+      return (
+        <ToggleSwitch
+          label={rowData.data.Activo ? "Activo" : "Inactivo"}
+          checked={rowData.data.Activo}
+          onChange={(e) => {
+            _handleToggleActivo(rowData.data.Id);
+          }}
+        />
+      );
+    },
+    [catalogoData]
+  );
+
+  const _editCellComponent = useCallback(
+    (rowData: ColumnCellTemplateData) => {
+      return (
+        <Tooltip content="Editar">
+          <Button color="dark" size="sm" onClick={(e) => _handleEdit(rowData.data.Id)}>
+            <FontAwesomeIcon icon={faPencil} />
+          </Button>
+        </Tooltip>
+      );
+    },
+    [catalogoData]
+  );
+
   return (
     <>
       <div className="p-6">
@@ -119,41 +155,17 @@ export const Comisiones = () => {
         </div>
 
         <div className="mb-6">
-          <Table>
-            <Table.Head>
-              <Table.HeadCell>Tipo Comision</Table.HeadCell>
-              <Table.HeadCell>Descripción</Table.HeadCell>
-              <Table.HeadCell></Table.HeadCell>
-              <Table.HeadCell></Table.HeadCell>
-            </Table.Head>
-            <Table.Body className="divide-y">
-              {catalogoData &&
-                catalogoData.map((item, index) => {
-                  return (
-                    <Table.Row key={index.toString()}>
-                      <Table.Cell className="">{item.Nombre}</Table.Cell>
-                      <Table.Cell>{item.Descripcion}</Table.Cell>
-                      <Table.Cell align="right" className="flex flex-wrap items-center gap-2">
-                        <Tooltip content="Editar">
-                          <Button color="dark" size="sm" onClick={(e) => _handleEdit(item.Id)}>
-                            <FontAwesomeIcon icon={faPencil} />
-                          </Button>
-                        </Tooltip>
-                      </Table.Cell>
-                      <Table.Cell>
-                        <ToggleSwitch
-                          checked={item.Activo}
-                          label="Activo"
-                          onChange={(e) => {
-                            _handleToggleActivo(item.Id);
-                          }}
-                        />
-                      </Table.Cell>
-                    </Table.Row>
-                  );
-                })}
-            </Table.Body>
-          </Table>
+          <DataGrid showBorders={true} showColumnLines={true} showRowLines={true} keyExpr="Id" dataSource={catalogoData}>
+            <Paging defaultPageSize={10} />
+            <HeaderFilter visible={true} />
+            <SearchPanel visible={true} />
+            <Selection mode="multiple" showCheckBoxesMode="always" />
+            <Export enabled={true} texts={txtsExport} allowExportSelectedData={true} />
+            <Column dataField="Nombre" />
+            <Column dataField="Descripcion" />
+            <Column caption="" cellRender={_toggleCellComponent} width={200} alignment="center" allowExporting={false} />
+            <Column caption="" cellRender={_editCellComponent} width={60} alignment="center" allowExporting={false} />
+          </DataGrid>
         </div>
 
         <Modal show={showAddForm} size="md" onClose={_handleHideModal} dismissible={true}>
