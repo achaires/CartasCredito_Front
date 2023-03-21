@@ -15,6 +15,7 @@ export * from "./lineaDeCreditoInterface";
 export * from "./monedaInterface";
 export * from "./proveedorInterface";
 export * from "./proyectoInterface";
+export * from "./reportesInterface";
 export * from "./respuestaFormatoInterface";
 export * from "./tipoActivoInterface";
 export * from "./tipoCoberturaInterface";

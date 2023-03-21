@@ -28,6 +28,7 @@ import { Recover } from "./pages/Recover";
 import { RolesIndex } from "./pages/usuarios/RolesIndex";
 import { UsuariosIndex } from "./pages/usuarios/UsuariosIndex";
 import { useAppSelector } from "./store";
+import { ReportesDiseno, ReportesIndex, ReportesSabana } from "./pages/reportes";
 
 const router = createHashRouter([
   {
@@ -172,6 +173,19 @@ const router = createHashRouter([
           {
             path: "pfe",
             element: <PFE />,
+          },
+        ],
+      },
+      {
+        path: "reportes",
+        children: [
+          {
+            path: "sabana",
+            element: <ReportesSabana />,
+          },
+          {
+            path: "diseno",
+            element: <ReportesDiseno />,
           },
         ],
       },
