@@ -51,10 +51,19 @@ export const CartasCreditoEnmiendas = () => {
   }, [routeParams]);
 
   useEffect(() => {
-    if (isGetDetalleSuccess && cartaCreditoDetalle && cartaCreditoDetalle.Enmiendas && cartaCreditoDetalle.Enmiendas[0]) {
+    if (isGetDetalleSuccess && cartaCreditoDetalle && cartaCreditoDetalle.Enmiendas && cartaCreditoDetalle.Enmiendas[0] && cartaCreditoDetalle.Enmiendas[0].Estatus === 1) {
       setValue("ImporteLC", cartaCreditoDetalle.Enmiendas[0].ImporteLC);
-      setValue("FechaVencimiento", cartaCreditoDetalle.Enmiendas[0].FechaVencimiento);
-      setValue("FechaLimiteEmbarque", cartaCreditoDetalle.Enmiendas[0].FechaLimiteEmbarque);
+
+      if (cartaCreditoDetalle.Enmiendas[0].FechaVencimiento) {
+        let fv = cartaCreditoDetalle.Enmiendas[0].FechaVencimiento.split("T");
+        setValue("FechaVencimiento", fv[0]);
+      }
+
+      if (cartaCreditoDetalle.Enmiendas[0].FechaLimiteEmbarque) {
+        let fle = cartaCreditoDetalle.Enmiendas[0].FechaLimiteEmbarque.split("T");
+        setValue("FechaLimiteEmbarque", fle[0]);
+      }
+
       setValue("DescripcionMercancia", cartaCreditoDetalle.Enmiendas[0].DescripcionMercancia);
       setValue("ConsideracionesAdicionales", cartaCreditoDetalle.Enmiendas[0].ConsideracionesAdicionales);
       setValue("InstruccionesEspeciales", cartaCreditoDetalle.Enmiendas[0].InstruccionesEspeciales);

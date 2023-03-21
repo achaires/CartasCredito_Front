@@ -99,6 +99,7 @@ function NuevaCartaComercial() {
   }, []);
 
   const _handleSubmit = handleSubmit((formData) => {
+    //@ts-ignore
     addCarta(formData)
       .unwrap()
       .then((rsp) => {

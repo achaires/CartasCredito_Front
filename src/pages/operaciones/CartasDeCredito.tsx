@@ -1,5 +1,5 @@
 import { useGetBancosQuery } from "@/apis/bancosApi";
-import { useGetCartasComercialesQuery, useLazyFiltrarCartasComercialesQuery, useLazyGetCartasComercialesQuery } from "@/apis/cartasCreditoApi";
+import { useLazyFiltrarCartasComercialesQuery, useLazyGetCartasComercialesQuery } from "@/apis/cartasCreditoApi";
 import { useGetEmpresasQuery } from "@/apis/empresasApi";
 import { useGetMonedasQuery } from "@/apis/monedasApi";
 import { useGetProveedoresQuery } from "@/apis/proveedoresApi";
@@ -15,8 +15,16 @@ import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import Datepicker from "react-tailwindcss-datepicker";
-import numeral from "numeral";
 import { apiHost } from "@/utils/apiConfig";
+
+import DataGrid, { Column, Export, HeaderFilter, Paging, SearchPanel, Selection } from "devextreme-react/data-grid";
+import { ColumnCellTemplateData } from "devextreme/ui/data_grid";
+
+const txtsExport = {
+  exportAll: "Exportar Todo",
+  exportSelectedRows: "Exportar Selección",
+  exportTo: "Exportar A",
+};
 
 const currentDate = new Date();
 const firstMonthDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
@@ -25,8 +33,8 @@ export const CartasDeCredito = () => {
   const nav = useNavigate();
   const dispatch = useAppDispatch();
 
-  const [dateStart, setDateStart] = useState(firstMonthDate);
-  const [dateEnd, setDateEnd] = useState(currentDate);
+  const [dateStart, setDateStart] = useState(firstMonthDate.toISOString());
+  const [dateEnd, setDateEnd] = useState(currentDate.toISOString());
 
   // @ts-ignore
   const _handleDateChange = (newValue) => {
@@ -46,12 +54,8 @@ export const CartasDeCredito = () => {
     nav("/operaciones/cartas-de-credito/nueva-carta-comercial");
   }, []);
 
-  const _handleNuevaCartaStandBy = useCallback(() => {
-    nav("/operaciones/cartas-de-credito/nueva-carta-standby");
-  }, []);
-
-  const [getCartasCredito, cartasCredito] = useLazyGetCartasComercialesQuery();
-  const [filtrarCartasCredito, cartasCreditoFiltradas] = useLazyFiltrarCartasComercialesQuery();
+  //const [getCartasCredito, cartasCredito] = useLazyGetCartasComercialesQuery();
+  const [filtrarCartasCredito, { data: cartasCreditoFiltradas, isFetching, isSuccess }] = useLazyFiltrarCartasComercialesQuery();
   const { data: catMonedas } = useGetMonedasQuery();
   const { data: catBancos } = useGetBancosQuery();
   const { data: catProveedores } = useGetProveedoresQuery();
@@ -59,24 +63,24 @@ export const CartasDeCredito = () => {
   const { data: catEmpresas } = useGetEmpresasQuery();
 
   const _handleFiltroSubmit = handleSubmit((formData) => {
-    if (!isDirty) {
+    /* if (!isDirty) {
       dispatch(addToast({ title: "Información", type: "error", message: "La búsqueda es muy amplia. Seleccione dos o más filtros para reducir la cantidad de resultados" }));
       return;
-    }
+    } */
 
-    // @ts-ignore
     filtrarCartasCredito({ ...formData, FechaInicio: dateStart, FechaFin: dateEnd });
   });
 
   useEffect(() => {
-    let curDate = new Date();
-    curDate.setHours(23);
-    curDate.setMinutes(59);
-    curDate.setSeconds(59);
+    _handleFiltroSubmit();
+  }, []);
 
-    let dateStart = new Date(curDate.getFullYear(), curDate.getMonth(), 1);
-
-    getCartasCredito({ FechaInicio: dateStart.toISOString().split("T")[0], FechaFin: curDate.toISOString().split("T")[0] });
+  const _detailCellComponent = useCallback((rowData: ColumnCellTemplateData) => {
+    return (
+      <Link to={`/operaciones/cartas-de-credito/${rowData.data.Id}`}>
+        <FontAwesomeIcon icon={faMagnifyingGlass} />
+      </Link>
+    );
   }, []);
 
   return (
@@ -203,79 +207,31 @@ export const CartasDeCredito = () => {
         <Button onClick={(e) => _handleFiltroSubmit()}>Buscar</Button>
       </div>
 
-      {cartasCreditoFiltradas.isFetching && (
+      {isFetching && (
         <div className="mb-6 flex items-center justify-center">
           <Spinner size="xl" />
         </div>
       )}
 
       <div className="mb-6">
-        <Table>
-          <Table.Head>
-            <Table.HeadCell>No. Carta Crédito</Table.HeadCell>
-            <Table.HeadCell>Tipo</Table.HeadCell>
-            {/* <Table.HeadCell>Activo</Table.HeadCell> */}
-            <Table.HeadCell>Proveedor</Table.HeadCell>
-            <Table.HeadCell>Empresa</Table.HeadCell>
-            <Table.HeadCell>Banco</Table.HeadCell>
-            <Table.HeadCell>Moneda</Table.HeadCell>
-            <Table.HeadCell align="right">Monto</Table.HeadCell>
-            <Table.HeadCell align="right">Ver</Table.HeadCell>
-          </Table.Head>
-          <Table.Body className="divide-y">
-            {cartasCreditoFiltradas.data &&
-              cartasCreditoFiltradas.data.map((item, index) => {
-                return (
-                  <Table.Row key={index.toString()}>
-                    <Table.Cell className="">{item.NumCartaCredito}</Table.Cell>
-                    <Table.Cell className="">{item.TipoCarta}</Table.Cell>
-                    {/* <Table.Cell className="">{item.TipoActivo}</Table.Cell> */}
-                    <Table.Cell className="">{item.Proveedor}</Table.Cell>
-                    <Table.Cell className="">{item.Empresa}</Table.Cell>
-                    <Table.Cell className="">{item.Banco}</Table.Cell>
-                    <Table.Cell className="">{item.Moneda}</Table.Cell>
-                    <Table.Cell align="right">{numeral(item.MontoOriginalLC).format("$0,0.00")}</Table.Cell>
-                    <Table.Cell>
-                      <Tooltip content="Ver Detalle">
-                        <Link to={`/operaciones/cartas-de-credito/${item.Id}`}>
-                          <FontAwesomeIcon icon={faMagnifyingGlass} />
-                        </Link>
-                        {/* <Button color="dark" size="sm" onClick={(e) => nav(`/operaciones/cartas-de-credito/${item.Id}`)}>
-                          <FontAwesomeIcon icon={faMagnifyingGlass} />
-                        </Button> */}
-                      </Tooltip>
-                    </Table.Cell>
-                  </Table.Row>
-                );
-              })}
-
-            {cartasCredito.data &&
-              cartasCredito.data.map((item, index) => {
-                return (
-                  <Table.Row key={index.toString()}>
-                    <Table.Cell className="">{item.NumCartaCredito}</Table.Cell>
-                    <Table.Cell className="">{item.TipoCarta}</Table.Cell>
-                    {/* <Table.Cell className="">{item.TipoActivo}</Table.Cell> */}
-                    <Table.Cell className="">{item.Proveedor}</Table.Cell>
-                    <Table.Cell className="">{item.Empresa}</Table.Cell>
-                    <Table.Cell className="">{item.Banco}</Table.Cell>
-                    <Table.Cell className="">{item.Moneda}</Table.Cell>
-                    <Table.Cell align="right">{numeral(item.MontoOriginalLC).format("$0,0.00")}</Table.Cell>
-                    <Table.Cell>
-                      <Tooltip content="Ver Detalle">
-                        <Link to={`/operaciones/cartas-de-credito/${item.Id}`}>
-                          <FontAwesomeIcon icon={faMagnifyingGlass} />
-                        </Link>
-                        {/* <Button color="dark" size="sm" onClick={(e) => nav(`/operaciones/cartas-de-credito/${item.Id}`)}>
-                          <FontAwesomeIcon icon={faMagnifyingGlass} />
-                        </Button> */}
-                      </Tooltip>
-                    </Table.Cell>
-                  </Table.Row>
-                );
-              })}
-          </Table.Body>
-        </Table>
+        {isSuccess && cartasCreditoFiltradas && (
+          <DataGrid showBorders={true} showColumnLines={true} showRowLines={true} keyExpr="Id" dataSource={cartasCreditoFiltradas}>
+            <Paging defaultPageSize={10} />
+            <HeaderFilter visible={true} />
+            <SearchPanel visible={true} />
+            <Selection mode="multiple" showCheckBoxesMode="always" />
+            <Export enabled={true} texts={txtsExport} allowExportSelectedData={true} />
+            <Column dataField="NumCartaCredito" />
+            <Column dataField="TipoCarta" />
+            <Column dataField="TipoActivo" />
+            <Column dataField="Proveedor" />
+            <Column dataField="Empresa" />
+            <Column dataField="Banco" />
+            <Column dataField="Moneda" />
+            <Column dataField="MontoOriginalLC" dataType="number" format="currency" />
+            <Column caption="" cellRender={_detailCellComponent} width={80} />
+          </DataGrid>
+        )}
       </div>
     </div>
   );

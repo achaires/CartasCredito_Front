@@ -151,8 +151,8 @@ export const CartasDeCreditoDetalle = () => {
         <div className="col-span-3">{cartaCreditoDetalle && cartaCreditoDetalle.Estatus && <EstatusButton estatus={cartaCreditoDetalle.Estatus} />}</div>
         {cartaCreditoDetalle && cartaCreditoDetalle.DocumentoSwift !== "" && (
           <div className="col-span-9 text-right">
-            <a target="_blank" className="bg-brandPrimary p-2 rounded text-white text-sm" href={cartaCreditoDetalle.DocumentoSwift}>
-              Descargar Archivo Swift
+            <a target="_blank" className="bg-brandPrimary p-2 rounded text-sm" href={cartaCreditoDetalle.DocumentoSwift}>
+              <span className="text-white">Descargar Archivo Swift</span>
             </a>
           </div>
         )}
@@ -310,6 +310,11 @@ export const CartasDeCreditoDetalle = () => {
           <div className="mb-4">
             <Label value="Consideraciones adicionales:" />
             <Textarea disabled defaultValue={cartaCreditoDetalle.ConsideracionesAdicionales ? cartaCreditoDetalle.ConsideracionesAdicionales : ""} />
+          </div>
+
+          <div className="mb-4">
+            <Label value="Instrucciones Especiales:" />
+            <Textarea disabled defaultValue={cartaCreditoDetalle.InstruccionesEspeciales ? cartaCreditoDetalle.InstruccionesEspeciales : ""} />
           </div>
         </div>
 

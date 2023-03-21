@@ -182,8 +182,8 @@ export const CartasDeCreditoPagos = () => {
             e.preventDefault();
             setShowPagoModal(true);
           }}>
-          <FontAwesomeIcon icon={faFileCirclePlus} className="h-6" />
-          <span className="text-sm">Nuevo Pago</span>
+          <FontAwesomeIcon icon={faFileCirclePlus} className="h-6 text-white" />
+          <span className="text-sm text-white">Nuevo Pago</span>
         </a>
 
         {selectedPago !== null && selectedPago.Estatus !== null && selectedPago.Estatus < 3 && (
@@ -195,21 +195,19 @@ export const CartasDeCreditoPagos = () => {
                 e.preventDefault();
                 setShowPagoManualModal(true);
               }}>
-              <FontAwesomeIcon icon={faCheckCircle} className="h-6" />
-              <span className="text-sm">Registro Manual</span>
+              <FontAwesomeIcon icon={faCheckCircle} className="h-6 text-white" />
+              <span className="text-sm text-white">Registro Manual</span>
             </a>
           </>
         )}
 
         {/* <a href="#" className="flex flex-col items-center justify-around gap-2">
-          <FontAwesomeIcon icon={faPlusCircle} className="h-6" />
-          <span className="text-sm">Comisiones</span>
+          <FontAwesomeIcon icon={faPlusCircle} className="h-6 text-white" />
+          <span className="text-sm text-white">Comisiones</span>
         </a>  */}
       </div>
 
-      {cartaCreditoDetalle && cartaCreditoDetalle.Id && (
-        <CartaPagoModal show={showPagoModal} handleClose={() => setShowPagoModal(false)} cartaCreditoId={cartaCreditoDetalle.Id} />
-      )}
+      {cartaCreditoDetalle && cartaCreditoDetalle.Id && <CartaPagoModal show={showPagoModal} handleClose={() => setShowPagoModal(false)} cartaCreditoId={cartaCreditoDetalle.Id} />}
       {cartaCreditoDetalle && cartaCreditoDetalle.Id && selectedPago && (
         <CartaPagoManualModal
           moneda={cartaCreditoDetalle.Moneda ? cartaCreditoDetalle.Moneda : ""}

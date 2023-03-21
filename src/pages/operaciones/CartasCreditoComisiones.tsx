@@ -81,7 +81,7 @@ export const CartasCreditoComisiones = () => {
         <div className="md:grid md:grid-cols-10 md:gap-4 mb-6 px-6">
           <div className="md:col-span-2">
             <Label value="Fecha de Apertura:" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle.FechaApertura} disabled />
+            <TextInput type="date" defaultValue={cartaCreditoDetalle.FechaApertura} disabled />
           </div>
           <div className="md:col-span-2">
             <Label value="No. Carta de Crédito:" />
@@ -188,8 +188,8 @@ export const CartasCreditoComisiones = () => {
             e.preventDefault();
             setShowPagoModal(true);
           }}>
-          <FontAwesomeIcon icon={faFileCirclePlus} className="h-6" />
-          <span className="text-sm">Registrar Comision</span>
+          <FontAwesomeIcon icon={faFileCirclePlus} className="h-6 text-white" />
+          <span className="text-sm text-white">Registrar Comision</span>
         </a>
 
         {selectedCartaComision !== null && selectedCartaComision.Estatus !== null && (
@@ -201,30 +201,25 @@ export const CartasCreditoComisiones = () => {
                 e.preventDefault();
                 setShowPagoManualModal(true);
               }}>
-              <FontAwesomeIcon icon={faCheckCircle} className="h-6" />
-              <span className="text-sm">Registro Manual</span>
+              <FontAwesomeIcon icon={faCheckCircle} className="h-6 text-white" />
+              <span className="text-sm text-white">Registro Manual</span>
             </a>
           </>
         )}
 
         <Link to={`/operaciones/cartas-de-credito/${cartaCreditoDetalle?.Id}/pagos`} className="flex flex-col items-center justify-around gap-2">
-          <FontAwesomeIcon icon={faDollarSign} className="h-6" />
-          <span className="text-sm">Pagos</span>
+          <FontAwesomeIcon icon={faDollarSign} className="h-6 text-white" />
+          <span className="text-sm text-white">Pagos</span>
         </Link>
 
         {/* <a href="#" className="flex flex-col items-center justify-around gap-2">
-          <FontAwesomeIcon icon={faPlusCircle} className="h-6" />
-          <span className="text-sm">Comisiones</span>
+          <FontAwesomeIcon icon={faPlusCircle} className="h-6 text-white" />
+          <span className="text-sm text-white">Comisiones</span>
         </a>  */}
       </div>
 
       {cartaCreditoDetalle && cartaCreditoDetalle.BancoId && cartaCreditoDetalle.Id && (
-        <CartaComisionModal
-          show={showPagoModal}
-          handleClose={() => setShowPagoModal(false)}
-          cartaCreditoId={cartaCreditoDetalle.Id}
-          cartaBancoId={cartaCreditoDetalle.BancoId}
-        />
+        <CartaComisionModal show={showPagoModal} handleClose={() => setShowPagoModal(false)} cartaCreditoId={cartaCreditoDetalle.Id} cartaBancoId={cartaCreditoDetalle.BancoId} />
       )}
 
       {cartaCreditoDetalle && cartaCreditoDetalle.Id && selectedCartaComision && (
