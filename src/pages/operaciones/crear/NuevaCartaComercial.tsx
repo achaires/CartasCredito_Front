@@ -8,62 +8,81 @@ import { useGetMonedasQuery } from "@/apis/monedasApi";
 import { useGetProveedoresQuery } from "@/apis/proveedoresApi";
 import { useGetProyectosQuery } from "@/apis/proyectosApi";
 import { useGetTiposActivoQuery } from "@/apis/tiposActivoApi";
-import { AdminBreadcrumbs, AdminLoadingActivity, AdminPageHeader } from "@/components";
-import { ICartaComercial } from "@/interfaces";
+import { AdminBreadcrumbs, AdminPageHeader } from "@/components";
 import { useAppDispatch } from "@/store";
 import { addToast } from "@/store/uiSlice";
 import { apiHost } from "@/utils/apiConfig";
-import { faCircleArrowLeft, faFileInvoiceDollar } from "@fortawesome/free-solid-svg-icons";
+import { faCircleArrowLeft, faFileInvoiceDollar, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Alert, Button, Label, Select, Table, Textarea, TextInput } from "flowbite-react";
-import { useCallback, useEffect } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "react-hot-toast";
+import React, { useCallback, useEffect } from "react";
+import { Controller, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { InformationCircleIcon } from "@heroicons/react/24/solid";
 
 import { z } from "zod";
+import DatePicker from "react-datepicker";
 
-const validationSchema = z.object({
-  TipoCartaId: z.number().min(1),
-  TipoActivoId: z.number().min(1),
-  ProyectoId: z.number().min(1),
-  BancoId: z.number().min(1),
-  ProveedorId: z.number().min(1),
-  EmpresaId: z.number().min(1),
-  AgenteAduanalId: z.number().min(1),
-  MonedaId: z.number().min(1),
-  TipoPago: z.string(),
-  Responsable: z.string(),
-  CompradorId: z.number().min(1),
-  PorcentajeTolerancia: z.number().min(1),
-  NumOrdenCompra: z.string().min(1),
-  CostoApertura: z.number().min(1),
-  MontoOrdenCompra: z.number().min(1),
-  MontoOriginalLC: z.number().min(1),
-  FechaApertura: z.date().refine((fa) => fa.toString()),
-  FechaLimiteEmbarque: z.date().refine((fle) => fle.toString()),
-  FechaVencimiento: z.date().refine((fv) => fv.toString()),
-  Incoterm: z.string().min(1),
-  EmbarquesParciales: z.string().min(1),
-  Transbordos: z.string().min(1),
-  PuntoEmbarque: z.string().min(1),
-  PuntoDesembarque: z.string().min(1),
-  DescripcionMercancia: z.string().min(1),
-  DescripcionCartaCredito: z.string().min(1),
-  PagoCartaAceptacion: z.string().min(1),
-  ConsignacionMercancia: z.string().min(1),
-  ConsideracionesAdicionales: z.string().min(1),
-  DiasParaPresentarDocumentos: z.number().min(1),
-  DiasPlazoProveedor: z.number().min(1),
-  CondicionesPago: z.string().min(1),
-  NumeroPeriodos: z.number().min(1),
-  BancoCorresponsalId: z.number().min(1),
-  SeguroPorCuenta: z.string().min(1),
-  GastosComisionesCorresponsal: z.string().min(1),
-  ConfirmacionBancoNotificador: z.string().min(1),
-  TipoEmision: z.string().min(1),
-});
+// Fix DatePicker + React Hook Form: https://github.com/Hacker0x01/react-datepicker/issues/2165#issuecomment-696095748
+
+const validationSchema = z
+  .object({
+    TipoCartaId: z.number().min(1),
+    TipoActivoId: z.number().min(1),
+    ProyectoId: z.number().min(1),
+    BancoId: z.number().min(1),
+    ProveedorId: z.number().min(1),
+    EmpresaId: z.number().min(1),
+    AgenteAduanalId: z.number().min(1),
+    MonedaId: z.number().min(1),
+    TipoPago: z.string(),
+    Responsable: z.string(),
+    CompradorId: z.number().min(1),
+    PorcentajeTolerancia: z.number().min(1),
+    NumOrdenCompra: z.string().min(1),
+    CostoApertura: z.number().min(1),
+    MontoOrdenCompra: z.number().min(1),
+    MontoOriginalLC: z.number().min(1),
+    FechaApertura: z.date().refine((fa) => fa.toString()),
+    FechaLimiteEmbarque: z.date().refine((fle) => fle.toString()),
+    FechaVencimiento: z.date().refine((fv) => fv.toString()),
+    Incoterm: z.string().min(1),
+    EmbarquesParciales: z.string().min(1),
+    Transbordos: z.string().min(1),
+    PuntoEmbarque: z.string().min(1),
+    PuntoDesembarque: z.string().min(1),
+    DescripcionMercancia: z.string().min(1),
+    DescripcionCartaCredito: z.string().min(1),
+    PagoCartaAceptacion: z.string().min(1),
+    ConsignacionMercancia: z.string().min(1),
+    ConsideracionesAdicionales: z.string().min(1),
+    DiasParaPresentarDocumentos: z.number().min(1),
+    DiasPlazoProveedor: z.number().min(1),
+    CondicionesPago: z.string().min(1),
+    NumeroPeriodos: z.number().min(1),
+    BancoCorresponsalId: z.number().min(1),
+    SeguroPorCuenta: z.string().min(1),
+    GastosComisionesCorresponsal: z.string().min(1),
+    ConfirmacionBancoNotificador: z.string().min(1),
+    TipoEmision: z.string().min(1),
+  })
+  .refine(
+    (args) => {
+      let tiempoLimite = args.FechaVencimiento.getTime();
+      let tiempoCalculado = args.FechaLimiteEmbarque.getTime() + 86400000 * args.DiasParaPresentarDocumentos;
+
+      if (tiempoLimite > tiempoCalculado) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    {
+      message: "La fecha límite de embarque no puede ser mayor a la fecha de vencimiento",
+      path: ["FechaLimiteEmbarque"],
+    }
+  );
 
 type ValidationSchema = z.infer<typeof validationSchema>;
 
@@ -71,10 +90,9 @@ function NuevaCartaComercial() {
   const nav = useNavigate();
 
   const {
-    reset,
     register,
-    setValue,
     handleSubmit,
+    control,
     formState: { errors: formErrors },
   } = useForm<ValidationSchema>({
     resolver: zodResolver(validationSchema),
@@ -109,6 +127,10 @@ function NuevaCartaComercial() {
       });
   });
 
+  const DatePickerCustomInput = ({ value, onClick }: { value: string; onClick: React.MouseEventHandler<HTMLInputElement> }) => (
+    <TextInput onClick={onClick} value={value} readOnly />
+  );
+
   useEffect(() => {
     if (isError) {
       dispatch(
@@ -140,8 +162,6 @@ function NuevaCartaComercial() {
       }
     }
   }, [isSuccess, isError, isLoading, error, responseData]);
-
-  console.log(formErrors);
 
   return (
     <>
@@ -354,18 +374,68 @@ function NuevaCartaComercial() {
         </div>
       </div>
 
+      {formErrors.FechaLimiteEmbarque && (
+        <div className="px-6 mb-4">
+          <Alert color="failure">
+            <ul className="list-disc ml-6">
+              <li>La FECHA LÍMITE DE EMBARQUE no puede ser mayor a la FECHA DE VENCIMIENTO</li>
+              <li>La FECHA DE VENCIMIENTO debe ser por lo menos igual a la FECHA LÍMITE DE EMBARQUE + DÍAS DE PLAZO PARA PRESENTAR DOCUMENTOS</li>
+            </ul>
+          </Alert>
+        </div>
+      )}
+
       <div className="md:grid md:grid-cols-12 md:gap-6 mb-6 px-6">
         <div className="md:col-span-3">
           <Label value="Fecha Apertura" />
-          <TextInput type="date" {...register("FechaApertura", { valueAsDate: true })} />
+          <Controller
+            control={control}
+            name="FechaApertura"
+            render={({ field }) => (
+              <DatePicker
+                customInput={React.createElement(DatePickerCustomInput)}
+                placeholderText="Seleccione Fecha"
+                onChange={(date) => field.onChange(date)}
+                selected={field.value}
+                dateFormat="yyyy/MM/dd"
+              />
+            )}
+          />
+          {/* <TextInput type="date" {...register("FechaApertura", { valueAsDate: true })} /> */}
         </div>
         <div className="md:col-span-3">
           <Label value="Fecha Límite de Embarque" />
-          <TextInput type="date" {...register("FechaLimiteEmbarque", { valueAsDate: true })} />
+          <Controller
+            control={control}
+            name="FechaLimiteEmbarque"
+            render={({ field }) => (
+              <DatePicker
+                customInput={React.createElement(DatePickerCustomInput)}
+                placeholderText="Seleccione Fecha"
+                onChange={(date) => field.onChange(date)}
+                selected={field.value}
+                dateFormat="yyyy/MM/dd"
+              />
+            )}
+          />
+          {/* <TextInput type="date" {...register("FechaLimiteEmbarque", { valueAsDate: true })} /> */}
         </div>
         <div className="md:col-span-3">
           <Label value="Fecha de Vencimiento" />
-          <TextInput type="date" {...register("FechaVencimiento", { valueAsDate: true })} />
+          <Controller
+            control={control}
+            name="FechaVencimiento"
+            render={({ field }) => (
+              <DatePicker
+                customInput={React.createElement(DatePickerCustomInput)}
+                placeholderText="Seleccione Fecha"
+                onChange={(date) => field.onChange(date)}
+                selected={field.value}
+                dateFormat="yyyy/MM/dd"
+              />
+            )}
+          />
+          {/* <TextInput type="date" {...register("FechaVencimiento", { valueAsDate: true })} /> */}
         </div>
         <div className="md:col-span-3">
           <Label value="Incoterm" />
@@ -400,23 +470,23 @@ function NuevaCartaComercial() {
       <div className="bg-yellow-50 py-6 px-6">
         <div className="mb-4">
           <Label value="Descripción de la Mercancía" />
-          <Textarea {...register("DescripcionMercancia")} />
+          <Textarea className="text-sm" {...register("DescripcionMercancia")} />
         </div>
         <div className="mb-4">
           <Label value="Descripción de la Carta de Crédito" />
-          <Textarea {...register("DescripcionCartaCredito")} />
+          <Textarea className="text-sm" {...register("DescripcionCartaCredito")} />
         </div>
         <div className="mb-4">
           <Label value="Pago vs Carta de Aceptación" />
-          <Textarea {...register("PagoCartaAceptacion")} />
+          <Textarea className="text-sm" {...register("PagoCartaAceptacion")} />
         </div>
         <div className="mb-4">
           <Label value="Consignación de la Mercancía" />
-          <Textarea {...register("ConsignacionMercancia")} />
+          <Textarea className="text-sm" {...register("ConsignacionMercancia")} />
         </div>
         <div className="mb-4">
           <Label value="Consideraciones Adicionales" />
-          <Textarea {...register("ConsideracionesAdicionales")} />
+          <Textarea className="text-sm" {...register("ConsideracionesAdicionales")} />
         </div>
       </div>
 
