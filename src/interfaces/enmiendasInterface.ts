@@ -3,8 +3,8 @@ export interface IEnmienda {
   CartaCreditoId: string;
   DocumentoSwift: string;
   ImporteLC: number;
-  FechaLimiteEmbarque: string;
-  FechaVencimiento: string;
+  FechaLimiteEmbarque: Date;
+  FechaVencimiento: Date;
   DescripcionMercancia: string;
   ConsideracionesAdicionales: string;
   InstruccionesEspeciales: string;
@@ -25,12 +25,12 @@ export interface IEnmienda {
 
 export interface IEnmiendaInsert {
   CartaCreditoId: string;
-  ConsideracionesAdicionales: string;
-  DescripcionMercancia: string;
-  FechaLimiteEmbarque: string;
-  FechaVencimiento: string;
-  ImporteLC: number;
-  InstruccionesEspeciales: string;
+  ConsideracionesAdicionales?: string | null | undefined;
+  DescripcionMercancia?: string | null | undefined;
+  FechaLimiteEmbarque?: Date | null | undefined;
+  FechaVencimiento?: Date | null | undefined;
+  ImporteLC?: number | null | undefined;
+  InstruccionesEspeciales?: string | null | undefined;
 }
 
 export interface IEnmiendaUpdate extends IEnmiendaInsert {

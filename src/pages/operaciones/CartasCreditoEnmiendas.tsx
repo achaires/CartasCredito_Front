@@ -4,14 +4,49 @@ import { useAppDispatch } from "@/store";
 import { apiHost } from "@/utils/apiConfig";
 import { faFileInvoiceDollar, faCircleArrowLeft, faSave, faClose, faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, Card, Label, TextInput, Textarea } from "flowbite-react";
+import { Alert, Button, Card, Label, TextInput, Textarea } from "flowbite-react";
 import React, { useCallback, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import numeral from "numeral";
 import { useAddEnmiendaMutation, useApproveEnmiendaMutation } from "@/apis/enmiendasApi";
-import { useForm } from "react-hook-form";
-import { IEnmienda, IEnmiendaInsert } from "@/interfaces";
+import { Controller, useForm } from "react-hook-form";
 import { addToast } from "@/store/uiSlice";
+import DatePicker from "react-datepicker";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+const validationSchema = z
+  .object({
+    FechaLimiteEmbarque: z.date().nullable().optional(),
+    FechaVencimiento: z.date().nullable().optional(),
+    ImporteLC: z.number().nullable().optional(),
+    DescripcionMercancia: z.string().nullable().optional(),
+    ConsideracionesAdicionales: z.string().nullable().optional(),
+    InstruccionesEspeciales: z.string().nullable().optional(),
+    DiasParaPresentarDocumentos: z.number(),
+  })
+  .refine(
+    (args) => {
+      if (args.FechaVencimiento && args.FechaLimiteEmbarque) {
+        let tiempoLimite = args.FechaVencimiento.getTime();
+        let tiempoCalculado = args.FechaLimiteEmbarque.getTime() + 86400000 * args.DiasParaPresentarDocumentos;
+
+        if (tiempoLimite > tiempoCalculado) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+
+      return true;
+    },
+    {
+      message: "La fecha límite de embarque no puede ser mayor a la fecha de vencimiento",
+      path: ["FechaLimiteEmbarque"],
+    }
+  );
+
+type ValidationSchema = z.infer<typeof validationSchema>;
 
 export const CartasCreditoEnmiendas = () => {
   const routeParams = useParams();
@@ -19,13 +54,20 @@ export const CartasCreditoEnmiendas = () => {
 
   const dispatch = useAppDispatch();
 
+  const DatePickerCustomInput = ({ value, onClick }: { value: string; onClick: React.MouseEventHandler<HTMLInputElement> }) => (
+    <TextInput onClick={onClick} value={value} readOnly />
+  );
+
   const {
     reset,
     register,
     setValue,
     handleSubmit,
+    control,
     formState: { errors: formErrors },
-  } = useForm<IEnmiendaInsert>();
+  } = useForm<ValidationSchema>({
+    resolver: zodResolver(validationSchema),
+  });
 
   const [getCartaComercial, { data: cartaCreditoDetalle, isLoading, isSuccess: isGetDetalleSuccess }] = useLazyGetCartaComercialQuery();
   const [addEnmienda, { data, isSuccess, isError }] = useAddEnmiendaMutation();
@@ -38,12 +80,13 @@ export const CartasCreditoEnmiendas = () => {
   const _handleSubmit = handleSubmit((formData) => {
     if (cartaCreditoDetalle && cartaCreditoDetalle.Id) {
       if (cartaCreditoDetalle.Estatus === 21 && cartaCreditoDetalle.Enmiendas) {
-        approveEnmienda({ ...formData, CartaCreditoId: cartaCreditoDetalle.Id, Estatus: 2, Id: cartaCreditoDetalle.Enmiendas[0].Id });
+        approveEnmienda(cartaCreditoDetalle.Enmiendas[0].Id);
       } else {
         addEnmienda({ ...formData, CartaCreditoId: cartaCreditoDetalle.Id });
       }
     }
   });
+
   useEffect(() => {
     if (routeParams.cartaCreditoId) {
       getCartaComercial(routeParams.cartaCreditoId);
@@ -51,17 +94,21 @@ export const CartasCreditoEnmiendas = () => {
   }, [routeParams]);
 
   useEffect(() => {
+    if (isGetDetalleSuccess && cartaCreditoDetalle && cartaCreditoDetalle.DiasParaPresentarDocumentos) {
+      setValue("DiasParaPresentarDocumentos", cartaCreditoDetalle.DiasParaPresentarDocumentos);
+    }
+
     if (isGetDetalleSuccess && cartaCreditoDetalle && cartaCreditoDetalle.Enmiendas && cartaCreditoDetalle.Enmiendas[0] && cartaCreditoDetalle.Enmiendas[0].Estatus === 1) {
       setValue("ImporteLC", cartaCreditoDetalle.Enmiendas[0].ImporteLC);
 
       if (cartaCreditoDetalle.Enmiendas[0].FechaVencimiento) {
-        let fv = cartaCreditoDetalle.Enmiendas[0].FechaVencimiento.split("T");
-        setValue("FechaVencimiento", fv[0]);
+        let fv = new Date(cartaCreditoDetalle.Enmiendas[0].FechaVencimiento);
+        setValue("FechaVencimiento", fv);
       }
 
       if (cartaCreditoDetalle.Enmiendas[0].FechaLimiteEmbarque) {
-        let fle = cartaCreditoDetalle.Enmiendas[0].FechaLimiteEmbarque.split("T");
-        setValue("FechaLimiteEmbarque", fle[0]);
+        let fle = new Date(cartaCreditoDetalle.Enmiendas[0].FechaLimiteEmbarque);
+        setValue("FechaLimiteEmbarque", fle);
       }
 
       setValue("DescripcionMercancia", cartaCreditoDetalle.Enmiendas[0].DescripcionMercancia);
@@ -190,6 +237,16 @@ export const CartasCreditoEnmiendas = () => {
           </Card>
 
           <Card className="mb-5">
+            {formErrors.FechaLimiteEmbarque && (
+              <div className="px-6 mb-4">
+                <Alert color="failure">
+                  <ul className="list-disc ml-6">
+                    <li>La FECHA LÍMITE DE EMBARQUE no puede ser mayor a la FECHA DE VENCIMIENTO</li>
+                    <li>La FECHA DE VENCIMIENTO debe ser por lo menos igual a la FECHA LÍMITE DE EMBARQUE + DÍAS DE PLAZO PARA PRESENTAR DOCUMENTOS</li>
+                  </ul>
+                </Alert>
+              </div>
+            )}
             <div className="md:grid md:grid-cols-12 md:gap-12">
               <div className="md:col-span-5 flex items-center justify-between gap-4">
                 <Label value="Importe de L/C" />
@@ -197,7 +254,7 @@ export const CartasCreditoEnmiendas = () => {
               </div>
               <div className="md:col-span-5 md:col-start-7 flex items-center justify-between gap-4">
                 <Label value="Nuevo Importe de L/C" />
-                <TextInput {...register("ImporteLC")} required readOnly={cartaCreditoDetalle.Estatus === 21} />
+                <TextInput type="number" {...register("ImporteLC", { setValueAs: (v) => (v === "" ? null : Number(v)) })} readOnly={cartaCreditoDetalle.Estatus === 21} />
               </div>
             </div>
 
@@ -208,7 +265,22 @@ export const CartasCreditoEnmiendas = () => {
               </div>
               <div className="md:col-span-5 md:col-start-7 flex items-center justify-between gap-4">
                 <Label value="Nueva Fecha de Vencimiento" />
-                <TextInput type="date" {...register("FechaVencimiento")} required readOnly={cartaCreditoDetalle.Estatus === 21} />
+                {/* <TextInput type="date" {...register("FechaVencimiento")} readOnly={cartaCreditoDetalle.Estatus === 21} /> */}
+                <div className="w-1/2">
+                  <Controller
+                    control={control}
+                    name="FechaVencimiento"
+                    render={({ field }) => (
+                      <DatePicker
+                        customInput={React.createElement(DatePickerCustomInput)}
+                        placeholderText="Seleccione Fecha"
+                        onChange={(date) => field.onChange(date)}
+                        selected={field.value}
+                        dateFormat="yyyy/MM/dd"
+                      />
+                    )}
+                  />
+                </div>
               </div>
             </div>
 
@@ -219,7 +291,22 @@ export const CartasCreditoEnmiendas = () => {
               </div>
               <div className="md:col-span-5 md:col-start-7 flex items-center justify-between gap-4">
                 <Label value="Nueva Fecha Límite de Embarque" />
-                <TextInput type="date" {...register("FechaLimiteEmbarque")} required readOnly={cartaCreditoDetalle.Estatus === 21} />
+                {/* <TextInput type="date" {...register("FechaLimiteEmbarque")} readOnly={cartaCreditoDetalle.Estatus === 21} /> */}
+                <div className="w-1/2">
+                  <Controller
+                    control={control}
+                    name="FechaLimiteEmbarque"
+                    render={({ field }) => (
+                      <DatePicker
+                        customInput={React.createElement(DatePickerCustomInput)}
+                        placeholderText="Seleccione Fecha"
+                        onChange={(date) => field.onChange(date)}
+                        selected={field.value}
+                        dateFormat="yyyy/MM/dd"
+                      />
+                    )}
+                  />
+                </div>
               </div>
             </div>
           </Card>
@@ -233,7 +320,7 @@ export const CartasCreditoEnmiendas = () => {
               </div>
               <div className="md:col-span-6">
                 <Label value="Debe Decir" />
-                <Textarea {...register("DescripcionMercancia")} required readOnly={cartaCreditoDetalle.Estatus === 21} />
+                <Textarea {...register("DescripcionMercancia")} readOnly={cartaCreditoDetalle.Estatus === 21} />
               </div>
             </div>
           </Card>
@@ -247,7 +334,7 @@ export const CartasCreditoEnmiendas = () => {
               </div>
               <div className="md:col-span-6">
                 <Label value="Debe Decir" />
-                <Textarea {...register("ConsideracionesAdicionales")} required readOnly={cartaCreditoDetalle.Estatus === 21} />
+                <Textarea {...register("ConsideracionesAdicionales")} readOnly={cartaCreditoDetalle.Estatus === 21} />
               </div>
             </div>
           </Card>
@@ -261,7 +348,7 @@ export const CartasCreditoEnmiendas = () => {
               </div>
               <div className="md:col-span-6">
                 <Label value="Debe Decir" />
-                <Textarea {...register("InstruccionesEspeciales")} required readOnly={cartaCreditoDetalle.Estatus === 21} />
+                <Textarea {...register("InstruccionesEspeciales")} readOnly={cartaCreditoDetalle.Estatus === 21} />
               </div>
             </div>
           </Card>

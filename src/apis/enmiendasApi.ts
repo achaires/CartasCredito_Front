@@ -4,7 +4,7 @@ import { rootApi } from "./rootApi";
 export const enmiendasApiSlice = rootApi.injectEndpoints({
   endpoints: (builder) => ({
     addEnmienda: builder.mutation<IRespuestaFormato, IEnmiendaInsert>({
-      invalidatesTags: ["Enmiendas"],
+      invalidatesTags: ["Enmiendas", "CartasCreditoDetalle", "CartasCredito"],
       query: (data) => {
         return {
           url: `/enmiendas`,
@@ -13,13 +13,12 @@ export const enmiendasApiSlice = rootApi.injectEndpoints({
         };
       },
     }),
-    approveEnmienda: builder.mutation<IRespuestaFormato, IEnmiendaUpdate>({
-      invalidatesTags: ["Enmiendas"],
-      query: (data) => {
+    approveEnmienda: builder.mutation<IRespuestaFormato, number>({
+      invalidatesTags: ["Enmiendas", "CartasCreditoDetalle", "CartasCredito"],
+      query: (id) => {
         return {
-          url: `/enmiendas/${data.Id}`,
-          method: "PUT",
-          body: data,
+          url: `/enmiendas/aprobar/${id}`,
+          method: "POST",
         };
       },
     }),

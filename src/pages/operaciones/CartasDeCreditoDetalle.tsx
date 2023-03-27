@@ -170,190 +170,190 @@ export const CartasDeCreditoDetalle = () => {
         <div className="md:grid md:grid-cols-12 md:gap-4 mb-6 px-6">
           <div className="md:col-span-3">
             <Label value="No. Carta de Crédito:" />
-            <TextInput type="text" name="numCarta" defaultValue={cartaCreditoDetalle.NumCartaCredito} disabled />
+            <TextInput type="text" name="numCarta" value={cartaCreditoDetalle.NumCartaCredito} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Tipo de Carta:" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle.TipoCarta} disabled />
+            <TextInput type="text" value={cartaCreditoDetalle.TipoCarta} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Tipo de Activo:" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle.TipoActivo} disabled />
+            <TextInput type="text" value={cartaCreditoDetalle.TipoActivo} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Proyecto:" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle.Proyecto} disabled />
+            <TextInput type="text" value={cartaCreditoDetalle.Proyecto} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Banco:" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle.Banco} disabled />
+            <TextInput type="text" value={cartaCreditoDetalle.Banco} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Proveedor:" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle.Proveedor} disabled />
+            <TextInput type="text" value={cartaCreditoDetalle.Proveedor} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Empresa:" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle.Empresa} disabled />
+            <TextInput type="text" value={cartaCreditoDetalle.Empresa} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Agente Aduanal:" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle.AgenteAduanal} disabled />
+            <TextInput type="text" value={cartaCreditoDetalle.AgenteAduanal} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Moneda:" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle.Moneda} disabled />
+            <TextInput type="text" value={cartaCreditoDetalle.Moneda} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Tipo de Pago:" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle.TipoPago} disabled />
+            <TextInput type="text" value={cartaCreditoDetalle.TipoPago} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Responsable:" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle.Responsable} disabled />
+            <TextInput type="text" value={cartaCreditoDetalle.Responsable} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Comprador:" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle.Comprador} disabled />
+            <TextInput type="text" value={cartaCreditoDetalle.Comprador} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="% Tolerancia:" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle.PorcentajeTolerancia} disabled />
+            <TextInput type="text" value={cartaCreditoDetalle.PorcentajeTolerancia} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="No. Orden de Compra:" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle.NumOrdenCompra} disabled />
+            <TextInput type="text" value={cartaCreditoDetalle.NumOrdenCompra} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Costo de Apertura:" />
-            <TextInput type="text" defaultValue={numeral(cartaCreditoDetalle.CostoApertura).format("$0,0.00")} disabled />
+            <TextInput type="text" value={numeral(cartaCreditoDetalle.CostoApertura).format("$0,0.00")} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Monto Orden de Compra:" />
-            <TextInput type="text" defaultValue={numeral(cartaCreditoDetalle.MontoOrdenCompra).format("$0,0.00")} disabled />
+            <TextInput type="text" value={numeral(cartaCreditoDetalle.MontoOrdenCompra).format("$0,0.00")} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Monto Original L/C:" />
-            <TextInput type="text" defaultValue={numeral(cartaCreditoDetalle.MontoOriginalLC).format("$0,0.00")} disabled />
+            <TextInput type="text" value={numeral(cartaCreditoDetalle.MontoOriginalLC).format("$0,0.00")} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Pagos Efectuados:" />
-            <TextInput type="text" defaultValue={numeral(cartaCreditoDetalle.PagosEfectuados).format("$0,0.00")} disabled />
+            <TextInput type="text" value={numeral(cartaCreditoDetalle.PagosEfectuados).format("$0,0.00")} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Pagos Programados:" />
-            <TextInput type="text" defaultValue={numeral(cartaCreditoDetalle.PagosProgramados).format("$0,0.00")} disabled />
+            <TextInput type="text" value={numeral(cartaCreditoDetalle.PagosProgramados).format("$0,0.00")} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Monto Dispuesto:" />
-            <TextInput type="text" defaultValue={numeral(cartaCreditoDetalle.MontoDispuesto).format("$0,0.00")} disabled />
+            <TextInput type="text" value={numeral(cartaCreditoDetalle.MontoDispuesto).format("$0,0.00")} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Saldo Insoluto:" />
-            <TextInput type="text" defaultValue={numeral(cartaCreditoDetalle.SaldoInsoluto).format("$0,0.00")} disabled />
+            <TextInput type="text" value={numeral(cartaCreditoDetalle.SaldoInsoluto).format("$0,0.00")} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Fecha de Apertura:" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle.FechaApertura?.toString()} disabled />
+            <TextInput type="text" value={cartaCreditoDetalle.FechaApertura?.toString()} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Icoterm:" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle.Incoterm?.toString()} disabled />
+            <TextInput type="text" value={cartaCreditoDetalle.Incoterm?.toString()} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Fecha Límite de Embarque:" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle.FechaLimiteEmbarque?.toString()} disabled />
+            <TextInput type="text" value={cartaCreditoDetalle.FechaLimiteEmbarque?.toString()} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Fecha de Vencimiento:" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle.FechaVencimiento?.toString()} disabled />
+            <TextInput type="text" value={cartaCreditoDetalle.FechaVencimiento?.toString()} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Embarques Parciales:" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle.EmbarquesParciales} disabled />
+            <TextInput type="text" value={cartaCreditoDetalle.EmbarquesParciales} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Transbordos:" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle.Transbordos} disabled />
+            <TextInput type="text" value={cartaCreditoDetalle.Transbordos} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Punto de Embarque:" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle.PuntoEmbarque} disabled />
+            <TextInput type="text" value={cartaCreditoDetalle.PuntoEmbarque} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Punto de Desembarque:" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle.PuntoDesembarque} disabled />
+            <TextInput type="text" value={cartaCreditoDetalle.PuntoDesembarque} disabled />
           </div>
         </div>
 
         <div className="bg-yellow-50 py-6 px-6">
           <div className="mb-4">
             <Label value="Descripción de Mercancía:" />
-            <Textarea disabled defaultValue={cartaCreditoDetalle.DescripcionMercancia ? cartaCreditoDetalle.DescripcionMercancia : ""} />
+            <Textarea disabled value={cartaCreditoDetalle.DescripcionMercancia ? cartaCreditoDetalle.DescripcionMercancia : ""} />
           </div>
 
           <div className="mb-4">
             <Label value="Descripción de la carta de crédito:" />
-            <Textarea disabled defaultValue={cartaCreditoDetalle.DescripcionCartaCredito ? cartaCreditoDetalle.DescripcionCartaCredito : ""} />
+            <Textarea disabled value={cartaCreditoDetalle.DescripcionCartaCredito ? cartaCreditoDetalle.DescripcionCartaCredito : ""} />
           </div>
 
           <div className="mb-4">
             <Label value="Pago vs carta de aceptación:" />
-            <Textarea disabled defaultValue={cartaCreditoDetalle.PagoCartaAceptacion ? cartaCreditoDetalle.PagoCartaAceptacion : ""} />
+            <Textarea disabled value={cartaCreditoDetalle.PagoCartaAceptacion ? cartaCreditoDetalle.PagoCartaAceptacion : ""} />
           </div>
 
           <div className="mb-4">
             <Label value="Consignación de mercancía:" />
-            <Textarea disabled defaultValue={cartaCreditoDetalle.ConsignacionMercancia ? cartaCreditoDetalle.ConsignacionMercancia : ""} />
+            <Textarea disabled value={cartaCreditoDetalle.ConsignacionMercancia ? cartaCreditoDetalle.ConsignacionMercancia : ""} />
           </div>
 
           <div className="mb-4">
             <Label value="Consideraciones adicionales:" />
-            <Textarea disabled defaultValue={cartaCreditoDetalle.ConsideracionesAdicionales ? cartaCreditoDetalle.ConsideracionesAdicionales : ""} />
+            <Textarea disabled value={cartaCreditoDetalle.ConsideracionesAdicionales ? cartaCreditoDetalle.ConsideracionesAdicionales : ""} />
           </div>
 
           <div className="mb-4">
             <Label value="Instrucciones Especiales:" />
-            <Textarea disabled defaultValue={cartaCreditoDetalle.InstruccionesEspeciales ? cartaCreditoDetalle.InstruccionesEspeciales : ""} />
+            <Textarea disabled value={cartaCreditoDetalle.InstruccionesEspeciales ? cartaCreditoDetalle.InstruccionesEspeciales : ""} />
           </div>
         </div>
 
         <div className="md:grid md:grid-cols-12 md:gap-4 mb-6 p-6">
           <div className="md:col-span-3">
             <Label value="Días para presentar documentos:" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle.DiasParaPresentarDocumentos} disabled />
+            <TextInput type="text" value={cartaCreditoDetalle.DiasParaPresentarDocumentos} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Días de plazo proveedor:" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle.DiasPlazoProveedor} disabled />
+            <TextInput type="text" value={cartaCreditoDetalle.DiasPlazoProveedor} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Condiciones de pago:" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle.CondicionesPago} disabled />
+            <TextInput type="text" value={cartaCreditoDetalle.CondicionesPago} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Número de periodos:" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle.NumeroPeriodos} disabled />
+            <TextInput type="text" value={cartaCreditoDetalle.NumeroPeriodos} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Banco Corresponsal:" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle.BancoCorresponsal} disabled />
+            <TextInput type="text" value={cartaCreditoDetalle.BancoCorresponsal} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Seguro por Cuenta:" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle.SeguroPorCuenta} disabled />
+            <TextInput type="text" value={cartaCreditoDetalle.SeguroPorCuenta} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Gastos y Comisiones de Corresponsal:" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle.GastosComisionesCorresponsal} disabled />
+            <TextInput type="text" value={cartaCreditoDetalle.GastosComisionesCorresponsal} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Confirmar Banco Notificador" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle.ConfirmacionBancoNotificador} disabled />
+            <TextInput type="text" value={cartaCreditoDetalle.ConfirmacionBancoNotificador} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Tipo de Emisión" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle.TipoEmision} disabled />
+            <TextInput type="text" value={cartaCreditoDetalle.TipoEmision} disabled />
           </div>
         </div>
       </form>
