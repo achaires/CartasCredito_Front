@@ -1,4 +1,4 @@
-import { IReporteAnalisisCartaRequest, IRespuestaFormato } from "@/interfaces";
+import { IReporteAnalisisCartaRequest, IReporteRequest, IRespuestaFormato } from "@/interfaces";
 import { rootApi } from "./rootApi";
 
 export const reportesApiSlice = rootApi.injectEndpoints({
@@ -12,7 +12,16 @@ export const reportesApiSlice = rootApi.injectEndpoints({
         };
       },
     }),
+    getReporteComisionesTipoComision: builder.query<IRespuestaFormato, IReporteRequest>({
+      query: (data) => {
+        return {
+          url: `/reportes/comisionestipocomision`,
+          body: data,
+          method: "POST",
+        };
+      },
+    }),
   }),
 });
 
-export const { useLazyGetReporteAnalisisCartasQuery } = reportesApiSlice;
+export const { useLazyGetReporteAnalisisCartasQuery, useLazyGetReporteComisionesTipoComisionQuery } = reportesApiSlice;

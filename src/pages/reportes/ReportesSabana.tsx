@@ -1,5 +1,5 @@
 import { useGetEmpresasQuery } from "@/apis";
-import { useLazyGetReporteAnalisisCartasQuery } from "@/apis/reportesApi";
+import { useLazyGetReporteAnalisisCartasQuery, useLazyGetReporteComisionesTipoComisionQuery } from "@/apis/reportesApi";
 import { AdminBreadcrumbs, AdminPageHeader } from "@/components";
 import { apiHost } from "@/utils/apiConfig";
 import { faChartPie } from "@fortawesome/free-solid-svg-icons";
@@ -29,6 +29,11 @@ export const ReportesSabana = () => {
     { data: analisisCartasRsp, isSuccess: isSuccessReporteAnalisisCartas, isError: isErrorReporteAnalisisCartas, isLoading: isLoadingReporteAnalisisCartas },
   ] = useLazyGetReporteAnalisisCartasQuery();
 
+  const [
+    getReporteComisionesPorTipoComision,
+    { data: comisionesPorTipoRsp, isSuccess: isSuccessComisionesPorTipoComision, isError: isErrorComisionesPorTipoComision, isLoading: isLoadingComisionesPorTipoComision },
+  ] = useLazyGetReporteComisionesTipoComisionQuery();
+
   const _onSubmit = () => {
     if (tipoReporteId < 1) {
       toast.error("Seleccione tipo de reporte");
@@ -42,12 +47,23 @@ export const ReportesSabana = () => {
       return;
     }
 
-    getReporteAnalisisCartas({
-      EmpresaId: empresaId,
-      TipoReporteId: tipoReporteId,
-      FechaInicio: fechaInicio,
-      FechaFin: fechaFin,
-    });
+    if (tipoReporteId === 1) {
+      getReporteAnalisisCartas({
+        EmpresaId: empresaId,
+        TipoReporteId: tipoReporteId,
+        FechaInicio: fechaInicio,
+        FechaFin: fechaFin,
+      });
+    }
+
+    if (tipoReporteId === 2) {
+      getReporteComisionesPorTipoComision({
+        EmpresaId: empresaId,
+        TipoReporteId: tipoReporteId,
+        FechaInicio: fechaInicio,
+        FechaFin: fechaFin,
+      });
+    }
   };
 
   /* const dataSource = new PivotGridDataSource({
@@ -106,6 +122,7 @@ export const ReportesSabana = () => {
               }}>
               <option value="0">Seleccione Opción</option>
               <option value="1">Análisis de Cartas</option>
+              <option value="2">Comisiones por Tipo de Comisión</option>
             </Select>
           </div>
           <div className="flex-1 mb-4 lg:mb-0">
@@ -122,7 +139,7 @@ export const ReportesSabana = () => {
           <Button onClick={(e) => _onSubmit()}>Generar Reporte</Button>
         </div>
 
-        {isLoadingReporteAnalisisCartas && (
+        {(isLoadingReporteAnalisisCartas || isLoadingComisionesPorTipoComision) && (
           <div className="mb-6 flex items-center justify-center">
             <Spinner size="xl" />
           </div>
@@ -144,6 +161,23 @@ export const ReportesSabana = () => {
               <Column dataField="Moneda" />
               <Column dataField="MontoOriginalLC" dataType="number" format="currency" caption="Importe Total" />
               <Column dataField="DiasPlazoProveedor" dataType="number" caption="Días plazo proveedor despues de B/L" />
+            </DataGrid>
+          )}
+
+          {isSuccessComisionesPorTipoComision && comisionesPorTipoRsp && (
+            <DataGrid showBorders={true} showColumnLines={true} showRowLines={true} keyExpr="Id" dataSource={comisionesPorTipoRsp.Content}>
+              <Paging defaultPageSize={10} />
+              <HeaderFilter visible={true} />
+              <SearchPanel visible={true} />
+              <Selection mode="multiple" showCheckBoxesMode="always" />
+              <Export enabled={true} texts={txtsExport} allowExportSelectedData={true} />
+              <Column dataField="Empresa" />
+              <Column dataField="Comision" />
+              <Column dataField="NumCartaCredito" caption="Número Carta Crédito" />
+              <Column dataField="MonedaOriginal" />
+              <Column dataField="Monto" dataType="number" format="currency" caption="Monto Original" />
+              <Column dataField="MontoPagado" dataType="number" format="currency" caption="Monto Pagado" />
+              <Column dataField="EstatusText" caption="Estatus Carta" />
             </DataGrid>
           )}
         </div>
