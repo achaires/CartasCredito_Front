@@ -20,21 +20,37 @@ import {
   TiposDeActivo,
   TiposDeCobertura,
 } from "./pages/catalogos";
-import { DashboardIndex } from "./pages/dashboard/DashboardIndex";
-import { CartasCreditoComisiones, CartasCreditoEnmiendas, CartasDeCredito, CartasDeCreditoDetalle, CartasDeCreditoPagos, PFE } from "./pages/operaciones";
+import {
+  CartaCreditoEnmiendasHistorial,
+  CartasCreditoComisiones,
+  CartasCreditoEnmiendas,
+  CartasDeCredito,
+  CartasDeCreditoDetalle,
+  CartasDeCreditoPagos,
+  PFE,
+} from "./pages/operaciones";
 import NuevaCartaComercial from "./pages/operaciones/crear/NuevaCartaComercial";
 import { NuevaCartaStandBy } from "./pages/operaciones/crear/NuevaCartaStandBy";
 import { Recover } from "./pages/Recover";
 import { RolesIndex } from "./pages/usuarios/RolesIndex";
 import { UsuariosIndex } from "./pages/usuarios/UsuariosIndex";
-import { useAppSelector } from "./store";
+import { useAppDispatch, useAppSelector } from "./store";
 import { ReportesDiseno, ReportesIndex, ReportesSabana } from "./pages/reportes";
+import { RoleAgregar, RoleEditar, UsuarioAgregar, UsuarioEditar } from "./pages/usuarios";
+import { Login } from "./pages/Login";
+import { DashboardIndex } from "./pages/dashboard/DashboardIndex";
+import { useLazyGetCurrentUserQuery } from "./apis";
+import { authIsLoading, loggedIn, storeAccessToken } from "./store/authSlice";
+import { AdminLoadingActivity } from "./components";
 
 const router = createHashRouter([
   {
     path: "/",
-    //element: <Login />,
-    element: <DashboardIndex />,
+    element: <Login />,
+  },
+  {
+    path: "/login",
+    element: <Login />,
   },
   {
     path: "/recuperar-contrasena",
@@ -44,7 +60,7 @@ const router = createHashRouter([
     element: <AdminLayout />,
     children: [
       {
-        index: true,
+        path: "/dashboard",
         element: <DashboardIndex />,
       },
       {
@@ -155,6 +171,10 @@ const router = createHashRouter([
                     element: <CartasCreditoComisiones />,
                   },
                   {
+                    path: "enmiendas/historial",
+                    element: <CartaCreditoEnmiendasHistorial />,
+                  },
+                  {
                     path: "enmiendas",
                     element: <CartasCreditoEnmiendas />,
                   },
@@ -189,6 +209,48 @@ const router = createHashRouter([
           },
         ],
       },
+      {
+        path: "usuarios",
+        children: [
+          {
+            children: [
+              {
+                index: true,
+                element: <UsuariosIndex />,
+              },
+              {
+                path: "agregar",
+                element: <UsuarioAgregar />,
+              },
+              {
+                path: "editar/:userId",
+                element: <UsuarioEditar />,
+              },
+            ],
+          },
+        ],
+      },
+      {
+        path: "roles",
+        children: [
+          {
+            children: [
+              {
+                index: true,
+                element: <RolesIndex />,
+              },
+              {
+                path: "agregar",
+                element: <RoleAgregar />,
+              },
+              {
+                path: "editar/:roleId",
+                element: <RoleEditar />,
+              },
+            ],
+          },
+        ],
+      },
     ],
   },
 ]);
@@ -216,6 +278,46 @@ function InnerApp() {
 }
 
 function App() {
+  const authState = useAppSelector((s) => s.auth);
+  const dispatch = useAppDispatch();
+
+  const [getCurrentUser] = useLazyGetCurrentUserQuery();
+
+  useEffect(() => {
+    const bootstrapAsync = async () => {
+      // 1. Checar si existe token
+      // 2. Si existe, confirmar que funciona
+      // 3. Actualizar el state con el token e info de usuario
+      try {
+        let storedAccessToken = localStorage.getItem("accessToken");
+
+        if (storedAccessToken) {
+          dispatch(storeAccessToken(storedAccessToken as string));
+
+          let currentUser = (await getCurrentUser()).data;
+
+          if (currentUser && currentUser.Activo) {
+            dispatch(loggedIn(currentUser));
+          }
+        }
+      } catch (err) {
+        console.log(err);
+      }
+
+      dispatch(authIsLoading(false));
+    };
+
+    bootstrapAsync();
+  }, []);
+
+  /* console.log(`Bootstrap App`);
+  console.log(`-- Auth State`);
+  console.log(authState); */
+
+  if (authState.isLoading) {
+    return <AdminLoadingActivity />;
+  }
+
   return (
     <>
       <InnerApp />

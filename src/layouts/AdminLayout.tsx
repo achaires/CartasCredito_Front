@@ -3,29 +3,19 @@ import { useAppDispatch, useAppSelector } from "@/store";
 import { addToast, setIsLoading } from "@/store/uiSlice";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useCallback, useState } from "react";
-import { Outlet } from "react-router-dom";
+import React, { useCallback, useContext, useState } from "react";
+import { Navigate, Outlet, useNavigate } from "react-router-dom";
 
 export const AdminLayout = () => {
   const [showSidebar, setShowSidebar] = useState(false);
 
   const dispatch = useAppDispatch();
   const ui = useAppSelector((s) => s.ui);
+  const auth = useAppSelector((s) => s.auth);
 
-  const testIsLoading = useCallback(() => {
-    dispatch(setIsLoading(true));
-  }, []);
-
-  const testToast = useCallback(() => {
-    dispatch(
-      addToast({
-        title: "Test",
-        message: "This is a test",
-        type: "success",
-        time: new Date().toISOString(),
-      })
-    );
-  }, []);
+  if (!auth.isLoggedIn || auth.accessToken.length < 1) {
+    return <Navigate to="/login" replace />;
+  }
 
   return (
     <div id="dashboard">

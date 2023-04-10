@@ -1,4 +1,4 @@
-import { faArrowsToCircle, faChartArea, faChartPie, faList, faTable, faTableList, faUsers } from "@fortawesome/free-solid-svg-icons";
+import { faArrowsToCircle, faChartArea, faChartPie, faList, faTable, faTableList, faUsers, faUserShield } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import { AdminSidebarItem } from "./AdminSidebarItem";
 
@@ -11,19 +11,17 @@ export const AdminSidebar = ({ showSidebar = false }: Props) => {
     <aside id="dashboard__sidebar" className={showSidebar ? "active" : ""}>
       <div className="sidebar__inner">
         <ul className="sidebar__list">
-          <AdminSidebarItem title={`Dashboard`} href={`/`} icon={faChartArea} />
-
-          {/*
+          <AdminSidebarItem title={`Dashboard`} href={`/dashboard`} icon={faChartArea} />
 
           <AdminSidebarItem
-            title={`Usuarios`}
+            title={`Seguridad`}
             href={`#`}
-            icon={faUsers}
+            icon={faUserShield}
             links={[
-              { title: "Roles", href: "/negocios" },
-              { title: "Registro", href: "/plantas" },
+              { title: "Usuarios", href: "/usuarios" },
+              { title: "Roles", href: "/roles" },
             ]}
-          /> */}
+          />
 
           <AdminSidebarItem
             title={`Catálogos`}

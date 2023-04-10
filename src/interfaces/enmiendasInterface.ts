@@ -37,3 +37,8 @@ export interface IEnmiendaUpdate extends IEnmiendaInsert {
   Id: number;
   Estatus: number;
 }
+
+export interface ISwiftEnmiendaRequest {
+  EnmiendaId: number;
+  SwiftFile: FileList;
+}

@@ -1,3 +1,4 @@
+import { RootState } from "@/store";
 import { apiHost } from "@/utils/apiConfig";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
@@ -25,18 +26,26 @@ export const rootApi = createApi({
     "CartasCreditoDetalle",
     "Pagos",
     "CartaCreditoComisiones",
+    "Users",
+    "UserDetail",
+    "Roles",
+    "Permissions",
+    "PFE_Programas",
+    "PFE_Pagos",
   ],
   baseQuery: fetchBaseQuery({
     baseUrl: `${apiHost}/api`,
     credentials: "same-origin",
-    /* prepareHeaders: (headers, { getState }) => {
-      if (!headers.has("content-type")) {
-        headers.set("accept", "application/json");
-        headers.set("content-type", "application/json");
+    prepareHeaders: (headers, { getState }) => {
+      const s = getState() as RootState;
+
+      if (s.auth.accessToken) {
+        console.log("Querying with token:", s.auth.accessToken);
+        headers.set("authorization", `Bearer ${s.auth.accessToken}`);
       }
 
       return headers;
-    }, */
+    },
   }),
   endpoints: (builder) => ({}),
 });

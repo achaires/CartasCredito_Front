@@ -1,4 +1,4 @@
-import { IEnmienda, IEnmiendaInsert, IEnmiendaUpdate, IRespuestaFormato } from "@/interfaces";
+import { IEnmienda, IEnmiendaInsert, IEnmiendaUpdate, IRespuestaFormato, ISwiftEnmiendaRequest } from "@/interfaces";
 import { rootApi } from "./rootApi";
 
 export const enmiendasApiSlice = rootApi.injectEndpoints({
@@ -22,7 +22,26 @@ export const enmiendasApiSlice = rootApi.injectEndpoints({
         };
       },
     }),
+    addSwiftEnmienda: builder.mutation<IRespuestaFormato, ISwiftEnmiendaRequest>({
+      query: (data) => {
+        let fd = new FormData();
+        fd.append("EnmiendaId", data.EnmiendaId.toString());
+
+        if (data.SwiftFile.length > 0) {
+          fd.append("SwiftFile", data.SwiftFile[0]);
+        }
+
+        return {
+          url: `/operaciones/adjuntarswift-enmienda/${data.EnmiendaId}`,
+          method: "POST",
+          body: fd,
+          /* headers: {
+            "content-type": "multipart/form-data",
+          }, */
+        };
+      },
+    }),
   }),
 });
 
-export const { useAddEnmiendaMutation, useApproveEnmiendaMutation } = enmiendasApiSlice;
+export const { useAddEnmiendaMutation, useApproveEnmiendaMutation, useAddSwiftEnmiendaMutation } = enmiendasApiSlice;

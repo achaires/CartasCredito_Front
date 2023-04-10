@@ -358,64 +358,63 @@ export const CartasDeCreditoDetalle = () => {
         </div>
       </form>
 
-      {cartaCreditoDetalle.Estatus !== 4 && (
-        <div id="controles-footer" className="fixed bottom-0 left-0 w-full bg-brandPrimary p-6 text-white flex items-center justify-center gap-12">
-          {/* <a href="#" className="flex flex-col items-center justify-around gap-2">
+      <div id="controles-footer" className="fixed bottom-0 left-0 w-full bg-brandPrimary p-6 text-white flex items-center justify-center gap-12">
+        {/* <a href="#" className="flex flex-col items-center justify-around gap-2">
           <FontAwesomeIcon icon={faPencil} className="h-6" />
           <span className="text-sm">Editar Solicitud</span>
         </a>
         */}
-          {cartaCreditoDetalle && cartaCreditoDetalle.Estatus && Number(cartaCreditoDetalle.Estatus) === 1 && (
+        {cartaCreditoDetalle && cartaCreditoDetalle.Estatus && Number(cartaCreditoDetalle.Estatus) === 1 && (
+          <a
+            href="#"
+            onClick={(e) => {
+              e.preventDefault();
+              setShowSwiftModal(true);
+            }}
+            className="flex flex-col items-center justify-around gap-2">
+            <FontAwesomeIcon icon={faUpload} className="h-6 text-white" />
+            <span className="text-xs text-white">Archivo Swift</span>
+          </a>
+        )}
+
+        {cartaCreditoDetalle && cartaCreditoDetalle.Estatus && Number(cartaCreditoDetalle.Estatus) > 1 && (
+          <>
+            <Link to={`/operaciones/cartas-de-credito/${cartaCreditoDetalle.Id}/pagos`} className="flex flex-col items-center justify-around gap-2">
+              <FontAwesomeIcon icon={faDollarSign} className="h-6 text-white" />
+              <span className="text-xs text-white">Registro de Pagos</span>
+            </Link>
+            <Link to={`/operaciones/cartas-de-credito/${cartaCreditoDetalle.Id}/comisiones`} className="flex flex-col items-center justify-around gap-2">
+              <FontAwesomeIcon icon={faPlusCircle} className="h-6 text-white" />
+              <span className="text-xs text-white">Registro de Comisiones</span>
+            </Link>
             <a
               href="#"
               onClick={(e) => {
                 e.preventDefault();
-                setShowSwiftModal(true);
+                setShowCartaPagadaModal(true);
               }}
               className="flex flex-col items-center justify-around gap-2">
-              <FontAwesomeIcon icon={faUpload} className="h-6 text-white" />
-              <span className="text-xs text-white">Archivo Swift</span>
+              <FontAwesomeIcon icon={faCheckCircle} className="h-6 text-white" />
+              <span className="text-xs text-white">Registrar como Pagada</span>
             </a>
-          )}
+          </>
+        )}
 
-          {cartaCreditoDetalle && cartaCreditoDetalle.Estatus && Number(cartaCreditoDetalle.Estatus) > 1 && (
-            <>
-              <Link to={`/operaciones/cartas-de-credito/${cartaCreditoDetalle.Id}/pagos`} className="flex flex-col items-center justify-around gap-2">
-                <FontAwesomeIcon icon={faDollarSign} className="h-6 text-white" />
-                <span className="text-xs text-white">Registro de Pagos</span>
-              </Link>
-              <Link to={`/operaciones/cartas-de-credito/${cartaCreditoDetalle.Id}/comisiones`} className="flex flex-col items-center justify-around gap-2">
-                <FontAwesomeIcon icon={faPlusCircle} className="h-6 text-white" />
-                <span className="text-xs text-white">Registro de Comisiones</span>
-              </Link>
-              <a
-                href="#"
-                onClick={(e) => {
-                  e.preventDefault();
-                  setShowCartaPagadaModal(true);
-                }}
-                className="flex flex-col items-center justify-around gap-2">
-                <FontAwesomeIcon icon={faCheckCircle} className="h-6 text-white" />
-                <span className="text-xs text-white">Registrar como Pagada</span>
-              </a>
-            </>
-          )}
+        {cartaCreditoDetalle && cartaCreditoDetalle.Estatus && Number(cartaCreditoDetalle.Estatus) !== 21 && (
+          <Link to={`/operaciones/cartas-de-credito/${cartaCreditoDetalle.Id}/enmiendas`} className="flex flex-col items-center justify-around gap-2">
+            <FontAwesomeIcon icon={faFilePen} className="h-6 text-white" />
+            <span className="text-xs text-white">Registrar Enmienda</span>
+          </Link>
+        )}
 
-          {cartaCreditoDetalle && cartaCreditoDetalle.Estatus && Number(cartaCreditoDetalle.Estatus) !== 21 && (
-            <Link to={`/operaciones/cartas-de-credito/${cartaCreditoDetalle.Id}/enmiendas`} className="flex flex-col items-center justify-around gap-2">
-              <FontAwesomeIcon icon={faFilePen} className="h-6 text-white" />
-              <span className="text-xs text-white">Registrar Enmienda</span>
-            </Link>
-          )}
+        {cartaCreditoDetalle && cartaCreditoDetalle.Estatus && Number(cartaCreditoDetalle.Estatus) === 21 && (
+          <Link to={`/operaciones/cartas-de-credito/${cartaCreditoDetalle.Id}/enmiendas`} className="flex flex-col items-center justify-around gap-2">
+            <FontAwesomeIcon icon={faFilePen} className="h-6 text-white" />
+            <span className="text-xs text-white">Enmienda Pendiente</span>
+          </Link>
+        )}
 
-          {cartaCreditoDetalle && cartaCreditoDetalle.Estatus && Number(cartaCreditoDetalle.Estatus) === 21 && (
-            <Link to={`/operaciones/cartas-de-credito/${cartaCreditoDetalle.Id}/enmiendas`} className="flex flex-col items-center justify-around gap-2">
-              <FontAwesomeIcon icon={faFilePen} className="h-6 text-white" />
-              <span className="text-xs text-white">Enmienda Pendiente</span>
-            </Link>
-          )}
-
-          {/* <a href="#" className="flex flex-col items-center justify-around gap-2">
+        {/* <a href="#" className="flex flex-col items-center justify-around gap-2">
           <FontAwesomeIcon icon={faCalendarAlt} className="h-6" />
           <span className="text-sm">Enmiendas</span>
         </a>
@@ -423,8 +422,7 @@ export const CartasDeCreditoDetalle = () => {
           <FontAwesomeIcon icon={faPrint} className="h-6" />
           <span className="text-sm">Imprimir</span>
         </a> */}
-        </div>
-      )}
+      </div>
 
       {cartaCreditoDetalle && cartaCreditoDetalle.Id && (
         <CartaSwiftModal show={showSwiftModal} handleClose={() => setShowSwiftModal(false)} cartaCreditoId={cartaCreditoDetalle.Id} />

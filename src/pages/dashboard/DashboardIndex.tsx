@@ -1,7 +1,19 @@
 import { useGetPagosProgramadosQuery, useGetPagosVencidosQuery } from "@/apis";
 import { AdminBreadcrumbs, AdminPageHeader } from "@/components";
 import { faFileInvoiceDollar } from "@fortawesome/free-solid-svg-icons";
-import DataGrid, { Export, Selection, Button, Column, FilterRow, Grouping, GroupPanel, HeaderFilter, Pager, Paging, SearchPanel } from "devextreme-react/data-grid";
+import DataGrid, {
+  Export,
+  Selection,
+  Button,
+  Column,
+  FilterRow,
+  Grouping,
+  GroupPanel,
+  HeaderFilter,
+  Pager,
+  Paging,
+  SearchPanel,
+} from "devextreme-react/data-grid";
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -17,7 +29,7 @@ export const DashboardIndex = () => {
   const { data: pagosVencidos } = useGetPagosVencidosQuery();
 
   const _handleDetalleClick = useCallback((e: any) => {
-    nav(`/operaciones/cartas-de-credito/${e.row.data.CartaCredito.Id}`);
+    nav(`/operaciones/cartas-de-credito/${e.row.data.CartaCredito.Id}/pagos`);
   }, []);
 
   return (

@@ -23,6 +23,7 @@ import { InformationCircleIcon } from "@heroicons/react/24/solid";
 
 import { z } from "zod";
 import DatePicker from "react-datepicker";
+import { useGetUsersQuery } from "@/apis";
 
 // Fix DatePicker + React Hook Form: https://github.com/Hacker0x01/react-datepicker/issues/2165#issuecomment-696095748
 
@@ -86,7 +87,11 @@ const validationSchema = z
 
 type ValidationSchema = z.infer<typeof validationSchema>;
 
-function NuevaCartaComercial() {
+const DatePickerCustomInput = ({ value, onClick }: { value: string; onClick: React.MouseEventHandler<HTMLInputElement> }, ref: React.Ref<HTMLInputElement>) => (
+  <TextInput onClick={onClick} value={value} readOnly />
+);
+
+const NuevaCartaComercial = () => {
   const nav = useNavigate();
 
   const {
@@ -107,6 +112,7 @@ function NuevaCartaComercial() {
   const { data: catMonedas } = useGetMonedasQuery();
   const { data: catCompradores } = useGetCompradoresQuery();
   const { data: catDocumentos } = useGetDocumentosQuery();
+  const { data: catUsuarios } = useGetUsersQuery();
 
   const [addCarta, { data: responseData, isSuccess, isError, isLoading, error }] = useAddCartaComercialMutation();
 
@@ -126,10 +132,6 @@ function NuevaCartaComercial() {
         }
       });
   });
-
-  const DatePickerCustomInput = ({ value, onClick }: { value: string; onClick: React.MouseEventHandler<HTMLInputElement> }) => (
-    <TextInput onClick={onClick} value={value} readOnly />
-  );
 
   useEffect(() => {
     if (isError) {
@@ -312,12 +314,21 @@ function NuevaCartaComercial() {
 
         <div className="md:col-span-3">
           <Label value="Responsable" />
-          <TextInput {...register("Responsable")} />
+          <Select {...register("Responsable")}>
+            <option value={""}>Seleccione Opción</option>
+            {catUsuarios
+              ?.filter((b) => b.Activo)
+              .map((item, index) => (
+                <option value={item.Id} key={index.toString()}>
+                  {item.Profile?.DisplayName}
+                </option>
+              ))}
+          </Select>
         </div>
 
         <div className="md:col-span-3">
           <Label value="Comprador" />
-          <Select {...register("CompradorId", { valueAsNumber: true })} {...register("CompradorId")}>
+          <Select {...register("CompradorId", { valueAsNumber: true })}>
             <option value={0}>Seleccione Opción</option>
             {catCompradores
               ?.filter((b) => b.Activo)
@@ -393,7 +404,7 @@ function NuevaCartaComercial() {
             name="FechaApertura"
             render={({ field }) => (
               <DatePicker
-                customInput={React.createElement(DatePickerCustomInput)}
+                customInput={React.createElement(React.forwardRef(DatePickerCustomInput))}
                 placeholderText="Seleccione Fecha"
                 onChange={(date) => field.onChange(date)}
                 selected={field.value}
@@ -410,7 +421,7 @@ function NuevaCartaComercial() {
             name="FechaLimiteEmbarque"
             render={({ field }) => (
               <DatePicker
-                customInput={React.createElement(DatePickerCustomInput)}
+                customInput={React.createElement(React.forwardRef(DatePickerCustomInput))}
                 placeholderText="Seleccione Fecha"
                 onChange={(date) => field.onChange(date)}
                 selected={field.value}
@@ -427,7 +438,7 @@ function NuevaCartaComercial() {
             name="FechaVencimiento"
             render={({ field }) => (
               <DatePicker
-                customInput={React.createElement(DatePickerCustomInput)}
+                customInput={React.createElement(React.forwardRef(DatePickerCustomInput))}
                 placeholderText="Seleccione Fecha"
                 onChange={(date) => field.onChange(date)}
                 selected={field.value}
@@ -592,5 +603,5 @@ function NuevaCartaComercial() {
       </div>
     </>
   );
-}
+};
 export default NuevaCartaComercial;

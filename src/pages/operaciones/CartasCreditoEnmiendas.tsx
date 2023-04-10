@@ -2,7 +2,7 @@ import { useLazyGetCartaComercialQuery } from "@/apis";
 import { AdminLoadingActivity, AdminBreadcrumbs, AdminPageHeader } from "@/components";
 import { useAppDispatch } from "@/store";
 import { apiHost } from "@/utils/apiConfig";
-import { faFileInvoiceDollar, faCircleArrowLeft, faSave, faClose, faCheckCircle } from "@fortawesome/free-solid-svg-icons";
+import { faFileInvoiceDollar, faCircleArrowLeft, faSave, faClose, faCheckCircle, faClockRotateLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Alert, Button, Card, Label, TextInput, Textarea } from "flowbite-react";
 import React, { useCallback, useEffect } from "react";
@@ -48,15 +48,15 @@ const validationSchema = z
 
 type ValidationSchema = z.infer<typeof validationSchema>;
 
+const DatePickerCustomInput = ({ value, onClick }: { value: string; onClick: React.MouseEventHandler<HTMLInputElement> }, ref: React.Ref<HTMLInputElement>) => (
+  <TextInput onClick={onClick} value={value} readOnly />
+);
+
 export const CartasCreditoEnmiendas = () => {
   const routeParams = useParams();
   const nav = useNavigate();
 
   const dispatch = useAppDispatch();
-
-  const DatePickerCustomInput = ({ value, onClick }: { value: string; onClick: React.MouseEventHandler<HTMLInputElement> }) => (
-    <TextInput onClick={onClick} value={value} readOnly />
-  );
 
   const {
     reset,
@@ -75,6 +75,10 @@ export const CartasCreditoEnmiendas = () => {
 
   const _handleBack = useCallback(() => {
     nav(`/operaciones/cartas-de-credito/${cartaCreditoDetalle?.Id}`);
+  }, [cartaCreditoDetalle]);
+
+  const _handleHistorial = useCallback(() => {
+    nav(`/operaciones/cartas-de-credito/${cartaCreditoDetalle?.Id}/enmiendas/historial`);
   }, [cartaCreditoDetalle]);
 
   const _handleSubmit = handleSubmit((formData) => {
@@ -98,7 +102,13 @@ export const CartasCreditoEnmiendas = () => {
       setValue("DiasParaPresentarDocumentos", cartaCreditoDetalle.DiasParaPresentarDocumentos);
     }
 
-    if (isGetDetalleSuccess && cartaCreditoDetalle && cartaCreditoDetalle.Enmiendas && cartaCreditoDetalle.Enmiendas[0] && cartaCreditoDetalle.Enmiendas[0].Estatus === 1) {
+    if (
+      isGetDetalleSuccess &&
+      cartaCreditoDetalle &&
+      cartaCreditoDetalle.Enmiendas &&
+      cartaCreditoDetalle.Enmiendas[0] &&
+      cartaCreditoDetalle.Enmiendas[0].Estatus === 1
+    ) {
       setValue("ImporteLC", cartaCreditoDetalle.Enmiendas[0].ImporteLC);
 
       if (cartaCreditoDetalle.Enmiendas[0].FechaVencimiento) {
@@ -206,10 +216,15 @@ export const CartasCreditoEnmiendas = () => {
           <AdminPageHeader title="Cartas de Crédito" subtitle="Emiendas" icon={faFileInvoiceDollar} />
         </div>
 
-        <div className="mb-4">
+        <div className="mb-4 flex items-center justify-start gap-4">
           <Button outline color="dark" size="xs" onClick={_handleBack}>
             <FontAwesomeIcon icon={faCircleArrowLeft} className="mr-2" />
             Regresar
+          </Button>
+
+          <Button outline color="dark" size="xs" onClick={_handleHistorial}>
+            <FontAwesomeIcon icon={faClockRotateLeft} className="mr-2" />
+            Historial de Enmiendas
           </Button>
         </div>
 
@@ -254,7 +269,11 @@ export const CartasCreditoEnmiendas = () => {
               </div>
               <div className="md:col-span-5 md:col-start-7 flex items-center justify-between gap-4">
                 <Label value="Nuevo Importe de L/C" />
-                <TextInput type="number" {...register("ImporteLC", { setValueAs: (v) => (v === "" ? null : Number(v)) })} readOnly={cartaCreditoDetalle.Estatus === 21} />
+                <TextInput
+                  type="number"
+                  {...register("ImporteLC", { setValueAs: (v) => (v === "" ? null : Number(v)) })}
+                  readOnly={cartaCreditoDetalle.Estatus === 21}
+                />
               </div>
             </div>
 
@@ -272,7 +291,7 @@ export const CartasCreditoEnmiendas = () => {
                     name="FechaVencimiento"
                     render={({ field }) => (
                       <DatePicker
-                        customInput={React.createElement(DatePickerCustomInput)}
+                        customInput={React.createElement(React.forwardRef(DatePickerCustomInput))}
                         placeholderText="Seleccione Fecha"
                         onChange={(date) => field.onChange(date)}
                         selected={field.value}
@@ -298,7 +317,7 @@ export const CartasCreditoEnmiendas = () => {
                     name="FechaLimiteEmbarque"
                     render={({ field }) => (
                       <DatePicker
-                        customInput={React.createElement(DatePickerCustomInput)}
+                        customInput={React.createElement(React.forwardRef(DatePickerCustomInput))}
                         placeholderText="Seleccione Fecha"
                         onChange={(date) => field.onChange(date)}
                         selected={field.value}
@@ -352,6 +371,13 @@ export const CartasCreditoEnmiendas = () => {
               </div>
             </div>
           </Card>
+
+          {cartaCreditoDetalle.Estatus === 21 && (
+            <Card className="mb-6">
+              <h3 className="font-bold">Adjuntar Documento Swift</h3>
+              <input type="file" />
+            </Card>
+          )}
 
           <div className="flex items-center gap-4">
             <Button color="failure" onClick={_handleBack}>

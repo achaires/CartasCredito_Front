@@ -3,6 +3,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useRef, useState } from "react";
 // @ts-ignore
 import useOutsideClick from "@/hooks/useOutsideClick";
+import { useAppDispatch, useAppSelector } from "@/store";
+import { authIsLoading, loggedOut } from "@/store/authSlice";
 
 export const AdminHeader = () => {
   const ref = useRef();
@@ -13,8 +15,14 @@ export const AdminHeader = () => {
 
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
 
+  const authState = useAppSelector((s) => s.auth);
+  const dispatch = useAppDispatch();
+
   const _handleLogout = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
+    dispatch(loggedOut());
+    localStorage.removeItem("accessToken");
+    dispatch(authIsLoading(false));
     //logout();
   };
 
@@ -45,13 +53,13 @@ export const AdminHeader = () => {
             setShowProfileDropdown(!showProfileDropdown);
           }}>
           <FontAwesomeIcon icon={faUserCircle} className="fa-2x" />
-          <span>{/* {userInfo !== null && userInfo.Nombre} */}Test Users</span>
+          <span>{authState.isLoggedIn && authState.user?.Profile?.DisplayName}</span>
         </button>
         <div className={`dropdown ${showProfileDropdown ? "active" : ""}`}>
           <ul className="dropdown__list shadow">
-            <li>
+            {/* <li>
               <a href="#">Mi Cuenta</a>
-            </li>
+            </li> */}
             <li>
               <a href="#" onClick={_handleLogout}>
                 Logout

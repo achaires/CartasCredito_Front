@@ -5,27 +5,34 @@ interface AuthState {
   user: IUser | null;
   accessToken: string;
   isLoggedIn: boolean;
+  isLoading: boolean;
 }
 
 const initialState: AuthState = {
   user: null,
   accessToken: "",
   isLoggedIn: false,
+  isLoading: true,
 };
 
 const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    loggedIn: (state, action: PayloadAction<AuthState>) => {
-      state.user = action.payload.user;
-      state.accessToken = action.payload.accessToken;
+    loggedIn: (state, action: PayloadAction<IUser>) => {
+      state.user = action.payload;
       state.isLoggedIn = true;
+    },
+    storeAccessToken: (state, action: PayloadAction<string>) => {
+      state.accessToken = action.payload;
+    },
+    authIsLoading: (state, action: PayloadAction<boolean>) => {
+      state.isLoading = action.payload;
     },
     loggedOut: () => initialState,
   },
 });
 
-export const { loggedIn, loggedOut } = authSlice.actions;
+export const { storeAccessToken, loggedIn, loggedOut, authIsLoading } = authSlice.actions;
 
 export default authSlice.reducer;
