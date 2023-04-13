@@ -4,16 +4,17 @@ import { useAppDispatch } from "@/store";
 import { apiHost } from "@/utils/apiConfig";
 import { faFileInvoiceDollar, faCircleArrowLeft, faSave, faClose, faCheckCircle, faClockRotateLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Alert, Button, Card, Label, TextInput, Textarea } from "flowbite-react";
-import React, { useCallback, useEffect } from "react";
+import { Alert, Button, Card, FileInput, Label, TextInput, Textarea } from "flowbite-react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import numeral from "numeral";
-import { useAddEnmiendaMutation, useApproveEnmiendaMutation } from "@/apis/enmiendasApi";
+import { useAddEnmiendaMutation, useAddSwiftEnmiendaMutation, useApproveEnmiendaMutation } from "@/apis/enmiendasApi";
 import { Controller, useForm } from "react-hook-form";
 import { addToast } from "@/store/uiSlice";
 import DatePicker from "react-datepicker";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "react-hot-toast";
 
 const validationSchema = z
   .object({
@@ -71,7 +72,10 @@ export const CartasCreditoEnmiendas = () => {
 
   const [getCartaComercial, { data: cartaCreditoDetalle, isLoading, isSuccess: isGetDetalleSuccess }] = useLazyGetCartaComercialQuery();
   const [addEnmienda, { data, isSuccess, isError }] = useAddEnmiendaMutation();
+  const [addSwiftEnmienda, { data: addSwiftData, isSuccess: addSwiftSuccess, isError: addSwiftError }] = useAddSwiftEnmiendaMutation();
   const [approveEnmienda, { data: approveData, isSuccess: approveIsSuccess, isError: approveIsError }] = useApproveEnmiendaMutation();
+
+  const [files, setFiles] = useState<FileList | null>(null);
 
   const _handleBack = useCallback(() => {
     nav(`/operaciones/cartas-de-credito/${cartaCreditoDetalle?.Id}`);
@@ -84,7 +88,16 @@ export const CartasCreditoEnmiendas = () => {
   const _handleSubmit = handleSubmit((formData) => {
     if (cartaCreditoDetalle && cartaCreditoDetalle.Id) {
       if (cartaCreditoDetalle.Estatus === 21 && cartaCreditoDetalle.Enmiendas) {
-        approveEnmienda(cartaCreditoDetalle.Enmiendas[0].Id);
+        if (files === null) {
+          toast.error("Seleccione archivo Swift");
+          return;
+        }
+        approveEnmienda(cartaCreditoDetalle.Enmiendas[0].Id).then(() => {
+          addSwiftEnmienda({
+            EnmiendaId: cartaCreditoDetalle.Enmiendas && cartaCreditoDetalle.Enmiendas[0].Id ? cartaCreditoDetalle.Enmiendas[0].Id : 0,
+            SwiftFile: files,
+          });
+        });
       } else {
         addEnmienda({ ...formData, CartaCreditoId: cartaCreditoDetalle.Id });
       }
@@ -102,13 +115,7 @@ export const CartasCreditoEnmiendas = () => {
       setValue("DiasParaPresentarDocumentos", cartaCreditoDetalle.DiasParaPresentarDocumentos);
     }
 
-    if (
-      isGetDetalleSuccess &&
-      cartaCreditoDetalle &&
-      cartaCreditoDetalle.Enmiendas &&
-      cartaCreditoDetalle.Enmiendas[0] &&
-      cartaCreditoDetalle.Enmiendas[0].Estatus === 1
-    ) {
+    if (isGetDetalleSuccess && cartaCreditoDetalle && cartaCreditoDetalle.Enmiendas && cartaCreditoDetalle.Enmiendas[0] && cartaCreditoDetalle.Enmiendas[0].Estatus === 1) {
       setValue("ImporteLC", cartaCreditoDetalle.Enmiendas[0].ImporteLC);
 
       if (cartaCreditoDetalle.Enmiendas[0].FechaVencimiento) {
@@ -269,11 +276,7 @@ export const CartasCreditoEnmiendas = () => {
               </div>
               <div className="md:col-span-5 md:col-start-7 flex items-center justify-between gap-4">
                 <Label value="Nuevo Importe de L/C" />
-                <TextInput
-                  type="number"
-                  {...register("ImporteLC", { setValueAs: (v) => (v === "" ? null : Number(v)) })}
-                  readOnly={cartaCreditoDetalle.Estatus === 21}
-                />
+                <TextInput type="number" {...register("ImporteLC", { setValueAs: (v) => (v === "" ? null : Number(v)) })} readOnly={cartaCreditoDetalle.Estatus === 21} />
               </div>
             </div>
 
@@ -375,7 +378,11 @@ export const CartasCreditoEnmiendas = () => {
           {cartaCreditoDetalle.Estatus === 21 && (
             <Card className="mb-6">
               <h3 className="font-bold">Adjuntar Documento Swift</h3>
-              <input type="file" />
+              <FileInput
+                onChange={(e) => {
+                  setFiles(e.target.files);
+                }}
+              />
             </Card>
           )}
 

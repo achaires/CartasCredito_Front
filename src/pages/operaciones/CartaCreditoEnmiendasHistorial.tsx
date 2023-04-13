@@ -60,7 +60,7 @@ export const CartaCreditoEnmiendasHistorial = () => {
           />
         </div>
         <div className="mb-4">
-          <AdminPageHeader title="Cartas de Crédito" subtitle="Emiendas" icon={faFileInvoiceDollar} />
+          <AdminPageHeader title="Cartas de Crédito" subtitle="Historial de Emiendas" icon={faFileInvoiceDollar} />
         </div>
 
         <div className="mb-4 flex items-center justify-start gap-4">
@@ -82,18 +82,11 @@ export const CartaCreditoEnmiendasHistorial = () => {
             <SearchPanel visible={true} />
             <Selection mode="multiple" showCheckBoxesMode="always" />
             <Export enabled={true} texts={txtsExport} allowExportSelectedData={true} />
-            <Column dataField="RowNum" caption="No. Enmienda" width={140} alignment="left" />
             <Column dataField="DocumentoSwift" />
             <Column dataField="ImporteLC" caption="Monto Original LC" format="currency" dataType="number" alignment="right" />
-            <Column
-              dataField="FechaLimiteEmbarque"
-              caption="Fecha Límite de Embarque"
-              dataType="datetime"
-              format="yyyy-MM-dd"
-              defaultSortIndex="asc"
-              sortIndex={0}
-            />
+            <Column dataField="FechaLimiteEmbarque" caption="Fecha Límite de Embarque" dataType="datetime" format="yyyy-MM-dd" defaultSortIndex="asc" sortIndex={0} />
             <Column dataField="FechaVencimiento" caption="Fecha Vencimiento" dataType="datetime" format="yyyy-MM-dd" defaultSortIndex="asc" sortIndex={0} />
+            <Column dataField="Creado" caption="Fecha de Registro" dataType="datetime" format="yyyy-MM-dd" defaultSortIndex="asc" sortIndex={0} />
             {/* <Column dataField="NumCartaCredito" /> */}
           </DataGrid>
         </div>

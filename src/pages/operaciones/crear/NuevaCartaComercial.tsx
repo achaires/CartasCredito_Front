@@ -12,10 +12,10 @@ import { AdminBreadcrumbs, AdminPageHeader } from "@/components";
 import { useAppDispatch } from "@/store";
 import { addToast } from "@/store/uiSlice";
 import { apiHost } from "@/utils/apiConfig";
-import { faCircleArrowLeft, faFileInvoiceDollar, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import { faCircleArrowLeft, faFileInvoiceDollar, faInfoCircle, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Alert, Button, Label, Select, Table, Textarea, TextInput } from "flowbite-react";
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -24,6 +24,7 @@ import { InformationCircleIcon } from "@heroicons/react/24/solid";
 import { z } from "zod";
 import DatePicker from "react-datepicker";
 import { useGetUsersQuery } from "@/apis";
+import { toast } from "react-hot-toast";
 
 // Fix DatePicker + React Hook Form: https://github.com/Hacker0x01/react-datepicker/issues/2165#issuecomment-696095748
 
@@ -85,6 +86,13 @@ const validationSchema = z
     }
   );
 
+type DocAgregado = {
+  DocId: number;
+  Originales: number;
+  Copias: number;
+  Nombre?: string;
+};
+
 type ValidationSchema = z.infer<typeof validationSchema>;
 
 const DatePickerCustomInput = ({ value, onClick }: { value: string; onClick: React.MouseEventHandler<HTMLInputElement> }, ref: React.Ref<HTMLInputElement>) => (
@@ -116,11 +124,57 @@ const NuevaCartaComercial = () => {
 
   const [addCarta, { data: responseData, isSuccess, isError, isLoading, error }] = useAddCartaComercialMutation();
 
+  const [docsAgregados, setDocsAgregados] = useState<Array<DocAgregado>>([]);
+  const [docId, setDocId] = useState(0);
+  const [docCopias, setDocCopias] = useState(0);
+  const [docOriginales, setDocOriginales] = useState(0);
+
   const dispatch = useAppDispatch();
 
   const _handleBack = useCallback(() => {
     nav(-1);
   }, []);
+
+  const _docAgregar = () => {
+    if (docId < 1 || docCopias < 1 || docOriginales < 1) {
+      toast.error("Seleccione documento, copias y originales");
+      return;
+    }
+
+    let newDocsAgregados = Array<DocAgregado>();
+
+    newDocsAgregados = [...docsAgregados];
+
+    if (catDocumentos) {
+      let docAgregado = catDocumentos.find((i) => i.Id === docId);
+
+      newDocsAgregados.push({
+        DocId: docId,
+        Copias: docCopias,
+        Originales: docOriginales,
+        Nombre: docAgregado?.Nombre,
+      });
+
+      setDocsAgregados(newDocsAgregados);
+
+      setDocId(0);
+      setDocCopias(0);
+      setDocOriginales(0);
+    }
+  };
+
+  const _docEliminar = (docId: number) => {
+    let newDocsAgregados = Array<DocAgregado>();
+    let docIndex = docsAgregados.findIndex((i) => i.DocId === docId);
+
+    newDocsAgregados = [...docsAgregados];
+
+    if (docIndex > -1) {
+      newDocsAgregados.splice(docIndex, 1);
+    }
+
+    setDocsAgregados(newDocsAgregados);
+  };
 
   const _handleSubmit = handleSubmit((formData) => {
     //@ts-ignore
@@ -572,31 +626,61 @@ const NuevaCartaComercial = () => {
       </div>
 
       <div className="m-6">
-        <Table>
-          <Table.Head>
-            <Table.HeadCell>Documentos a negociar</Table.HeadCell>
-            <Table.HeadCell>Copias</Table.HeadCell>
-            <Table.HeadCell>Originales</Table.HeadCell>
-          </Table.Head>
-          <Table.Body>
-            {catDocumentos
-              ?.filter((doc) => doc.Activo)
-              .map((item, index) => {
-                return (
-                  <Table.Row key={index.toString()}>
-                    <Table.Cell width="60%">{item.Nombre}</Table.Cell>
-                    <Table.Cell>
-                      <TextInput type="number" />
-                    </Table.Cell>
-                    <Table.Cell>
-                      <TextInput type="number" />
-                    </Table.Cell>
-                  </Table.Row>
-                );
-              })}
-          </Table.Body>
-        </Table>
+        <div className="md:grid md:grid-cols-12 gap-4 items-center">
+          <div className="md:col-span-6">
+            <Label value="Documentos a Negociar: " />
+            <Select onChange={(e) => setDocId(Number(e.target.value))} value={Number(docId)}>
+              <option value="0">Seleccione</option>
+              {catDocumentos &&
+                catDocumentos
+                  .filter((d) => d.Activo)
+                  .map((item, index) => (
+                    <option key={index.toString()} value={item.Id}>
+                      {item.Nombre}
+                    </option>
+                  ))}
+            </Select>
+          </div>
+          <div className="md:col-span-2">
+            <Label value="Copias" />
+            <TextInput onChange={(e) => setDocCopias(Number(e.target.value))} value={Number(docCopias)} />
+          </div>
+          <div className="md:col-span-2">
+            <Label value="Originales" />
+            <TextInput onChange={(e) => setDocOriginales(Number(e.target.value))} value={Number(docOriginales)} />
+          </div>
+          <div className="md:col-span-2 pt-4">
+            <Button onClick={_docAgregar}>Agregar</Button>
+          </div>
+        </div>
+      </div>
 
+      <Table className="mt-6">
+        <Table.Head>
+          <Table.HeadCell>Documentos a negociar</Table.HeadCell>
+          <Table.HeadCell>Copias</Table.HeadCell>
+          <Table.HeadCell>Originales</Table.HeadCell>
+          <Table.HeadCell>Eliminar</Table.HeadCell>
+        </Table.Head>
+        <Table.Body>
+          {docsAgregados.map((item, index) => {
+            return (
+              <Table.Row key={index.toString()}>
+                <Table.Cell width="60%">{item.Nombre}</Table.Cell>
+                <Table.Cell>{item.Copias}</Table.Cell>
+                <Table.Cell>{item.Originales}</Table.Cell>
+                <Table.Cell>
+                  <Button color="warning" size="sm" onClick={() => _docEliminar(item.DocId)}>
+                    <FontAwesomeIcon icon={faTrash} />
+                  </Button>
+                </Table.Cell>
+              </Table.Row>
+            );
+          })}
+        </Table.Body>
+      </Table>
+
+      <div className="m-6">
         <div className="mt-6">
           <Button onClick={_handleSubmit}>REGISTRAR SOLICITUD</Button>
         </div>
