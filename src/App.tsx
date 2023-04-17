@@ -40,8 +40,9 @@ import { RoleAgregar, RoleEditar, UsuarioAgregar, UsuarioEditar } from "./pages/
 import { Login } from "./pages/Login";
 import { DashboardIndex } from "./pages/dashboard/DashboardIndex";
 import { useLazyGetCurrentUserQuery } from "./apis";
-import { authIsLoading, loggedIn, storeAccessToken } from "./store/authSlice";
+import { authIsLoading, loggedIn, loggedOut, storeAccessToken } from "./store/authSlice";
 import { AdminLoadingActivity } from "./components";
+import { BitacoraIndex } from "./pages/bitacora/BitacoraIndex";
 
 const router = createHashRouter([
   {
@@ -251,6 +252,19 @@ const router = createHashRouter([
           },
         ],
       },
+      {
+        path: "bitacora",
+        children: [
+          {
+            children: [
+              {
+                index: true,
+                element: <BitacoraIndex />,
+              },
+            ],
+          },
+        ],
+      },
     ],
   },
 ]);
@@ -298,10 +312,15 @@ function App() {
 
           if (currentUser && currentUser.Activo) {
             dispatch(loggedIn(currentUser));
+          } else {
+            localStorage.removeItem("accessToken");
+            dispatch(loggedOut());
           }
         }
       } catch (err) {
         console.log(err);
+        localStorage.removeItem("accessToken");
+        dispatch(loggedOut());
       }
 
       dispatch(authIsLoading(false));
