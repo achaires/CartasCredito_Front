@@ -1,6 +1,10 @@
-import { useAddAgenteAduanalMutation, useGetAgentesAduanalesQuery, useToggleAgenteAduanalMutation, useUpdateAgenteAduanalMutation } from "@/apis/agentesAduanalesApi";
+import {
+  useAddAgenteAduanalMutation,
+  useGetAgentesAduanalesQuery,
+  useToggleAgenteAduanalMutation,
+  useUpdateAgenteAduanalMutation,
+} from "@/apis/agentesAduanalesApi";
 import { useAddContactoMutation, useUpdateContactoMutation } from "@/apis/contactosApi";
-import { useGetEmpresasQuery } from "@/apis/empresasApi";
 import { AdminBreadcrumbs, AdminPageHeader } from "@/components";
 import { useAppDispatch } from "@/store";
 import { addToast } from "@/store/uiSlice";
@@ -23,7 +27,6 @@ type TContactoFormData = {
 };
 
 type TInsertFormData = {
-  EmpresaId: number;
   Nombre: string;
   Descripcion: string;
   Contacto: TContactoFormData;
@@ -46,7 +49,6 @@ export const AgentesAduanales = () => {
   } = useForm<TInsertFormData>();
 
   /* API CALLS */
-  const { data: catEmpresas } = useGetEmpresasQuery();
   const { data: catalogoData, isLoading, error } = useGetAgentesAduanalesQuery();
   const [addModelo, { isLoading: isAdding, error: addError, data: rsp }] = useAddAgenteAduanalMutation();
   const [updateModelo, { data: updateRsp, isSuccess: updateSuccess }] = useUpdateAgenteAduanalMutation();
@@ -81,7 +83,6 @@ export const AgentesAduanales = () => {
     if (editModel) {
       setEditId(editModel.Id);
       setValue("Nombre", editModel.Nombre);
-      setValue("EmpresaId", editModel.EmpresaId);
       setValue("Descripcion", editModel.Descripcion);
       if (editModel.Contacto) {
         setValue("Contacto", editModel.Contacto as TContactoFormData);
@@ -96,7 +97,7 @@ export const AgentesAduanales = () => {
     if (editId > 0) {
       let editModel = catalogoData?.find((i) => i.Id === editId);
 
-      updateModelo({ Id: editId, Nombre: formData.Nombre, Descripcion: formData.Descripcion, EmpresaId: formData.EmpresaId })
+      updateModelo({ Id: editId, Nombre: formData.Nombre, Descripcion: formData.Descripcion })
         .unwrap()
         .then((rsp) => {
           if (rsp.DataInt && rsp.DataInt > 0) {
@@ -126,7 +127,7 @@ export const AgentesAduanales = () => {
           }
         });
     } else {
-      addModelo({ Nombre: formData.Nombre, Descripcion: formData.Descripcion, EmpresaId: formData.EmpresaId })
+      addModelo({ Nombre: formData.Nombre, Descripcion: formData.Descripcion })
         .unwrap()
         .then((rsp) => {
           if (rsp.DataInt && rsp.DataInt > 0) {
@@ -187,7 +188,7 @@ export const AgentesAduanales = () => {
         />
       );
     },
-    [catEmpresas, catalogoData]
+    [catalogoData]
   );
 
   const _editCellComponent = useCallback(
@@ -200,7 +201,7 @@ export const AgentesAduanales = () => {
         </Tooltip>
       );
     },
-    [catEmpresas, catalogoData]
+    [catalogoData]
   );
 
   return (
@@ -234,47 +235,10 @@ export const AgentesAduanales = () => {
             <Selection mode="multiple" showCheckBoxesMode="always" />
             <Export enabled={true} texts={txtsExport} allowExportSelectedData={true} />
             <Column dataField="Nombre" />
-            <Column dataField="Empresa" />
-            <Column dataField="Descripcion" />
+            <Column dataField="Descripcion" caption="Dirección" />
             <Column caption="" cellRender={_toggleCellComponent} width={200} alignment="center" allowExporting={false} />
             <Column caption="" cellRender={_editCellComponent} width={60} alignment="center" allowExporting={false} />
           </DataGrid>
-
-          {/* <Table>
-            <Table.Head>
-              <Table.HeadCell>Agente Aduanal</Table.HeadCell>
-              <Table.HeadCell>Dirección</Table.HeadCell>
-              <Table.HeadCell></Table.HeadCell>
-              <Table.HeadCell></Table.HeadCell>
-            </Table.Head>
-            <Table.Body className="divide-y">
-              {catalogoData &&
-                catalogoData.map((item, index) => {
-                  return (
-                    <Table.Row key={index.toString()}>
-                      <Table.Cell className="">{item.Nombre}</Table.Cell>
-                      <Table.Cell>{item.Descripcion}</Table.Cell>
-                      <Table.Cell align="right" className="flex flex-wrap items-center gap-2">
-                        <Tooltip content="Editar">
-                          <FButton color="dark" size="sm" onClick={(e) => _handleEdit(item.Id)}>
-                            <FontAwesomeIcon icon={faPencil} />
-                          </FButton>
-                        </Tooltip>
-                      </Table.Cell>
-                      <Table.Cell>
-                        <ToggleSwitch
-                          checked={item.Activo}
-                          label="Activo"
-                          onChange={(e) => {
-                            _handleToggleActivo(item.Id);
-                          }}
-                        />
-                      </Table.Cell>
-                    </Table.Row>
-                  );
-                })}
-            </Table.Body>
-          </Table> */}
         </div>
 
         <Modal show={showAddForm} size="4xl" onClose={_handleHideModal} dismissible={true}>
@@ -284,21 +248,6 @@ export const AgentesAduanales = () => {
               <Label value="INFORMACIÓN" className="opacity-60" />
               <div className="md:grid md:grid-cols-12 gap-4">
                 <div className="md:col-span-6">
-                  <div className="mb-2">
-                    <Label htmlFor="empresaId" value="Empresa" />
-                    <Select id="empresaId" required={true} {...register("EmpresaId")}>
-                      <option value={0}>Seleccione opción</option>
-                      {catEmpresas
-                        ?.filter((d) => d.Activo)
-                        .map((item, index) => {
-                          return (
-                            <option key={index.toString()} value={item.Id}>
-                              {item.Nombre}
-                            </option>
-                          );
-                        })}
-                    </Select>
-                  </div>
                   <div className="mb-4">
                     <Label htmlFor="nombre" value="Nombre" />
                     <TextInput id="nombre" type="text" placeholder="Ingrese el nombre para el nuevo elemento" required={true} {...register("Nombre")} />

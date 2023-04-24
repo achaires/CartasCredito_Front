@@ -2,7 +2,6 @@ import { IContacto } from "./contactoInterface";
 
 export interface IAgenteAduanal {
   Id: number;
-  EmpresaId: number;
   Nombre: string;
   Descripcion: string;
   Activo: boolean;
@@ -14,7 +13,6 @@ export interface IAgenteAduanal {
 }
 
 export interface IAgenteAduanalInsert {
-  EmpresaId: number;
   Nombre: string;
   Descripcion?: string | null;
 }

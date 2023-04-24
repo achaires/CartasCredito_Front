@@ -1,5 +1,13 @@
 import { useLazyGetCartaComercialQuery, useUpdateCartaComercialEstatusMutation } from "@/apis/cartasCreditoApi";
-import { AdminBreadcrumbs, AdminLoadingActivity, AdminPageHeader, CartaComisionModal, CartaPagoManualModal, CartaPagoModal, CartaSwiftModal } from "@/components";
+import {
+  AdminBreadcrumbs,
+  AdminLoadingActivity,
+  AdminPageHeader,
+  CartaComisionModal,
+  CartaPagoManualModal,
+  CartaPagoModal,
+  CartaSwiftModal,
+} from "@/components";
 import { useAppDispatch } from "@/store";
 import { addToast } from "@/store/uiSlice";
 import { faFileInvoiceDollar, faCircleArrowLeft, faUpload, faDollarSign, faCheckCircle, faFileCirclePlus } from "@fortawesome/free-solid-svg-icons";
@@ -12,6 +20,9 @@ import { EstatusButton } from "./CartasDeCreditoDetalle";
 import { ICartaCreditoComision, IPago } from "@/interfaces";
 import { CartaComisionPagoModal } from "@/components/CartaComisionPagoModal";
 import { apiHost } from "@/utils/apiConfig";
+import { useConvertirMutation } from "@/apis/conversionMonedaApi";
+
+//console.log(new Date().toISOString());
 
 export const CartasCreditoComisiones = () => {
   const routeParams = useParams();
@@ -24,10 +35,21 @@ export const CartasCreditoComisiones = () => {
   const dispatch = useAppDispatch();
 
   const [getCartaComercial, { data: cartaCreditoDetalle, isLoading }] = useLazyGetCartaComercialQuery();
+  const [convertirMoneda, { data: conversionRes, isLoading: conversionIsLoading }] = useConvertirMutation();
 
   const _handleBack = useCallback(() => {
     nav(`/operaciones/cartas-de-credito/${cartaCreditoDetalle?.Id}`);
   }, [cartaCreditoDetalle]);
+
+  /* useEffect(() => {
+    // prueba conversion
+    let date = new Date(2022, 3, 1);
+    convertirMoneda({
+      Fecha: date.toISOString(),
+      MonedaInput: "USD",
+      MonedaOutput: "MXP",
+    });
+  }, []); */
 
   useEffect(() => {
     if (routeParams.cartaCreditoId) {
@@ -219,7 +241,12 @@ export const CartasCreditoComisiones = () => {
       </div>
 
       {cartaCreditoDetalle && cartaCreditoDetalle.BancoId && cartaCreditoDetalle.Id && (
-        <CartaComisionModal show={showPagoModal} handleClose={() => setShowPagoModal(false)} cartaCreditoId={cartaCreditoDetalle.Id} cartaBancoId={cartaCreditoDetalle.BancoId} />
+        <CartaComisionModal
+          show={showPagoModal}
+          handleClose={() => setShowPagoModal(false)}
+          cartaCreditoId={cartaCreditoDetalle.Id}
+          cartaBancoId={cartaCreditoDetalle.BancoId}
+        />
       )}
 
       {cartaCreditoDetalle && cartaCreditoDetalle.Id && selectedCartaComision && (

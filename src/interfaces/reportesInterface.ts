@@ -1,13 +1,15 @@
-export interface IReporteAnalisisCartaRequest {
-  TipoReporteId: number;
-  EmpresaId?: number | null;
-  FechaInicio: string;
-  FechaFin: string;
+export interface IReporte {
+  Id: number;
+  TipoReporte: string;
+  Creado: string;
+  CreadoPorId: string;
+  CreadoPor: string;
+  Filename: string;
 }
 
 export interface IReporteRequest {
-  TipoReporteId: number;
-  EmpresaId?: number | null;
-  FechaInicio: string;
-  FechaFin: string;
+  TipoReporte: string;
+  EmpresaId: number | null;
+  Desde: string;
+  Hasta: string;
 }

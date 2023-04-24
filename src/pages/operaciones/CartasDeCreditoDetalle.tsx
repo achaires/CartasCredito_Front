@@ -10,9 +10,8 @@ import {
   faDollarSign,
   faCheckCircle,
   faPlusCircle,
-  faPenToSquare,
-  faPenSquare,
   faFilePen,
+  faPrint,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Alert, Button, Label, Modal, TextInput, Textarea } from "flowbite-react";
@@ -94,6 +93,10 @@ export const CartasDeCreditoDetalle = () => {
     nav(`/operaciones/cartas-de-credito`);
   }, []);
 
+  const _handleClonar = useCallback(() => {
+    console.log(`Clonar`);
+  }, []);
+
   useEffect(() => {
     if (routeParams.cartaCreditoId) {
       getCartaComercial(routeParams.cartaCreditoId);
@@ -149,21 +152,17 @@ export const CartasDeCreditoDetalle = () => {
 
       <div className="md:grid md:grid-cols-12 md:gap-4 mb-6 px-6">
         <div className="col-span-3">{cartaCreditoDetalle && cartaCreditoDetalle.Estatus && <EstatusButton estatus={cartaCreditoDetalle.Estatus} />}</div>
-        {cartaCreditoDetalle && cartaCreditoDetalle.DocumentoSwift !== "" && (
-          <div className="col-span-9 text-right">
+        <div className="col-span-9 flex justify-end gap-4 items-center">
+          <Button className="bg-brandPrimary hover:bg-brandDark rounded-md" size="sm" onClick={() => _handleClonar()}>
+            Clonar
+          </Button>
+
+          {cartaCreditoDetalle && cartaCreditoDetalle.DocumentoSwift !== "" && (
             <a target="_blank" className="bg-brandPrimary p-2 rounded text-sm" href={cartaCreditoDetalle.DocumentoSwift}>
               <span className="text-white">Descargar Archivo Swift</span>
             </a>
-          </div>
-        )}
-
-        {/* @if (Model.DocumentoSwift != "")
-                    {
-                        <a target="_blank" className="btn btn-dark" href="@Utility.HostUrl/Uploads/@Model.DocumentoSwift">Descargar Archivo Swift</a>
-                    } */}
-        {/* <button type="submit" className="btn btn-dark">
-            Clonar
-          </button> */}
+          )}
+        </div>
       </div>
 
       <form className="pb-24">
@@ -414,14 +413,10 @@ export const CartasDeCreditoDetalle = () => {
           </Link>
         )}
 
-        {/* <a href="#" className="flex flex-col items-center justify-around gap-2">
-          <FontAwesomeIcon icon={faCalendarAlt} className="h-6" />
-          <span className="text-sm">Enmiendas</span>
-        </a>
-        <a href="#" className="flex flex-col items-center justify-around gap-2">
-          <FontAwesomeIcon icon={faPrint} className="h-6" />
-          <span className="text-sm">Imprimir</span>
-        </a> */}
+        <Link to={`/imprimir/cartas-de-credito/${cartaCreditoDetalle.Id}`} className="flex flex-col items-center justify-around gap-2" target="_blank">
+          <FontAwesomeIcon icon={faPrint} className="h-6 text-white" />
+          <span className="text-sm text-white">Imprimir</span>
+        </Link>
       </div>
 
       {cartaCreditoDetalle && cartaCreditoDetalle.Id && (

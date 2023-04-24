@@ -70,6 +70,7 @@ export const Proveedores = () => {
       setValue("EmpresaId", editModel.EmpresaId);
       setValue("Descripcion", editModel.Descripcion);
       setValue("Contacto", editModel.Contacto);
+      setValue("Pais", editModel.Pais ? editModel.Pais : "");
       setShowAddForm(true);
     } else {
       dispatch(addToast({ title: "Ocurrió un Error", message: "No se encuentra el elemento", type: "error" }));
@@ -168,7 +169,9 @@ export const Proveedores = () => {
             <Selection mode="multiple" showCheckBoxesMode="always" />
             <Export enabled={true} texts={txtsExport} allowExportSelectedData={true} />
             <Column dataField="Nombre" />
-            <Column dataField="Descripcion" />
+            <Column dataField="Empresa" />
+            <Column dataField="Pais" caption="País" />
+            <Column dataField="Domicilio" />
             <Column caption="" cellRender={_toggleCellComponent} width={200} alignment="center" allowExporting={false} />
             <Column caption="" cellRender={_editCellComponent} width={60} alignment="center" allowExporting={false} />
           </DataGrid>
@@ -200,8 +203,12 @@ export const Proveedores = () => {
                 </div>
               </div>
               <div className="md:col-span-6">
+                <div className="mb-2">
+                  <Label htmlFor="pais" value="País" />
+                  <TextInput defaultValue="" type="text" {...register("Pais", { required: true })} />
+                </div>
                 <Label htmlFor="descripcion" value="Domicilio" />
-                <Textarea defaultValue="" rows={4} {...register("Descripcion", { required: true })} />
+                <Textarea defaultValue="" rows={1} {...register("Descripcion", { required: true })} />
               </div>
             </div>
 

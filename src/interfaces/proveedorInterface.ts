@@ -12,6 +12,7 @@ export interface IProveedor {
   Actualizado?: string;
   Eliminado?: string;
   Contacto?: IContacto;
+  Pais?: string | null;
 }
 
 export interface IProveedorInsert {
@@ -20,6 +21,7 @@ export interface IProveedorInsert {
   Nombre: string;
   Descripcion?: string;
   Contacto?: IContacto;
+  Pais?: string;
 }
 
 export interface IProveedorUpdate extends IProveedorInsert {

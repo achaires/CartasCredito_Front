@@ -50,6 +50,8 @@ export const DashboardIndex = () => {
             <Selection mode="multiple" showCheckBoxesMode="always" />
             <Export enabled={true} texts={txtsExport} allowExportSelectedData={true} />
             <Column dataField="CartaCredito.NumCartaCredito" caption="Num. Carta Crédito" />
+            <Column dataField="CartaCredito.Empresa" caption="Empresa" />
+            <Column dataField="CartaCredito.Proveedor" caption="Proveedor" />
             <Column dataField="CartaCredito.DescripcionCartaCredito" caption="Descripción" />
             <Column dataField="FechaVencimiento" caption="Fecha Vencimiento" dataType="datetime" format="yyyy-MM-dd" defaultSortIndex="asc" sortIndex={0} />
             <Column dataField="MontoPago" caption="Monto Programado" format="currency" dataType="number" alignment="right" />
@@ -71,6 +73,8 @@ export const DashboardIndex = () => {
             <Selection mode="multiple" showCheckBoxesMode="always" />
             <Export enabled={true} texts={txtsExport} allowExportSelectedData={true} />
             <Column dataField="CartaCredito.NumCartaCredito" caption="Num. Carta Crédito" />
+            <Column dataField="CartaCredito.Empresa" caption="Empresa" />
+            <Column dataField="CartaCredito.Proveedor" caption="Proveedor" />
             <Column dataField="CartaCredito.DescripcionCartaCredito" caption="Descripción" />
             <Column dataField="FechaVencimiento" caption="Fecha Vencimiento" dataType="datetime" format="yyyy-MM-dd" defaultSortIndex="asc" sortIndex={0} />
             <Column dataField="MontoPago" caption="Monto Programado" format="currency" dataType="number" alignment="right" />

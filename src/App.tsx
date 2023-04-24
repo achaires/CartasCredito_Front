@@ -21,7 +21,9 @@ import {
   TiposDeCobertura,
 } from "./pages/catalogos";
 import {
+  Bitacora,
   CartaCreditoEnmiendasHistorial,
+  CartaCreditoImprimir,
   CartasCreditoComisiones,
   CartasCreditoEnmiendas,
   CartasDeCredito,
@@ -40,7 +42,7 @@ import { RoleAgregar, RoleEditar, UsuarioAgregar, UsuarioEditar } from "./pages/
 import { Login } from "./pages/Login";
 import { DashboardIndex } from "./pages/dashboard/DashboardIndex";
 import { useLazyGetCurrentUserQuery } from "./apis";
-import { authIsLoading, loggedIn, storeAccessToken } from "./store/authSlice";
+import { authIsLoading, loggedIn, loggedOut, storeAccessToken } from "./store/authSlice";
 import { AdminLoadingActivity } from "./components";
 
 const router = createHashRouter([
@@ -55,6 +57,10 @@ const router = createHashRouter([
   {
     path: "/recuperar-contrasena",
     element: <Recover />,
+  },
+  {
+    path: "/imprimir/cartas-de-credito/:cartaCreditoId",
+    element: <CartaCreditoImprimir />,
   },
   {
     element: <AdminLayout />,
@@ -231,6 +237,19 @@ const router = createHashRouter([
         ],
       },
       {
+        path: "bitacora",
+        children: [
+          {
+            children: [
+              {
+                index: true,
+                element: <Bitacora />,
+              },
+            ],
+          },
+        ],
+      },
+      {
         path: "roles",
         children: [
           {
@@ -298,6 +317,9 @@ function App() {
 
           if (currentUser && currentUser.Activo) {
             dispatch(loggedIn(currentUser));
+          } else {
+            localStorage.removeItem("accessToken");
+            dispatch(loggedOut());
           }
         }
       } catch (err) {

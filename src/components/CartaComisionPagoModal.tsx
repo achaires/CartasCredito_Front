@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import Datepicker from "react-tailwindcss-datepicker";
 import numeral from "numeral";
 import { ICartaCreditoComision } from "@/interfaces";
+import { useConvertirMutation } from "@/apis/conversionMonedaApi";
 
 type Props = {
   cartaComision: ICartaCreditoComision;
@@ -25,7 +26,35 @@ export const CartaComisionPagoModal = ({ show, cartaComision, monto, handleClose
   const dispatch = useAppDispatch();
 
   const [addPagoComision, { isLoading, isSuccess, isError, data }] = useAddPagoComisionMutation();
+  const [convertirMoneda, { data: conversionRes, isLoading: conversionIsLoading }] = useConvertirMutation();
   const { data: monedas } = useGetMonedasQuery();
+
+  useEffect(() => {
+    if (monedaId > 0 && monedas && fechaPago.startDate !== null) {
+      let selMoneda = monedas.find((i) => i.Id === monedaId);
+
+      if (selMoneda) {
+        // consultar conversión
+        // let date = new Date(2022, 3, 1);
+        let date = new Date();
+        convertirMoneda({
+          Fecha: fechaPago.startDate,
+          MonedaInput: selMoneda.Abbr.trim(),
+          MonedaOutput: "MXP",
+        });
+      }
+    }
+  }, [monedaId, monedas, fechaPago]);
+
+  useEffect(() => {
+    if (conversionRes) {
+      if (conversionRes.Flag && conversionRes.DataDecimal) {
+        setTipoCambio(conversionRes.DataDecimal);
+      } else {
+        setTipoCambio(0);
+      }
+    }
+  }, [conversionRes]);
 
   const _submit = () => {
     if (!fechaPago.startDate) {

@@ -25,6 +25,7 @@ import { z } from "zod";
 import DatePicker from "react-datepicker";
 import { useGetUsersQuery } from "@/apis";
 import { toast } from "react-hot-toast";
+import { IComprador } from "@/interfaces";
 
 // Fix DatePicker + React Hook Form: https://github.com/Hacker0x01/react-datepicker/issues/2165#issuecomment-696095748
 
@@ -41,7 +42,7 @@ const validationSchema = z
     TipoPago: z.string(),
     Responsable: z.string(),
     CompradorId: z.number().min(1),
-    PorcentajeTolerancia: z.number().min(1),
+    PorcentajeTolerancia: z.number(),
     NumOrdenCompra: z.string().min(1),
     CostoApertura: z.number().min(1),
     MontoOrdenCompra: z.number().min(1),
@@ -106,6 +107,8 @@ const NuevaCartaComercial = () => {
     register,
     handleSubmit,
     control,
+    getValues,
+    watch,
     formState: { errors: formErrors },
   } = useForm<ValidationSchema>({
     resolver: zodResolver(validationSchema),
@@ -128,6 +131,8 @@ const NuevaCartaComercial = () => {
   const [docId, setDocId] = useState(0);
   const [docCopias, setDocCopias] = useState(0);
   const [docOriginales, setDocOriginales] = useState(0);
+  const [availableCompradores, setAvailableCompradores] = useState<Array<IComprador>>([]);
+  const watchEmpresa = watch("EmpresaId");
 
   const dispatch = useAppDispatch();
 
@@ -186,6 +191,19 @@ const NuevaCartaComercial = () => {
         }
       });
   });
+
+  useEffect(() => {
+    if (catCompradores) {
+      setAvailableCompradores(catCompradores.filter((c) => c.Activo));
+    }
+  }, [catCompradores]);
+
+  useEffect(() => {
+    if (watchEmpresa && catCompradores) {
+      let newCompradores = [...catCompradores];
+      setAvailableCompradores(newCompradores.filter((c) => c.Activo).filter((c) => c.EmpresaId === watchEmpresa));
+    }
+  }, [watchEmpresa]);
 
   useEffect(() => {
     if (isError) {
@@ -384,13 +402,11 @@ const NuevaCartaComercial = () => {
           <Label value="Comprador" />
           <Select {...register("CompradorId", { valueAsNumber: true })}>
             <option value={0}>Seleccione Opción</option>
-            {catCompradores
-              ?.filter((b) => b.Activo)
-              .map((item, index) => (
-                <option value={item.Id} key={index.toString()}>
-                  {item.Nombre}
-                </option>
-              ))}
+            {availableCompradores.map((item, index) => (
+              <option value={item.Id} key={index.toString()}>
+                {item.Nombre}
+              </option>
+            ))}
           </Select>
         </div>
       </div>

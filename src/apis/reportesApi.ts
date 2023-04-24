@@ -1,12 +1,12 @@
-import { IReporteAnalisisCartaRequest, IReporteRequest, IRespuestaFormato } from "@/interfaces";
+import { IRespuestaFormato } from "@/interfaces";
 import { rootApi } from "./rootApi";
 
 export const reportesApiSlice = rootApi.injectEndpoints({
   endpoints: (builder) => ({
-    getReporteAnalisisCartas: builder.query<IRespuestaFormato, IReporteAnalisisCartaRequest>({
+    getReportes: builder.query<IRespuestaFormato, void>({
       query: (data) => {
         return {
-          url: `/reportes/analisiscartas`,
+          url: `/reportes/`,
           body: data,
           method: "POST",
         };

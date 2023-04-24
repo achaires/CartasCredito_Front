@@ -32,6 +32,7 @@ export const rootApi = createApi({
     "Permissions",
     "PFE_Programas",
     "PFE_Pagos",
+    "Bitacora",
   ],
   baseQuery: fetchBaseQuery({
     baseUrl: `${apiHost}/api`,

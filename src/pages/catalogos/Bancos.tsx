@@ -109,6 +109,17 @@ export const Bancos = () => {
     }
   }, [rsp, addError, updateRsp]);
 
+  const _comisionesCellComponent = useCallback(
+    (rowData: ColumnCellTemplateData) => {
+      return (
+        <FButton onClick={() => _handleEditComisiones(rowData.data.Id)} size="xs">
+          Comisiones
+        </FButton>
+      );
+    },
+    [catalogoData]
+  );
+
   const _toggleCellComponent = useCallback(
     (rowData: ColumnCellTemplateData) => {
       return (
@@ -173,6 +184,7 @@ export const Bancos = () => {
             <Export enabled={true} texts={txtsExport} allowExportSelectedData={true} />
             <Column dataField="Nombre" />
             <Column dataField="TotalLinea" format="currency" dataType="number" />
+            <Column caption="" cellRender={_comisionesCellComponent} width={140} alignment="center" allowExporting={false} />
             <Column caption="" cellRender={_toggleCellComponent} width={200} alignment="center" allowExporting={false} />
             <Column caption="" cellRender={_editCellComponent} width={60} alignment="center" allowExporting={false} />
           </DataGrid>
