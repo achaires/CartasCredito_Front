@@ -8,8 +8,8 @@ export interface IReporte {
 }
 
 export interface IReporteRequest {
-  TipoReporte: string;
+  TipoReporteId: number;
   EmpresaId: number | null;
-  Desde: string;
-  Hasta: string;
+  FechaInicio: string;
+  FechaFin: string;
 }
