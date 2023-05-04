@@ -207,7 +207,7 @@ const router = createHashRouter([
         path: "reportes",
         children: [
           {
-            path: "sabana",
+            index: true,
             element: <ReportesSabana />,
           },
           {

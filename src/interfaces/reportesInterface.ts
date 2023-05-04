@@ -12,4 +12,5 @@ export interface IReporteRequest {
   EmpresaId: number | null;
   FechaInicio: string;
   FechaFin: string;
+  FechaDivisas: string;
 }

@@ -69,7 +69,7 @@ export const AdminSidebar = ({ showSidebar = false }: Props) => {
             ]}
           /> */}
 
-          <AdminSidebarItem title={`Reportes`} href={`/reportes/sabana`} icon={faChartPie} />
+          <AdminSidebarItem title={`Reportes`} href={`/reportes`} icon={faChartPie} />
         </ul>
       </div>
     </aside>

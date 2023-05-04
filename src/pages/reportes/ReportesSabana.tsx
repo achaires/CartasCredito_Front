@@ -7,6 +7,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import DataGrid, { Column, Export, HeaderFilter, Paging, SearchPanel, Selection } from "devextreme-react/data-grid";
 import { ColumnCellTemplateData } from "devextreme/ui/data_grid";
+import { useConvertirMutation } from "@/apis/conversionMonedaApi";
 /* import PivotGrid, { FieldChooser } from "devextreme-react/pivot-grid";
 import PivotGridDataSource from "devextreme/ui/pivot_grid/data_source"; */
 
@@ -20,11 +21,23 @@ export const ReportesSabana = () => {
   const { data: empresas, isLoading, error } = useGetEmpresasQuery();
   const [getReportes, { data: reportesRsp, isLoading: isLoadingReportes, error: getReportesError }] = useLazyGetReportesQuery();
   const [generarReporte, { data: genReporteRsp, isLoading: isLoadingGenReporte, error: genReporteError }] = useGenerarReporteMutation();
+  const [convertirMoneda, { data: conversionRes, isLoading: conversionIsLoading }] = useConvertirMutation();
 
   const [empresaId, setEmpresaId] = useState(0);
   const [tipoReporteId, setTipoReporteId] = useState(0);
   const [fechaInicio, setFechaInicio] = useState("");
   const [fechaFin, setFechaFin] = useState("");
+  const [fechaDivisas, setFechaDivisas] = useState("");
+
+  const _onFechaDivisasChange = (val: string) => {
+    setFechaDivisas(val);
+
+    convertirMoneda({
+      Fecha: val,
+      MonedaInput: "USD",
+      MonedaOutput: "MXP",
+    });
+  };
 
   const _onSubmit = () => {
     if (tipoReporteId < 1) {
@@ -39,7 +52,7 @@ export const ReportesSabana = () => {
       return;
     }
 
-    generarReporte({ EmpresaId: empresaId, TipoReporteId: tipoReporteId, FechaInicio: fechaInicio, FechaFin: fechaFin });
+    generarReporte({ EmpresaId: empresaId, TipoReporteId: tipoReporteId, FechaInicio: fechaInicio, FechaFin: fechaFin, FechaDivisas: fechaDivisas });
   };
 
   const _filenameCellComponent = useCallback(
@@ -57,20 +70,23 @@ export const ReportesSabana = () => {
     getReportes();
   }, []);
 
+  useEffect(() => {
+    if (conversionRes) {
+      if (!conversionRes.Flag) {
+        toast.error("No se ha encontrado el tipo de cambio para esta fecha");
+      }
+    }
+  }, [conversionRes]);
+
   return (
     <>
       <div className="p-6">
         <div className="mb-6">
-          <AdminBreadcrumbs
-            links={[
-              { name: "Reportes", href: "#" },
-              { name: "Tipo Sábana", href: `${apiHost}/#/reportes/sabana` },
-            ]}
-          />
+          <AdminBreadcrumbs links={[{ name: "Reportes", href: `${apiHost}/#/reportes/` }]} />
         </div>
 
         <div className="mb-6">
-          <AdminPageHeader title="Reportes" subtitle="Tipo Sábana" icon={faChartPie} />
+          <AdminPageHeader title="Reportes" icon={faChartPie} />
         </div>
 
         <div className="mb-6 lg:flex items-center justify-between gap-4 lg:w-full">
@@ -118,9 +134,11 @@ export const ReportesSabana = () => {
           </div>
           <div className="flex-1 mb-4 lg:mb-0">
             <Label value="Conversión de Divisas" />
-            <TextInput type="date" onChange={(e) => setFechaFin(e.target.value)} />
+            <TextInput type="date" onChange={(e) => _onFechaDivisasChange(e.target.value)} />
           </div>
         </div>
+
+        {!conversionIsLoading && conversionRes && <div className="mb-6">Utilizando tipo de cambio: {conversionRes?.DataString}</div>}
 
         <div className="flex-1 mb-4 lg:mb-0">
           <Button onClick={(e) => _onSubmit()}>Generar Reporte</Button>
@@ -141,7 +159,7 @@ export const ReportesSabana = () => {
               <Selection mode="multiple" showCheckBoxesMode="always" />
               <Export enabled={true} texts={txtsExport} allowExportSelectedData={true} />
               <Column dataField="TipoReporte" />
-              <Column dataField="Creado" dataType="datetime" format="yyyy-MM-dd HH:mm" defaultSortIndex="asc" sortIndex={0} />
+              <Column dataField="Creado" dataType="datetime" format="yyyy-MM-dd HH:mm" defaultSortOrder="asc" sortIndex={0} />
               <Column dataField="Descarga" cellRender={_filenameCellComponent} />
             </DataGrid>
           )}
