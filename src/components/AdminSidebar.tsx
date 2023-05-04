@@ -20,7 +20,7 @@ export const AdminSidebar = ({ showSidebar = false }: Props) => {
             links={[
               { title: "Usuarios", href: "/usuarios" },
               { title: "Roles", href: "/roles" },
-              { title: "Bitácora de Movimientos", href: "/bitacora/" },
+              { title: "Bitácora", href: "/bitacora/" },
             ]}
           />
 
@@ -55,7 +55,7 @@ export const AdminSidebar = ({ showSidebar = false }: Props) => {
               /* { title: "Enmiendas", href: "/operaciones/" },
               { title: "Pagos", href: "/operaciones/" },
               { title: "Comisiones", href: "/operaciones/" },
-               */
+              { title: "Bitácora de Movimientos", href: "/operaciones/" }, */
             ]}
           />
 

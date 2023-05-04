@@ -47,9 +47,7 @@ export const Login = () => {
   }, [getUserRsp, getUserSuccess, getUserError, getUserLoading]);
 
   return (
-    <div
-      className="flex flex-1 flex-col h-screen"
-      style={{ backgroundImage: "url(" + loginBgImg + ")", backgroundRepeat: "no-repeat", backgroundSize: "cover" }}>
+    <div className="flex flex-1 flex-col h-screen" style={{ backgroundImage: "url(" + loginBgImg + ")", backgroundRepeat: "no-repeat", backgroundSize: "cover" }}>
       <div className="bg-white px-12 h-24 flex items-start justify-center flex-col">
         <img src={brandImg} alt="" className="h-full" />
       </div>
