@@ -90,7 +90,7 @@ export const ReportesSabana = () => {
                 ))}
             </Select>
           </div>
-          <div className="flex-1 mb-4 lg:mb-0">
+          <div className="flex-2 mb-4 lg:mb-0">
             <Label value="Tipo de Reporte" />
             <Select
               className="w-full"
@@ -98,11 +98,14 @@ export const ReportesSabana = () => {
                 setTipoReporteId(Number(e.target.value));
               }}>
               <option value="0">Seleccione Opción</option>
-              {/* <option value="1">Análisis de Cartas</option> */}
+              <option value="1">Análisis Ejecutivo de Cartas</option>
+              <option value="8">Análisis Cartas de Crédito</option>
               <option value="2">Comisiones por Tipo de Comisión</option>
               <option value="3">Cartas de Crédito Stand By</option>
               <option value="4">Vencimientos de Cartas de Crédito</option>
               <option value="5">Comisiones de Cartas de Crédito por Estatus</option>
+              <option value="6">Líneas de Crédito Disponibles</option>
+              <option value="7">Total Outstanding</option>
             </Select>
           </div>
           <div className="flex-1 mb-4 lg:mb-0">
@@ -111,6 +114,10 @@ export const ReportesSabana = () => {
           </div>
           <div className="flex-1 mb-4 lg:mb-0">
             <Label value="Hasta" />
+            <TextInput type="date" onChange={(e) => setFechaFin(e.target.value)} />
+          </div>
+          <div className="flex-1 mb-4 lg:mb-0">
+            <Label value="Conversión de Divisas" />
             <TextInput type="date" onChange={(e) => setFechaFin(e.target.value)} />
           </div>
         </div>
@@ -135,7 +142,7 @@ export const ReportesSabana = () => {
               <Export enabled={true} texts={txtsExport} allowExportSelectedData={true} />
               <Column dataField="TipoReporte" />
               <Column dataField="Creado" dataType="datetime" format="yyyy-MM-dd HH:mm" defaultSortIndex="asc" sortIndex={0} />
-              <Column dataField="Filename" cellRender={_filenameCellComponent} />
+              <Column dataField="Descarga" cellRender={_filenameCellComponent} />
             </DataGrid>
           )}
         </div>

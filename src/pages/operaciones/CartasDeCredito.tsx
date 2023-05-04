@@ -193,14 +193,6 @@ export const CartasDeCredito = () => {
             ))}
           </Select>
         </div>
-        {/* <div className="md:col-span-3">
-          <Label value="Estado de la Carta" />
-          <Select {...register("Estatus")}>
-            <option value={0}>Seleccione opción</option>
-            <option value={0}>Regular</option>
-            <option value={1}>Vencida</option>
-          </Select>
-        </div> */}
       </div>
 
       <div className="mb-6">

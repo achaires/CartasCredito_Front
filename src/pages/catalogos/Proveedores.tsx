@@ -171,7 +171,7 @@ export const Proveedores = () => {
             <Column dataField="Nombre" />
             <Column dataField="Empresa" />
             <Column dataField="Pais" caption="País" />
-            <Column dataField="Domicilio" />
+            <Column dataField="Descripcion" caption="Domicilio" />
             <Column caption="" cellRender={_toggleCellComponent} width={200} alignment="center" allowExporting={false} />
             <Column caption="" cellRender={_editCellComponent} width={60} alignment="center" allowExporting={false} />
           </DataGrid>

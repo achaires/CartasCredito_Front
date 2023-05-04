@@ -1,10 +1,13 @@
 import { AdminBreadcrumbs, AdminPageHeader } from "@/components";
 import { apiHost } from "@/utils/apiConfig";
-import { faList } from "@fortawesome/free-solid-svg-icons";
-import { useEffect, useState } from "react";
+import { faList, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import { useCallback, useEffect, useState } from "react";
 import DataGrid, { Column, Export, HeaderFilter, Paging, SearchPanel, Selection } from "devextreme-react/data-grid";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useLazyGetMovimientosQuery } from "@/apis/bitacoraApiSlice";
+import { ColumnCellTemplateData } from "devextreme/ui/data_grid";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { IBitacoraMovimiento } from "@/interfaces";
 
 const txtsExport = {
   exportAll: "Exportar Todo",
@@ -25,6 +28,23 @@ export const Bitacora = () => {
   useEffect(() => {
     getMovimientos({ DateStart: Math.floor(dateStart.getTime() / 1000), DateEnd: Math.floor(dateEnd.getTime() / 1000) });
   }, []);
+
+  const _detalleCellComponent = useCallback((rowData: ColumnCellTemplateData<IBitacoraMovimiento>) => {
+    if ( rowData.data && rowData.data.CartaCreditoId ) {
+      return (
+        <Link to={`/operaciones/cartas-de-credito/${rowData.data.CartaCreditoId}`}>
+        <FontAwesomeIcon icon={faMagnifyingGlass} />
+      </Link>
+      )
+    }
+
+    return (
+      <>
+      NA
+      </>
+    );
+  }, []);
+  
 
   return (
     <>
@@ -50,7 +70,9 @@ export const Bitacora = () => {
             <Selection mode="multiple" showCheckBoxesMode="always" />
             <Export enabled={true} texts={txtsExport} allowExportSelectedData={true} />
             <Column dataField="Titulo" />
+            <Column dataField="CreadoPor" caption="Usuario" />
             <Column dataField="Creado" caption="Fecha Movimiento" dataType="datetime" format="yyyy-MM-dd HH:mm a" defaultSortIndex="asc" sortIndex={0} />
+            <Column caption="Detalle" cellRender={_detalleCellComponent} width={80} />
           </DataGrid>
         </div>
       </div>
