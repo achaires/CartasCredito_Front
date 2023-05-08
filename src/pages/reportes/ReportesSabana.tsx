@@ -32,11 +32,11 @@ export const ReportesSabana = () => {
   const _onFechaDivisasChange = (val: string) => {
     setFechaDivisas(val);
 
-    convertirMoneda({
+    /* convertirMoneda({
       Fecha: val,
       MonedaInput: "USD",
       MonedaOutput: "MXP",
-    });
+    }); */
   };
 
   const _onSubmit = () => {

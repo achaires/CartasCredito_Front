@@ -60,7 +60,7 @@ const validationSchema = z
     PagoCartaAceptacion: z.string().min(1),
     ConsignacionMercancia: z.string().min(1),
     ConsideracionesAdicionales: z.string().min(1),
-    DiasParaPresentarDocumentos: z.number().min(1),
+    DiasParaPresentarDocumentos: z.number().min(1).max(21),
     DiasPlazoProveedor: z.number().min(1),
     CondicionesPago: z.string().min(1),
     NumeroPeriodos: z.number().min(1),
@@ -441,16 +441,6 @@ const NuevaCartaComercial = () => {
 
         <div className="md:col-span-3">
           <Label value="Pagos Programados" />
-          <TextInput disabled />
-        </div>
-
-        <div className="md:col-span-3">
-          <Label value="Monto Dispuesto" />
-          <TextInput disabled />
-        </div>
-
-        <div className="md:col-span-3">
-          <Label value="Saldo Insoluto" />
           <TextInput disabled />
         </div>
       </div>
