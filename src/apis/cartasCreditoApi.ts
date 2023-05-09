@@ -1,4 +1,4 @@
-import { ICartaComercial, ICartaCreditoFiltrar, IRespuestaFormato, ISwiftNumCartaRequest } from "@/interfaces";
+import { ICartaComercial, ICartaCreditoClonar, ICartaCreditoFiltrar, IRespuestaFormato, ISwiftNumCartaRequest } from "@/interfaces";
 import { rootApi } from "./rootApi";
 
 export const cartasCreditoApiSlice = rootApi.injectEndpoints({
@@ -37,6 +37,16 @@ export const cartasCreditoApiSlice = rootApi.injectEndpoints({
       query: (data) => {
         return {
           url: `/cartascredito`,
+          method: "POST",
+          body: data,
+        };
+      },
+    }),
+    clonarCartaComercial: builder.mutation<IRespuestaFormato, ICartaCreditoClonar>({
+      invalidatesTags: ["CartasCredito"],
+      query: (data) => {
+        return {
+          url: `/operaciones/clonar/${data.CartaCreditoId}`,
           method: "POST",
           body: data,
         };
@@ -104,4 +114,5 @@ export const {
   useLazyGetCartaComercialQuery,
   useUpdateCartaComercialEstatusMutation,
   useAddSwiftNumCartaMutation,
+  useClonarCartaComercialMutation
 } = cartasCreditoApiSlice;

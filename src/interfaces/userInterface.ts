@@ -31,7 +31,6 @@ export interface IUser {
 
 export interface IUserInsert {
   UserName: string;
-  Password: string;
   Name: string;
   LastName: string;
   Email: string;

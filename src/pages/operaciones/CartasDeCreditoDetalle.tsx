@@ -1,4 +1,4 @@
-import { useLazyGetCartaComercialQuery, useUpdateCartaComercialEstatusMutation } from "@/apis/cartasCreditoApi";
+import { useClonarCartaComercialMutation, useLazyGetCartaComercialQuery, useUpdateCartaComercialEstatusMutation } from "@/apis/cartasCreditoApi";
 import { AdminBreadcrumbs, AdminLoadingActivity, AdminPageHeader, CartaSwiftModal } from "@/components";
 import { useAppDispatch } from "@/store";
 import { addToast } from "@/store/uiSlice";
@@ -88,20 +88,43 @@ export const CartasDeCreditoDetalle = () => {
 
   const [getCartaComercial, { data: cartaCreditoDetalle, isLoading }] = useLazyGetCartaComercialQuery();
   const [updateEstatus, { data: updatedCartaCredito, isSuccess: updateEstatusSuccess, isError: updateEstatusError }] = useUpdateCartaComercialEstatusMutation();
+  const [clonarCarta, { data: clonData, isSuccess: clonSuccess, isError: clonError }] = useClonarCartaComercialMutation();
 
   const _handleBack = useCallback(() => {
     nav(`/operaciones/cartas-de-credito`);
   }, []);
 
   const _handleClonar = useCallback(() => {
-    console.log(`Clonar`);
-  }, []);
+    if ( routeParams.cartaCreditoId ) {
+      clonarCarta({ CartaCreditoId: routeParams.cartaCreditoId });
+    } else {
+      dispatch(addToast({ title: "Error", message: "No hay información de carta de crédito", type: "error" }));
+    }
+  }, [routeParams]);
 
   useEffect(() => {
     if (routeParams.cartaCreditoId) {
       getCartaComercial(routeParams.cartaCreditoId);
     }
   }, [routeParams]);
+
+  useEffect(() => {
+    if ( clonSuccess ) {
+      if ( clonData && clonData.Flag === true ) {
+        dispatch(addToast({ title: "Éxito", message: "Nueva carta de crédito creada. Redirigiendo...", type: "success" }));
+        nav(`/operaciones/cartas-de-credito/${clonData.DataString}`);
+      }
+
+      if ( clonData && clonData.Flag === false ) {
+        dispatch(addToast({ title: "Error", message: clonData.Errors ? clonData.Errors[0] : 'Ocurrió un error', type: "error" }));
+      }
+    }
+
+    if ( clonError ) {
+      dispatch(addToast({ title: "Error", message: "Ocurrió un error al clonar la carta de crédito", type: "error" }));
+    }
+  }, [clonSuccess,clonError,clonData])
+  
 
   useEffect(() => {
     if (updateEstatusSuccess) {

@@ -90,3 +90,7 @@ export interface ISwiftNumCartaRequest {
   NumCarta: string;
   SwiftFile: FileList;
 }
+
+export interface ICartaCreditoClonar {
+  CartaCreditoId: string;
+}
