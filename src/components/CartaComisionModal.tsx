@@ -102,6 +102,8 @@ export const CartaComisionModal = ({ cartaCreditoId, show, cartaBancoId, handleC
     setMonto(Number(newAmount.toFixed(2)));
   };
 
+  console.log(cartaBancoId);
+
   return (
     <>
       <Modal dismissible show={show} onClose={handleClose} size="xl">
@@ -119,11 +121,13 @@ export const CartaComisionModal = ({ cartaCreditoId, show, cartaBancoId, handleC
                   <Select onChange={(e) => setComisionId(Number(e.target.value))} value={comisionId}>
                     <option value={0}>Seleccione Opción</option>
                     {comisiones &&
-                      comisiones.map((item, index) => (
-                        <option value={item.Id} key={index.toString()}>
-                          {item.Nombre}
-                        </option>
-                      ))}
+                      comisiones
+                        .filter((com) => com.BancoId === cartaBancoId)
+                        .map((item, index) => (
+                          <option value={item.Id} key={index.toString()}>
+                            {item.Nombre}
+                          </option>
+                        ))}
                   </Select>
                 </div>
               </div>

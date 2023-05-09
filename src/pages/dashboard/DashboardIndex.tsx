@@ -1,19 +1,7 @@
 import { useGetPagosProgramadosQuery, useGetPagosVencidosQuery } from "@/apis";
 import { AdminBreadcrumbs, AdminPageHeader } from "@/components";
 import { faFileInvoiceDollar } from "@fortawesome/free-solid-svg-icons";
-import DataGrid, {
-  Export,
-  Selection,
-  Button,
-  Column,
-  FilterRow,
-  Grouping,
-  GroupPanel,
-  HeaderFilter,
-  Pager,
-  Paging,
-  SearchPanel,
-} from "devextreme-react/data-grid";
+import DataGrid, { Export, Selection, Button, Column, FilterRow, Grouping, GroupPanel, HeaderFilter, Pager, Paging, SearchPanel } from "devextreme-react/data-grid";
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -63,7 +51,7 @@ export const DashboardIndex = () => {
         </div>
 
         <div className="mb-0">
-          <AdminPageHeader title="Pagos Vencidos" icon={faFileInvoiceDollar} />
+          <AdminPageHeader title="Programa de Vencimientos" icon={faFileInvoiceDollar} />
         </div>
 
         <div className="mb-6">
