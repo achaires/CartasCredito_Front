@@ -1,26 +1,12 @@
-import {
-  useAddUserMutation,
-  useGetEmpresasQuery,
-  useGetRolesQuery,
-} from "@/apis";
+import { useAddUserMutation, useGetEmpresasQuery, useGetRolesQuery } from "@/apis";
 import { AdminBreadcrumbs, AdminPageHeader } from "@/components";
 import { useAppDispatch } from "@/store";
 import { addToast } from "@/store/uiSlice";
 import { apiHost } from "@/utils/apiConfig";
-import {
-  faCircleArrowLeft,
-  faUserShield,
-} from "@fortawesome/free-solid-svg-icons";
+import { faCircleArrowLeft, faUserShield } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Button as FButton,
-  Checkbox,
-  Label,
-  Textarea,
-  TextInput,
-  Select,
-} from "flowbite-react";
+import { Button as FButton, Checkbox, Label, Textarea, TextInput, Select } from "flowbite-react";
 import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -59,15 +45,7 @@ export const UsuarioAgregar = () => {
   /** API Calls */
   const { data: catEmpresas } = useGetEmpresasQuery();
   const { data: catRoles } = useGetRolesQuery();
-  const [
-    addModel,
-    {
-      isLoading: isAdding,
-      isSuccess: isAdded,
-      isError: isAddingError,
-      data: isAddedData,
-    },
-  ] = useAddUserMutation();
+  const [addModel, { isLoading: isAdding, isSuccess: isAdded, isError: isAddingError, data: isAddedData }] = useAddUserMutation();
 
   /** Form Setup */
   const {
@@ -115,8 +93,7 @@ export const UsuarioAgregar = () => {
       dispatch(
         addToast({
           title: "Información",
-          message:
-            "Ocurrió un error interno. Verifique los datos e intente nuévamente.",
+          message: "Ocurrió un error interno. Verifique los datos e intente nuévamente.",
           type: "error",
         })
       );
@@ -138,10 +115,7 @@ export const UsuarioAgregar = () => {
           dispatch(
             addToast({
               title: "Información",
-              message:
-                isAddedData.Errors && isAddedData.Errors.length > 0
-                  ? isAddedData.Errors[0]
-                  : "Ocurrió un error",
+              message: isAddedData.Errors && isAddedData.Errors.length > 0 ? isAddedData.Errors[0] : "Ocurrió un error",
               type: "error",
             })
           );
@@ -163,11 +137,7 @@ export const UsuarioAgregar = () => {
         </div>
 
         <div className="mb-6">
-          <AdminPageHeader
-            title="Usuarios"
-            subtitle="Agregar"
-            icon={faUserShield}
-          />
+          <AdminPageHeader title="Usuarios" subtitle="Agregar" icon={faUserShield} />
         </div>
 
         <div className="mb-6">
@@ -182,22 +152,12 @@ export const UsuarioAgregar = () => {
             <div className="md:grid md:grid-cols-12 md:gap-4">
               <div className="md:col-span-8 md:grid md:grid-cols-12 md:gap-4">
                 <div className="md:col-span-4">
-                  <Label value="Email" />
-                  <TextInput
-                    {...register("Email")}
-                    type="email"
-                    color={formErrors.Email ? "failure" : "gray"}
-                    helperText={formErrors.Email?.message}
-                  />
+                  <Label value="Email GIS" />
+                  <TextInput {...register("Email")} type="email" color={formErrors.Email ? "failure" : "gray"} helperText={formErrors.Email?.message} />
                 </div>
                 <div className="md:col-span-4">
-                  <Label value="Nombre de Usuario" />
-                  <TextInput
-                    {...register("UserName")}
-                    placeholder="ej: john.doe"
-                    color={formErrors.UserName ? "failure" : "gray"}
-                    helperText={formErrors.UserName?.message}
-                  />
+                  <Label value="Nombre de Usuario GIS" />
+                  <TextInput {...register("UserName")} placeholder="ej: john.doe" color={formErrors.UserName ? "failure" : "gray"} helperText={formErrors.UserName?.message} />
                 </div>
                 <div className="md:col-span-4">
                   <Label value="Rol" />
@@ -213,27 +173,15 @@ export const UsuarioAgregar = () => {
                 </div>
                 <div className="md:col-span-4">
                   <Label value="Nombre" />
-                  <TextInput
-                    {...register("Name")}
-                    color={formErrors.Name ? "failure" : "gray"}
-                    helperText={formErrors.Name?.message}
-                  />
+                  <TextInput {...register("Name")} color={formErrors.Name ? "failure" : "gray"} helperText={formErrors.Name?.message} />
                 </div>
                 <div className="md:col-span-4">
                   <Label value="Apellidos" />
-                  <TextInput
-                    {...register("LastName")}
-                    color={formErrors.LastName ? "failure" : "gray"}
-                    helperText={formErrors.LastName?.message}
-                  />
+                  <TextInput {...register("LastName")} color={formErrors.LastName ? "failure" : "gray"} helperText={formErrors.LastName?.message} />
                 </div>
                 <div className="md:col-span-4">
                   <Label value="Teléfono" />
-                  <TextInput
-                    {...register("PhoneNumber")}
-                    color={formErrors.PhoneNumber ? "failure" : "gray"}
-                    helperText={formErrors.PhoneNumber?.message}
-                  />
+                  <TextInput {...register("PhoneNumber")} color={formErrors.PhoneNumber ? "failure" : "gray"} helperText={formErrors.PhoneNumber?.message} />
                 </div>
               </div>
               <div className="md:col-span-4">
@@ -254,18 +202,9 @@ export const UsuarioAgregar = () => {
                   .filter((i) => i.Activo)
                   .map((item, index) => {
                     return (
-                      <div
-                        className="md:col-span-4 flex items-center justify-start gap-2"
-                        key={index.toString()}
-                      >
-                        <Checkbox
-                          id={`empresa-${item.Id}`}
-                          onChange={_handleCheckboxChange}
-                          value={item.Id}
-                        />
-                        <Label htmlFor={`empresa-${item.Id}`}>
-                          {item.Nombre}
-                        </Label>
+                      <div className="md:col-span-4 flex items-center justify-start gap-2" key={index.toString()}>
+                        <Checkbox id={`empresa-${item.Id}`} onChange={_handleCheckboxChange} value={item.Id} />
+                        <Label htmlFor={`empresa-${item.Id}`}>{item.Nombre}</Label>
                       </div>
                     );
                   })}

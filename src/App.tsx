@@ -45,6 +45,7 @@ import { useLazyGetCurrentUserQuery } from "./apis";
 import { authIsLoading, loggedIn, loggedOut, storeAccessToken } from "./store/authSlice";
 import { AdminLoadingActivity } from "./components";
 import { BitacoraIndex } from "./pages/bitacora/BitacoraIndex";
+import { Registro } from "./pages";
 
 const router = createHashRouter([
   {
@@ -54,6 +55,10 @@ const router = createHashRouter([
   {
     path: "/login",
     element: <Login />,
+  },
+  {
+    path: "/registro/:token",
+    element: <Registro />,
   },
   {
     path: "/recuperar-contrasena",

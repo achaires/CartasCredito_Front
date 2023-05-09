@@ -13,6 +13,34 @@ export const authApiSlice = rootApi.injectEndpoints({
         };
       },
     }),
+    registerUser: builder.mutation<string, { UserName: string; Password: string }>({
+      invalidatesTags: ["Users"],
+      query: (data) => {
+        return {
+          url: `/account/register`,
+          method: "POST",
+          body: data,
+        };
+      },
+    }),
+    validateToken: builder.query<IUser, string>({
+      providesTags: ["UserDetail"],
+      query: (token) => {
+        return {
+          url: `/validainvitacion/${token}`,
+          method: "POST",
+        };
+      },
+    }),
+    registerUserGIS: builder.mutation<IUser, { UserName: string; Password: string; Token: string }>({
+      query: (userData) => {
+        return {
+          url: `/invitaciones/finalizaregistro`,
+          method: "POST",
+          body: userData,
+        };
+      },
+    }),
     getCurrentUser: builder.query<IUser, void>({
       providesTags: ["UserDetail"],
       query: () => `/account/user`,
@@ -24,4 +52,5 @@ export const authApiSlice = rootApi.injectEndpoints({
   }),
 });
 
-export const { useLazyLoginUserQuery, useLazyGetCurrentUserQuery, useLogoutUserMutation } = authApiSlice;
+export const { useLazyLoginUserQuery, useLazyGetCurrentUserQuery, useLogoutUserMutation, useRegisterUserMutation, useLazyValidateTokenQuery, useRegisterUserGISMutation } =
+  authApiSlice;

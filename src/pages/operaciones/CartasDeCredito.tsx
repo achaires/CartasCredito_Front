@@ -54,6 +54,10 @@ export const CartasDeCredito = () => {
     nav("/operaciones/cartas-de-credito/nueva-carta-comercial");
   }, []);
 
+  const _handleNuevaCartaStandBy = useCallback(() => {
+    nav("/operaciones/cartas-de-credito/nueva-carta-standby");
+  }, []);
+
   //const [getCartasCredito, cartasCredito] = useLazyGetCartasComercialesQuery();
   const [filtrarCartasCredito, { data: cartasCreditoFiltradas, isFetching, isSuccess }] = useLazyFiltrarCartasComercialesQuery();
   const { data: catMonedas } = useGetMonedasQuery();

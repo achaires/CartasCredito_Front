@@ -52,3 +52,10 @@ export interface IUserUpdate {
   Activo?: boolean;
   RolId: string;
 }
+
+export interface IUserInvitacion {
+  Id: number;
+  Email: string;
+  Token: string;
+  Creado: string;
+}
