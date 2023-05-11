@@ -32,7 +32,7 @@ export const authApiSlice = rootApi.injectEndpoints({
         };
       },
     }),
-    registerUserGIS: builder.mutation<IUser, { UserName: string; Password: string; Token: string }>({
+    registerUserGIS: builder.mutation<IRespuestaFormato, { UserName: string; Password: string; Token: string }>({
       query: (userData) => {
         return {
           url: `/invitaciones/finalizaregistro`,

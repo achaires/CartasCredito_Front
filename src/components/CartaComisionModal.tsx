@@ -102,8 +102,6 @@ export const CartaComisionModal = ({ cartaCreditoId, show, cartaBancoId, handleC
     setMonto(Number(newAmount.toFixed(2)));
   };
 
-  console.log(cartaBancoId);
-
   return (
     <>
       <Modal dismissible show={show} onClose={handleClose} size="xl">

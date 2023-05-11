@@ -117,11 +117,11 @@ export const ReportesSabana = () => {
               <option value="1">Análisis Ejecutivo de Cartas</option>
               <option value="8">Análisis Cartas de Crédito</option>
               <option value="2">Comisiones por Tipo de Comisión</option>
-              <option value="3">Cartas de Crédito Stand By</option>
+              {/* <option value="3">Cartas de Crédito Stand By</option>
               <option value="4">Vencimientos de Cartas de Crédito</option>
               <option value="5">Comisiones de Cartas de Crédito por Estatus</option>
               <option value="6">Líneas de Crédito Disponibles</option>
-              <option value="7">Total Outstanding</option>
+              <option value="7">Total Outstanding</option> */}
             </Select>
           </div>
           <div className="flex-1 mb-4 lg:mb-0">

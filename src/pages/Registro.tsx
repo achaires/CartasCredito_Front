@@ -30,10 +30,22 @@ export const Registro = () => {
 
   useEffect(() => {
     if (tknIsError) {
-      toast.error("Invitación no es válida");
+      toast.error("Invitación no es válida", { position: "top-right" });
       nav("/login");
     }
   }, [tknRsp, tknIsSuccess, tknIsError]);
+
+  useEffect(() => {
+    if (isSuccess && data && data.Flag === true) {
+      toast.success("Registro exitoso. Ingrese con su nombre de usuario y contraseña.", { position: "top-right" });
+      nav("/login");
+    }
+
+    if (isSuccess && data && data.Flag === false) {
+      var errMsg = data.Errors && data.Errors[0] ? data.Errors[0] : "Verifique su cuenta";
+      toast.error(errMsg, { position: "top-right" });
+    }
+  }, [data, isSuccess, isError]);
 
   return (
     <div className="flex flex-1 flex-col h-screen" style={{ backgroundImage: "url(" + loginBgImg + ")", backgroundRepeat: "no-repeat", backgroundSize: "cover" }}>
