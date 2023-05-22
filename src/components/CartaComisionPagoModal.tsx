@@ -1,4 +1,9 @@
-import { useAddPagoComisionMutation, useAddPagoMutation, useGetMonedasQuery, useUpdatePagoMutation } from "@/apis";
+import {
+  useAddPagoComisionMutation,
+  useAddPagoMutation,
+  useGetMonedasQuery,
+  useUpdatePagoMutation,
+} from "@/apis";
 import { useAppDispatch } from "@/store";
 import { addToast } from "@/store/uiSlice";
 import { Button, Label, Modal, Select, TextInput } from "flowbite-react";
@@ -10,12 +15,19 @@ import { useConvertirMutation } from "@/apis/conversionMonedaApi";
 
 type Props = {
   cartaComision: ICartaCreditoComision;
+  cartaMonedaId: number;
   show: boolean;
   handleClose: () => void;
   monto: number;
 };
 
-export const CartaComisionPagoModal = ({ show, cartaComision, monto, handleClose }: Props) => {
+export const CartaComisionPagoModal = ({
+  show,
+  cartaComision,
+  cartaMonedaId,
+  monto,
+  handleClose,
+}: Props) => {
   const [monedaId, setMonedaId] = useState(0);
   const [tipoCambio, setTipoCambio] = useState(0);
   const [fechaPago, setFechaPago] = useState({
@@ -25,8 +37,12 @@ export const CartaComisionPagoModal = ({ show, cartaComision, monto, handleClose
 
   const dispatch = useAppDispatch();
 
-  const [addPagoComision, { isLoading, isSuccess, isError, data }] = useAddPagoComisionMutation();
-  const [convertirMoneda, { data: conversionRes, isLoading: conversionIsLoading }] = useConvertirMutation();
+  const [addPagoComision, { isLoading, isSuccess, isError, data }] =
+    useAddPagoComisionMutation();
+  const [
+    convertirMoneda,
+    { data: conversionRes, isLoading: conversionIsLoading },
+  ] = useConvertirMutation();
   const { data: monedas } = useGetMonedasQuery();
 
   useEffect(() => {
@@ -39,8 +55,8 @@ export const CartaComisionPagoModal = ({ show, cartaComision, monto, handleClose
         let date = new Date();
         convertirMoneda({
           Fecha: fechaPago.startDate,
-          MonedaInput: selMoneda.Abbr.trim(),
-          MonedaOutput: "MXP",
+          MonedaInput: cartaMonedaId,
+          MonedaOutput: selMoneda.Id,
         });
       }
     }
@@ -98,7 +114,10 @@ export const CartaComisionPagoModal = ({ show, cartaComision, monto, handleClose
           addToast({
             title: "Información",
             type: "error",
-            message: data.Errors && data.Errors[0] ? data.Errors[0] : "Ocurrió un error desconocido",
+            message:
+              data.Errors && data.Errors[0]
+                ? data.Errors[0]
+                : "Ocurrió un error desconocido",
           })
         );
       }
@@ -135,7 +154,10 @@ export const CartaComisionPagoModal = ({ show, cartaComision, monto, handleClose
               <div className="flex items-center justify-center gap-2">
                 <div className="mb-4">
                   <Label value="Moneda" />
-                  <Select onChange={(e) => setMonedaId(Number(e.target.value))} value={monedaId}>
+                  <Select
+                    onChange={(e) => setMonedaId(Number(e.target.value))}
+                    value={monedaId}
+                  >
                     <option value={0}>Seleccione Opción</option>
                     {monedas &&
                       monedas.map((item, index) => (
@@ -147,16 +169,30 @@ export const CartaComisionPagoModal = ({ show, cartaComision, monto, handleClose
                 </div>
                 <div className="mb-4">
                   <Label value="Tipo de Cambio" />
-                  <TextInput type="number" value={tipoCambio} onChange={(e) => _handleTipoCambioChange(e.target.value)} />
+                  <TextInput
+                    type="number"
+                    value={tipoCambio}
+                    onChange={(e) => _handleTipoCambioChange(e.target.value)}
+                  />
                 </div>
               </div>
               <div className="mb-4">
                 <Label value="Cantidad a Pagar" />
-                <TextInput type="text" value={numeral(monto).format("$0,0.00")} disabled />
+                <TextInput
+                  type="text"
+                  value={numeral(monto).format("$0,0.00")}
+                  disabled
+                />
               </div>
               <div className="mb-4">
                 <Label value="Fecha de Pago" />
-                <Datepicker displayFormat="YYYY-MM-DD" value={fechaPago} onChange={_handleDateChange} showFooter={false} asSingle />
+                <Datepicker
+                  displayFormat="YYYY-MM-DD"
+                  value={fechaPago}
+                  onChange={_handleDateChange}
+                  showFooter={false}
+                  asSingle
+                />
               </div>
             </form>
           </div>

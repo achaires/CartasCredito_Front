@@ -71,6 +71,21 @@ export interface ICartaComercial {
   Enmiendas?: IEnmienda[] | null;
 }
 
+export interface ICartaStandBy {
+  TipoCartaId: number;
+  TipoStandBy: string;
+  BancoId: number;
+  EmpresaId: number;
+  MonedaId: number;
+  CompradorId: number;
+  MontoOriginalLC: number;
+  FechaApertura: string;
+  FechaLimiteEmbarque: string;
+  FechaVencimiento: string;
+  ConsideracionesAdicionales: string;
+  ConsideracionesReclamacion: string;
+}
+
 export interface ICartaCreditoFiltrar {
   NumCarta?: string | null;
   TipoCarta?: string | null;

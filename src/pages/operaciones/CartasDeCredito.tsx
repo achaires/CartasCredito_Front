@@ -1,5 +1,8 @@
 import { useGetBancosQuery } from "@/apis/bancosApi";
-import { useLazyFiltrarCartasComercialesQuery, useLazyGetCartasComercialesQuery } from "@/apis/cartasCreditoApi";
+import {
+  useLazyFiltrarCartasComercialesQuery,
+  useLazyGetCartasComercialesQuery,
+} from "@/apis/cartasCreditoApi";
 import { useGetEmpresasQuery } from "@/apis/empresasApi";
 import { useGetMonedasQuery } from "@/apis/monedasApi";
 import { useGetProveedoresQuery } from "@/apis/proveedoresApi";
@@ -8,16 +11,36 @@ import { AdminBreadcrumbs, AdminPageHeader } from "@/components";
 import { ICartaCreditoFiltrar } from "@/interfaces";
 import { useAppDispatch } from "@/store";
 import { addToast } from "@/store/uiSlice";
-import { faEye, faFileInvoiceDollar, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEye,
+  faFileInvoiceDollar,
+  faMagnifyingGlass,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, Dropdown, Label, Select, Spinner, Table, TextInput, Tooltip } from "flowbite-react";
+import {
+  Button,
+  Dropdown,
+  Label,
+  Select,
+  Spinner,
+  Table,
+  TextInput,
+  Tooltip,
+} from "flowbite-react";
 import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import Datepicker from "react-tailwindcss-datepicker";
 import { apiHost } from "@/utils/apiConfig";
 
-import DataGrid, { Column, Export, HeaderFilter, Paging, SearchPanel, Selection } from "devextreme-react/data-grid";
+import DataGrid, {
+  Column,
+  Export,
+  HeaderFilter,
+  Paging,
+  SearchPanel,
+  Selection,
+} from "devextreme-react/data-grid";
 import { ColumnCellTemplateData } from "devextreme/ui/data_grid";
 
 const txtsExport = {
@@ -27,7 +50,11 @@ const txtsExport = {
 };
 
 const currentDate = new Date();
-const firstMonthDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+const firstMonthDate = new Date(
+  currentDate.getFullYear(),
+  currentDate.getMonth(),
+  1
+);
 
 export const CartasDeCredito = () => {
   const nav = useNavigate();
@@ -59,7 +86,10 @@ export const CartasDeCredito = () => {
   }, []);
 
   //const [getCartasCredito, cartasCredito] = useLazyGetCartasComercialesQuery();
-  const [filtrarCartasCredito, { data: cartasCreditoFiltradas, isFetching, isSuccess }] = useLazyFiltrarCartasComercialesQuery();
+  const [
+    filtrarCartasCredito,
+    { data: cartasCreditoFiltradas, isFetching, isSuccess },
+  ] = useLazyFiltrarCartasComercialesQuery();
   const { data: catMonedas } = useGetMonedasQuery();
   const { data: catBancos } = useGetBancosQuery();
   const { data: catProveedores } = useGetProveedoresQuery();
@@ -72,20 +102,27 @@ export const CartasDeCredito = () => {
       return;
     } */
 
-    filtrarCartasCredito({ ...formData, FechaInicio: dateStart, FechaFin: dateEnd });
+    filtrarCartasCredito({
+      ...formData,
+      FechaInicio: dateStart,
+      FechaFin: dateEnd,
+    });
   });
 
   useEffect(() => {
     _handleFiltroSubmit();
   }, []);
 
-  const _detailCellComponent = useCallback((rowData: ColumnCellTemplateData) => {
-    return (
-      <Link to={`/operaciones/cartas-de-credito/${rowData.data.Id}`}>
-        <FontAwesomeIcon icon={faMagnifyingGlass} />
-      </Link>
-    );
-  }, []);
+  const _detailCellComponent = useCallback(
+    (rowData: ColumnCellTemplateData) => {
+      return (
+        <Link to={`/operaciones/cartas-de-credito/${rowData.data.Id}`}>
+          <FontAwesomeIcon icon={faMagnifyingGlass} />
+        </Link>
+      );
+    },
+    []
+  );
 
   return (
     <div className="p-6">
@@ -93,7 +130,10 @@ export const CartasDeCredito = () => {
         <AdminBreadcrumbs
           links={[
             { name: "Operaciones", href: "#" },
-            { name: "Cartas de Crédito", href: `${apiHost}/#/operaciones/cartas-de-credito` },
+            {
+              name: "Cartas de Crédito",
+              href: `${apiHost}/#/operaciones/cartas-de-credito`,
+            },
           ]}
         />
       </div>
@@ -103,8 +143,12 @@ export const CartasDeCredito = () => {
 
       <div className="mb-6">
         <Dropdown label="Nueva Carta de Crédito" dismissOnClick={false}>
-          <Dropdown.Item onClick={_handleNuevaCartaComercial}>Nueva Carta Comercial</Dropdown.Item>
-          {/* <Dropdown.Item onClick={_handleNuevaCartaStandBy}>Nueva Carta Stand By</Dropdown.Item> */}
+          <Dropdown.Item onClick={_handleNuevaCartaComercial}>
+            Nueva Carta Comercial
+          </Dropdown.Item>
+          <Dropdown.Item onClick={_handleNuevaCartaStandBy}>
+            Nueva Carta Stand By
+          </Dropdown.Item>
         </Dropdown>
       </div>
 
@@ -211,12 +255,22 @@ export const CartasDeCredito = () => {
 
       <div className="mb-6">
         {isSuccess && cartasCreditoFiltradas && (
-          <DataGrid showBorders={true} showColumnLines={true} showRowLines={true} keyExpr="Id" dataSource={cartasCreditoFiltradas}>
+          <DataGrid
+            showBorders={true}
+            showColumnLines={true}
+            showRowLines={true}
+            keyExpr="Id"
+            dataSource={cartasCreditoFiltradas}
+          >
             <Paging defaultPageSize={10} />
             <HeaderFilter visible={true} />
             <SearchPanel visible={true} />
             <Selection mode="multiple" showCheckBoxesMode="always" />
-            <Export enabled={true} texts={txtsExport} allowExportSelectedData={true} />
+            <Export
+              enabled={true}
+              texts={txtsExport}
+              allowExportSelectedData={true}
+            />
             <Column dataField="NumCartaCredito" />
             <Column dataField="TipoCarta" />
             <Column dataField="TipoActivo" />
@@ -224,7 +278,11 @@ export const CartasDeCredito = () => {
             <Column dataField="Empresa" />
             <Column dataField="Banco" />
             <Column dataField="Moneda" />
-            <Column dataField="MontoOriginalLC" dataType="number" format="currency" />
+            <Column
+              dataField="MontoOriginalLC"
+              dataType="number"
+              format="currency"
+            />
             <Column caption="" cellRender={_detailCellComponent} width={80} />
           </DataGrid>
         )}

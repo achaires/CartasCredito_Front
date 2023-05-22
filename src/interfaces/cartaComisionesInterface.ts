@@ -7,6 +7,8 @@ export interface ICartaCreditoComision {
   ComisionId: number;
   FechaCargo: string;
   MonedaId: number;
+  PagoMonedaId: number;
+  PagoMoneda: string;
   Monto: number;
   Activo: boolean;
   CreadoPor: string;
@@ -26,7 +28,6 @@ export interface ICartaCreditoComisionInsert {
   CartaCreditoId: string;
   ComisionId: number;
   FechaCargo: string;
-  MonedaId: number;
   Monto: number;
   NumReferencia: number | null;
 }

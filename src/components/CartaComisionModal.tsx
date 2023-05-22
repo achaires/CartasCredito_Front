@@ -1,4 +1,8 @@
-import { useAddCartaCreditoComisionMutation, useGetComisionesQuery, useGetMonedasQuery } from "@/apis";
+import {
+  useAddCartaCreditoComisionMutation,
+  useGetComisionesQuery,
+  useGetMonedasQuery,
+} from "@/apis";
 import { useAppDispatch } from "@/store";
 import { addToast } from "@/store/uiSlice";
 import { Button, Label, Modal, Select, TextInput } from "flowbite-react";
@@ -12,9 +16,14 @@ type Props = {
   handleClose: () => void;
 };
 
-export const CartaComisionModal = ({ cartaCreditoId, show, cartaBancoId, handleClose }: Props) => {
+export const CartaComisionModal = ({
+  cartaCreditoId,
+  show,
+  cartaBancoId,
+  handleClose,
+}: Props) => {
   const [monto, setMonto] = useState(0);
-  const [monedaId, setMonedaId] = useState(0);
+
   const [comisionId, setComisionId] = useState(0);
   const [numReferencia, setNumReferencia] = useState(0);
 
@@ -25,13 +34,14 @@ export const CartaComisionModal = ({ cartaCreditoId, show, cartaBancoId, handleC
 
   const dispatch = useAppDispatch();
 
-  const [addCartaComision, { isLoading, isSuccess, isError, data }] = useAddCartaCreditoComisionMutation();
+  const [addCartaComision, { isLoading, isSuccess, isError, data }] =
+    useAddCartaCreditoComisionMutation();
 
   const { data: comisiones } = useGetComisionesQuery();
   const { data: monedas } = useGetMonedasQuery();
 
   const _submit = () => {
-    if (monto < 1 || comisionId < 1 || monedaId < 1 || fechaCargo.startDate === null) {
+    if (monto < 1 || comisionId < 1 || fechaCargo.startDate === null) {
       dispatch(
         addToast({
           title: "Información",
@@ -47,7 +57,6 @@ export const CartaComisionModal = ({ cartaCreditoId, show, cartaBancoId, handleC
       CartaCreditoId: cartaCreditoId,
       FechaCargo: fechaCargo.startDate ? fechaCargo.startDate : "",
       Monto: monto,
-      MonedaId: monedaId,
       ComisionId: comisionId,
       NumReferencia: numReferencia,
     });
@@ -66,7 +75,6 @@ export const CartaComisionModal = ({ cartaCreditoId, show, cartaBancoId, handleC
 
         setFechaCargo({ startDate: null, endDate: null });
         setMonto(0);
-        setMonedaId(0);
         setComisionId(0);
 
         handleClose();
@@ -75,7 +83,10 @@ export const CartaComisionModal = ({ cartaCreditoId, show, cartaBancoId, handleC
           addToast({
             title: "Información",
             type: "error",
-            message: data.Errors && data.Errors[0] ? data.Errors[0] : "Ocurrió un error desconocido",
+            message:
+              data.Errors && data.Errors[0]
+                ? data.Errors[0]
+                : "Ocurrió un error desconocido",
           })
         );
       }
@@ -112,11 +123,20 @@ export const CartaComisionModal = ({ cartaCreditoId, show, cartaBancoId, handleC
               <div className="md:flex md:items-center md:gap-2">
                 <div className="mb-4 w-1/34">
                   <Label value="Fecha de Cargo" />
-                  <Datepicker displayFormat="YYYY-MM-DD" value={fechaCargo} onChange={_handleDateChange} showFooter={false} asSingle />
+                  <Datepicker
+                    displayFormat="YYYY-MM-DD"
+                    value={fechaCargo}
+                    onChange={_handleDateChange}
+                    showFooter={false}
+                    asSingle
+                  />
                 </div>
                 <div className="mb-4 w-2/3">
                   <Label value="Comision" />
-                  <Select onChange={(e) => setComisionId(Number(e.target.value))} value={comisionId}>
+                  <Select
+                    onChange={(e) => setComisionId(Number(e.target.value))}
+                    value={comisionId}
+                  >
                     <option value={0}>Seleccione Opción</option>
                     {comisiones &&
                       comisiones
@@ -131,24 +151,20 @@ export const CartaComisionModal = ({ cartaCreditoId, show, cartaBancoId, handleC
               </div>
               <div className="md:flex md:items-center md:gap-2">
                 <div className="mb-4 flex-1">
-                  <Label value="Moneda" />
-                  <Select onChange={(e) => setMonedaId(Number(e.target.value))} value={monedaId}>
-                    <option value={0}>Seleccione Opción</option>
-                    {monedas &&
-                      monedas.map((item, index) => (
-                        <option value={item.Id} key={index.toString()}>
-                          {item.Nombre}
-                        </option>
-                      ))}
-                  </Select>
-                </div>
-                <div className="mb-4 flex-1">
                   <Label value="Monto" />
-                  <TextInput type="number" onChange={(e) => _handleMontoChange(e.target.value)} value={monto} />
+                  <TextInput
+                    type="number"
+                    onChange={(e) => _handleMontoChange(e.target.value)}
+                    value={monto}
+                  />
                 </div>
                 <div className="mb-4 flex-1">
                   <Label value="No. Referencia" />
-                  <TextInput type="number" onChange={(e) => setNumReferencia(Number(e.target.value))} value={numReferencia} />
+                  <TextInput
+                    type="number"
+                    onChange={(e) => setNumReferencia(Number(e.target.value))}
+                    value={numReferencia}
+                  />
                 </div>
               </div>
             </form>
