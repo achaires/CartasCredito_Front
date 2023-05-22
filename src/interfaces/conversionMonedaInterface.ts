@@ -1,5 +1,5 @@
 export interface IConversionMonedaConvertir {
-  MonedaInput: string;
-  MonedaOutput: string;
+  MonedaInput: number;
+  MonedaOutput: number;
   Fecha: string;
 }
