@@ -24,7 +24,7 @@ export interface ICartaComercial {
   AgenteAduanal?: string;
   MonedaId?: number;
   TipoPago?: string;
-  Responsable?: number;
+  Responsable?: string;
   CompradorId?: number;
   Comprador?: string;
   PorcentajeTolerancia?: number;

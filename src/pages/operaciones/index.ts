@@ -2,6 +2,7 @@ export * from "./Bitacora";
 export * from "./CartaCreditoEnmiendaDetalle";
 export * from "./CartaCreditoEnmiendasHistorial";
 export * from "./CartaCreditoImprimir";
+export * from "./CartaDeCreditoEditar";
 export * from "./CartasCreditoComisiones";
 export * from "./CartasCreditoEnmiendas";
 export * from "./CartasDeCredito";

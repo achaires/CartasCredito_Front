@@ -22,6 +22,7 @@ import {
 } from "./pages/catalogos";
 import {
   Bitacora,
+  CartaCreditoEditar,
   CartaCreditoEnmiendasHistorial,
   CartaCreditoImprimir,
   CartasCreditoComisiones,
@@ -189,6 +190,10 @@ const router = createHashRouter([
                   {
                     path: "enmiendas",
                     element: <CartasCreditoEnmiendas />,
+                  },
+                  {
+                    path: "editar",
+                    element: <CartaCreditoEditar />,
                   },
                 ],
               },

@@ -1,19 +1,9 @@
-import {
-  ICartaComercial,
-  ICartaCreditoClonar,
-  ICartaCreditoFiltrar,
-  ICartaStandBy,
-  IRespuestaFormato,
-  ISwiftNumCartaRequest,
-} from "@/interfaces";
+import { ICartaComercial, ICartaCreditoClonar, ICartaCreditoFiltrar, ICartaStandBy, IRespuestaFormato, ISwiftNumCartaRequest } from "@/interfaces";
 import { rootApi } from "./rootApi";
 
 export const cartasCreditoApiSlice = rootApi.injectEndpoints({
   endpoints: (builder) => ({
-    getCartasComerciales: builder.query<
-      ICartaComercial[],
-      ICartaCreditoFiltrar
-    >({
+    getCartasComerciales: builder.query<ICartaComercial[], ICartaCreditoFiltrar>({
       providesTags: ["CartasCredito"],
       query: (data) => {
         return {
@@ -32,10 +22,7 @@ export const cartasCreditoApiSlice = rootApi.injectEndpoints({
         };
       },
     }),
-    filtrarCartasComerciales: builder.query<
-      ICartaComercial[],
-      ICartaCreditoFiltrar
-    >({
+    filtrarCartasComerciales: builder.query<ICartaComercial[], ICartaCreditoFiltrar>({
       providesTags: ["CartasCredito"],
       query: (filtros) => {
         return {
@@ -65,10 +52,7 @@ export const cartasCreditoApiSlice = rootApi.injectEndpoints({
         };
       },
     }),
-    clonarCartaComercial: builder.mutation<
-      IRespuestaFormato,
-      ICartaCreditoClonar
-    >({
+    clonarCartaComercial: builder.mutation<IRespuestaFormato, ICartaCreditoClonar>({
       invalidatesTags: ["CartasCredito"],
       query: (data) => {
         return {
@@ -88,10 +72,7 @@ export const cartasCreditoApiSlice = rootApi.injectEndpoints({
         };
       },
     }),
-    updateCartaComercialEstatus: builder.mutation<
-      IRespuestaFormato,
-      ICartaComercial
-    >({
+    updateCartaComercialEstatus: builder.mutation<IRespuestaFormato, ICartaComercial>({
       invalidatesTags: ["CartasCreditoDetalle"],
       query: (data) => {
         return {
@@ -110,10 +91,7 @@ export const cartasCreditoApiSlice = rootApi.injectEndpoints({
         };
       },
     }),
-    addSwiftNumCarta: builder.mutation<
-      IRespuestaFormato,
-      ISwiftNumCartaRequest
-    >({
+    addSwiftNumCarta: builder.mutation<IRespuestaFormato, ISwiftNumCartaRequest>({
       query: (data) => {
         let fd = new FormData();
         fd.append("CartaCreditoId", data.CartaCreditoId);

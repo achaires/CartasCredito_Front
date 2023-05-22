@@ -13,21 +13,20 @@ import { useNavigate, useParams } from "react-router-dom";
 import { z } from "zod";
 
 /** Form Validation Schema */
-const validationSchema = z
-  .object({
-    UserName: z.string().min(1),
-    Name: z.string().min(3),
-    LastName: z.string().min(3),
-    Email: z.string().min(3),
-    PhoneNumber: z.string().optional().nullable(),
-    Notes: z.string().optional().nullable(),
-    RolId: z.string(),
-    //Empresas: z.array(z.object({id: z.number()})).optional().nullable(),
-  })
-  .refine((data) => /^\w+(\.\w+)*$/.test(data.UserName), {
+const validationSchema = z.object({
+  /* UserName: z.string().min(1), */
+  Name: z.string().min(3),
+  LastName: z.string().min(3),
+  Email: z.string().min(3),
+  PhoneNumber: z.string().optional().nullable(),
+  Notes: z.string().optional().nullable(),
+  RolId: z.string(),
+  //Empresas: z.array(z.object({id: z.number()})).optional().nullable(),
+});
+/* .refine((data) => /^\w+(\.\w+)*$/.test(data.UserName), {
     message: "Utilice solo letras, números y punto",
     path: ["UserName"],
-  });
+  }); */
 
 type ValidationSchema = z.infer<typeof validationSchema>;
 
@@ -99,7 +98,6 @@ export const UsuarioEditar = () => {
 
   useEffect(() => {
     if (userDetail && userDetail.Profile) {
-      setValue("UserName", userDetail.UserName);
       setValue("Email", userDetail.Email);
       setValue("PhoneNumber", userDetail.PhoneNumber);
       setValue("Name", userDetail.Profile.Name ? userDetail.Profile.Name : "");
@@ -187,15 +185,6 @@ export const UsuarioEditar = () => {
           <form onSubmit={_handleSubmit}>
             <div className="md:grid md:grid-cols-12 md:gap-4">
               <div className="md:col-span-8 md:grid md:grid-cols-12 md:gap-4">
-                <div className="md:col-span-12">
-                  <Label value="Nombre de Usuario" />
-                  <TextInput
-                    {...register("UserName")}
-                    placeholder="ej: john.doe"
-                    color={formErrors.UserName ? "failure" : "gray"}
-                    helperText={formErrors.UserName?.message}
-                  />
-                </div>
                 <div className="md:col-span-4">
                   <Label value="Nombre" />
                   <TextInput {...register("Name")} color={formErrors.Name ? "failure" : "gray"} helperText={formErrors.Name?.message} />
@@ -239,12 +228,7 @@ export const UsuarioEditar = () => {
                   .map((item, index) => {
                     return (
                       <div className="md:col-span-4 flex items-center justify-start gap-2" key={index.toString()}>
-                        <Checkbox
-                          id={`empresa-${item.Id}`}
-                          onChange={_handleCheckboxChange}
-                          value={item.Id}
-                          checked={empresas.find((i) => i === item.Id) ? true : false}
-                        />
+                        <Checkbox id={`empresa-${item.Id}`} onChange={_handleCheckboxChange} value={item.Id} checked={empresas.find((i) => i === item.Id) ? true : false} />
                         <Label htmlFor={`empresa-${item.Id}`}>{item.Nombre}</Label>
                       </div>
                     );

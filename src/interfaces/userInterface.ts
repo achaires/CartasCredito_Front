@@ -30,7 +30,6 @@ export interface IUser {
 }
 
 export interface IUserInsert {
-  UserName: string;
   Name: string;
   LastName: string;
   Email: string;
@@ -42,7 +41,6 @@ export interface IUserInsert {
 
 export interface IUserUpdate {
   Id: string;
-  UserName?: string;
   Name?: string;
   LastName?: string;
   Email?: string;

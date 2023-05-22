@@ -13,23 +13,22 @@ import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 
 /** Form Validation Schema */
-const validationSchema = z
-  .object({
-    UserName: z.string().min(1),
-    //Password: z.string().min(8),
-    //PasswordConfirm: z.string().min(8),
-    Name: z.string().min(3),
-    LastName: z.string().min(3),
-    Email: z.string().min(3),
-    PhoneNumber: z.string().optional().nullable(),
-    Notes: z.string().optional().nullable(),
-    RolId: z.string(),
-    //Empresas: z.array(z.object({id: z.number()})).optional().nullable(),
-  })
-  .refine((data) => /^\w+(\.\w+)*$/.test(data.UserName), {
+const validationSchema = z.object({
+  /* UserName: z.string().min(1), */
+  //Password: z.string().min(8),
+  //PasswordConfirm: z.string().min(8),
+  Name: z.string().min(3),
+  LastName: z.string().min(3),
+  Email: z.string().min(3),
+  PhoneNumber: z.string().optional().nullable(),
+  Notes: z.string().optional().nullable(),
+  RolId: z.string(),
+  //Empresas: z.array(z.object({id: z.number()})).optional().nullable(),
+});
+/* .refine((data) => /^\w+(\.\w+)*$/.test(data.UserName), {
     message: "Utilice solo letras, números y punto",
     path: ["UserName"],
-  });
+  }); */
 
 type ValidationSchema = z.infer<typeof validationSchema>;
 
@@ -151,15 +150,15 @@ export const UsuarioAgregar = () => {
           <form onSubmit={_handleSubmit}>
             <div className="md:grid md:grid-cols-12 md:gap-4">
               <div className="md:col-span-8 md:grid md:grid-cols-12 md:gap-4">
-                <div className="md:col-span-4">
-                  <Label value="Email GIS" />
+                <div className="md:col-span-6">
+                  <Label value="Email" />
                   <TextInput {...register("Email")} type="email" color={formErrors.Email ? "failure" : "gray"} helperText={formErrors.Email?.message} />
                 </div>
-                <div className="md:col-span-4">
+                {/* <div className="md:col-span-4">
                   <Label value="Nombre de Usuario GIS" />
                   <TextInput {...register("UserName")} placeholder="ej: john.doe" color={formErrors.UserName ? "failure" : "gray"} helperText={formErrors.UserName?.message} />
-                </div>
-                <div className="md:col-span-4">
+                </div> */}
+                <div className="md:col-span-6">
                   <Label value="Rol" />
                   <Select {...register("RolId")}>
                     <option value={0}>Seleccione</option>
