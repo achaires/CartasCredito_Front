@@ -25,6 +25,7 @@ import {
   CartaCreditoEditar,
   CartaCreditoEnmiendasHistorial,
   CartaCreditoImprimir,
+  CartaEditarStandBy,
   CartasCreditoComisiones,
   CartasCreditoEnmiendas,
   CartasDeCredito,
@@ -194,6 +195,10 @@ const router = createHashRouter([
                   {
                     path: "editar",
                     element: <CartaCreditoEditar />,
+                  },
+                  {
+                    path: "editar-standby",
+                    element: <CartaEditarStandBy />,
                   },
                 ],
               },

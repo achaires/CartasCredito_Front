@@ -115,7 +115,11 @@ export const CartasDeCreditoDetalle = () => {
             type: "success",
           })
         );
-        nav(`/operaciones/cartas-de-credito/${clonData.DataString}/editar`);
+        if (cartaCreditoDetalle && cartaCreditoDetalle.TipoCarta === "StandBy") {
+          nav(`/operaciones/cartas-de-credito/${clonData.DataString}/editar-standby`);
+        } else {
+          nav(`/operaciones/cartas-de-credito/${clonData.DataString}/editar`);
+        }
       }
 
       if (clonData && clonData.Flag === false) {

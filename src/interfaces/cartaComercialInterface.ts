@@ -72,6 +72,7 @@ export interface ICartaComercial {
 }
 
 export interface ICartaStandBy {
+  Id?: string;
   TipoCartaId: number;
   TipoStandBy: string;
   BancoId: number;

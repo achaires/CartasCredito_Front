@@ -89,8 +89,14 @@ export const CartasDeCredito = () => {
         <Link to={`/operaciones/cartas-de-credito/${rowData.data.Id}`}>
           <FontAwesomeIcon icon={faMagnifyingGlass} />
         </Link>
-        {rowData.data.Estatus < 2 && (
+        {rowData.data.Estatus < 2 && rowData.data.TipoCarta === "Comercial" && (
           <Link to={`/operaciones/cartas-de-credito/${rowData.data.Id}/editar`}>
+            <FontAwesomeIcon icon={faEdit} />
+          </Link>
+        )}
+
+        {rowData.data.Estatus < 2 && rowData.data.TipoCarta === "StandBy" && (
+          <Link to={`/operaciones/cartas-de-credito/${rowData.data.Id}/editar-standby`}>
             <FontAwesomeIcon icon={faEdit} />
           </Link>
         )}

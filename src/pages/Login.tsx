@@ -60,7 +60,7 @@ export const Login = () => {
           <div className="font-bold text-2xl mb-4">Iniciar Sesión</div>
 
           <div className="mb-4 text-sm">
-            <p className="mb-1">Usuario GIS</p>
+            <p className="mb-1">Correo Electrónico</p>
             <input
               type="text"
               className="border rounded border-gray-300 text-sm py-2 px-2 w-full block"

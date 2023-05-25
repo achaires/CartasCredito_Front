@@ -52,6 +52,16 @@ export const cartasCreditoApiSlice = rootApi.injectEndpoints({
         };
       },
     }),
+    updateCartaStandBy: builder.mutation<IRespuestaFormato, ICartaStandBy>({
+      invalidatesTags: ["CartasCredito"],
+      query: (data) => {
+        return {
+          url: `/cartascredito/${data.Id}`,
+          method: "PUT",
+          body: data,
+        };
+      },
+    }),
     clonarCartaComercial: builder.mutation<IRespuestaFormato, ICartaCreditoClonar>({
       invalidatesTags: ["CartasCredito"],
       query: (data) => {
@@ -126,4 +136,5 @@ export const {
   useAddSwiftNumCartaMutation,
   useClonarCartaComercialMutation,
   useAddCartaStandByMutation,
+  useUpdateCartaStandByMutation,
 } = cartasCreditoApiSlice;
