@@ -1,4 +1,7 @@
+import { IPago } from "./cartaPagoInterface";
+
 export interface IPFEPrograma {
+  Pagos?: IPago[];
   Id?: number;
   Anio: number;
   Periodo: number;

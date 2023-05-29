@@ -3,9 +3,15 @@ import { rootApi } from "./rootApi";
 
 export const pfeApiSlice = rootApi.injectEndpoints({
   endpoints: (builder) => ({
-    searchPrograma: builder.query<IPFEPrograma, void>({
-      providesTags: ["PFEProgramas"],
-      query: () => `/pfeprogramas/insert`,
+    searchPrograma: builder.mutation<IPFEPrograma, IPFEPrograma>({
+      invalidatesTags: ["PFEProgramas"],
+      query: (data) => {
+        return {
+          url: `/pfeprogramas/buscar`,
+          method: "POST",
+          body: data,
+        };
+      },
     }),
     addPrograma: builder.mutation<IRespuestaFormato, IPFEPrograma>({
       invalidatesTags: ["PFEProgramas"],
@@ -30,4 +36,4 @@ export const pfeApiSlice = rootApi.injectEndpoints({
   }),
 });
 
-export const { } = pfeApiSlice;
+export const { useSearchProgramaMutation, useAddProgramaMutation, useUpdateProgramaMutation } = pfeApiSlice;

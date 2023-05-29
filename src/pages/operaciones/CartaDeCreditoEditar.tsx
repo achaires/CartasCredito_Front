@@ -331,7 +331,7 @@ export const CartaCreditoEditar = () => {
         <div className="md:col-span-3">
           <Label value="Tipo de Carta de Crédito" />
           <TextInput defaultValue="Comercial" type="text" disabled />
-          <input type="hidden" value={1} {...register("TipoCartaId", { valueAsNumber: true })} />
+          <input type="hidden" value={17} {...register("TipoCartaId", { valueAsNumber: true })} />
         </div>
         <div className="md:col-span-3">
           <Label value="Tipo de Activo" />
