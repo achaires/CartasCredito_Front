@@ -1,11 +1,11 @@
 import { useGetEmpresasQuery } from "@/apis";
-import { useLazySearchPFEPRogramaQuery } from "@/apis/pfeApi";
 import { AdminBreadcrumbs, AdminPageHeader } from "@/components";
 import { apiHost } from "@/utils/apiConfig";
 import { faFileInvoiceDollar } from "@fortawesome/free-solid-svg-icons";
 import { Button, Label, Select, Table } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 
@@ -38,7 +38,6 @@ export const PFE = () => {
   ]);
 
   const { data: catEmpresas } = useGetEmpresasQuery();
-  const [searchPrograma, { data: rspPrograma, isLoading: isSearching, isError: isSearchError, isSuccess: isSearchSuccess }] = useLazySearchPFEPRogramaQuery();
 
   const {
     register,
@@ -53,26 +52,22 @@ export const PFE = () => {
   };
 
   const _handleSubmitSearch = handleSubmit((formData) => {
-    searchPrograma(formData);
+    if (Number(formData.EmpresaId) < 1) {
+      toast.error('Seleccione empresa', { position: "top-right" });
+      return;
+    }
+    console.log(formData)
   });
 
   /** EFFECT HOOKS */
   useEffect(() => {
     let newYearOptions = [];
-    for (var i = 2015; i <= curDate.getFullYear(); i++) {
+    for (var i = curDate.getFullYear(); i >= 2018; i--) {
       newYearOptions.push(i);
     }
 
     setYearOptions(newYearOptions);
   }, [curDate]);
-
-  useEffect(() => {
-    if (isSearchSuccess) {
-      if (rspPrograma && rspPrograma.Id > 0) {
-        console.log(rspPrograma);
-      }
-    }
-  }, [isSearchSuccess]);
 
   return (
     <>
@@ -81,7 +76,7 @@ export const PFE = () => {
           <AdminBreadcrumbs
             links={[
               { name: "Operaciones", href: "#" },
-              { name: "Pagos PFE", href: `${apiHost}/#/operaciones/pfe` },
+              { name: "Programación de Pagos PFE", href: `${apiHost}/#/operaciones/pfe` },
             ]}
           />
         </div>
@@ -120,6 +115,7 @@ export const PFE = () => {
                 <div className="mt-4">
                   <Label value="Empresa" />
                   <Select {...register("EmpresaId", { valueAsNumber: true })}>
+                    <option value="0">Seleccione Empresa</option>
                     {catEmpresas &&
                       catEmpresas
                         .filter((i) => i.Activo)
@@ -142,7 +138,7 @@ export const PFE = () => {
                 </div>
                 <Table>
                   <Table.Head>
-                    <Table.HeadCell>Editar</Table.HeadCell>
+                    <Table.HeadCell>&nbsp;</Table.HeadCell>
                     <Table.HeadCell>Moneda</Table.HeadCell>
                     <Table.HeadCell>PA</Table.HeadCell>
                     <Table.HeadCell>PA+1</Table.HeadCell>

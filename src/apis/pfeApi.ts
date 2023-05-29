@@ -1,34 +1,24 @@
-import { IPFE_Programa, IPFE_ProgramaSearch, IRespuestaFormato } from "@/interfaces";
+import { IPFEPrograma, IRespuestaFormato } from "@/interfaces";
 import { rootApi } from "./rootApi";
 
 export const pfeApiSlice = rootApi.injectEndpoints({
   endpoints: (builder) => ({
-    getPFEProgramas: builder.query<IPFE_Programa[], void>({
-      providesTags: ["PFE_Programas"],
-      query: () => `/pfeprogramas`,
+    searchPrograma: builder.query<IPFEPrograma, void>({
+      providesTags: ["PFEProgramas"],
+      query: () => `/pfeprogramas/insert`,
     }),
-    searchPFEPRograma: builder.query<IPFE_Programa, IPFE_ProgramaSearch>({
-      providesTags: ["PFE_Programas"],
+    addPrograma: builder.mutation<IRespuestaFormato, IPFEPrograma>({
+      invalidatesTags: ["PFEProgramas"],
       query: (data) => {
         return {
-          url: `/pfeprogramas/buscar`,
-          method: "post",
-          body: data,
-        };
-      },
-    }),
-    addPFEPrograma: builder.mutation<IRespuestaFormato, IPFE_Programa>({
-      invalidatesTags: ["PFE_Programas"],
-      query: (data) => {
-        return {
-          url: `/pfeprogramas/agregar`,
+          url: `/pfeprogramas`,
           method: "POST",
           body: data,
         };
       },
     }),
-    updatePFEPrograma: builder.mutation<IRespuestaFormato, IPFE_Programa>({
-      invalidatesTags: ["PFE_Programas"],
+    updatePrograma: builder.mutation<IRespuestaFormato, IPFEPrograma>({
+      invalidatesTags: ["PFEProgramas"],
       query: (data) => {
         return {
           url: `/pfeprogramas/${data.Id}`,
@@ -40,4 +30,4 @@ export const pfeApiSlice = rootApi.injectEndpoints({
   }),
 });
 
-export const { useGetPFEProgramasQuery, useLazySearchPFEPRogramaQuery, useAddPFEProgramaMutation, useUpdatePFEProgramaMutation } = pfeApiSlice;
+export const { } = pfeApiSlice;
