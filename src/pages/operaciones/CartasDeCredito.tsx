@@ -5,7 +5,7 @@ import { useGetMonedasQuery } from "@/apis/monedasApi";
 import { useGetProveedoresQuery } from "@/apis/proveedoresApi";
 import { useGetTiposActivoQuery } from "@/apis/tiposActivoApi";
 import { AdminBreadcrumbs, AdminPageHeader } from "@/components";
-import { ICartaCreditoFiltrar } from "@/interfaces";
+import { ICartaCreditoFiltrar, IMoneda } from "@/interfaces";
 import { useAppDispatch } from "@/store";
 import { addToast } from "@/store/uiSlice";
 import { faEdit, faEye, faFileInvoiceDollar, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
@@ -167,7 +167,7 @@ export const CartasDeCredito = () => {
           <Label value="Tipo de Moneda" />
           <Select {...register("MonedaId")}>
             <option value={0}>Seleccione opción</option>
-            {catMonedas?.map((item, index) => (
+            {catMonedas?.map((item: IMoneda, index: number) => (
               <option key={index.toString()} value={item.Id}>
                 {item.Nombre}
               </option>

@@ -1,8 +1,8 @@
 import { useGetEmpresasQuery } from "@/apis";
-import { useSearchProgramaMutation } from "@/apis/pfeApi";
+import { useAddProgramaMutation, useSearchProgramaMutation, useUpdateProgramaMutation } from "@/apis/pfeApi";
 import { AdminBreadcrumbs, AdminPageHeader, PFETIpoCambioModal } from "@/components";
 import { apiHost } from "@/utils/apiConfig";
-import { faFileEdit, faFileInvoiceDollar, faPencil, faUpload } from "@fortawesome/free-solid-svg-icons";
+import { faFileEdit, faFileInvoiceDollar, faFloppyDisk, faPencil, faTrash, faUpload } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Label, Select, Table } from "flowbite-react";
 import { useEffect, useState } from "react";
@@ -10,6 +10,14 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
+import DataGrid, { Column, Export, HeaderFilter, Paging, SearchPanel, Selection } from "devextreme-react/data-grid";
+import { IPFETipoCambio, IPago } from "@/interfaces";
+
+const txtsExport = {
+  exportAll: "Exportar Todo",
+  exportSelectedRows: "Exportar Selección",
+  exportTo: "Exportar A",
+};
 
 const validationSchema = z.object({
   Anio: z.number(),
@@ -50,11 +58,18 @@ export const PFE = () => {
   const [pa1, setPa1] = useState(0);
   const [pa2, setPa2] = useState(0);
   const [pa, setPa] = useState(0);
+  const [selectedPagos, setSelectedPagos] = useState<Array<IPago>>([]);
+
+  const [tiposCambio, setTiposCambio] = useState<IPFETipoCambio[]>([]);
 
   const [programaMonedas, setProgramaMonedas] = useState<Array<PFEProgramaMoneda>>([]);
 
   const { data: catEmpresas } = useGetEmpresasQuery();
   const [pfeBuscar, { data: programaPFErsp, isLoading, isSuccess, isError, error }] = useSearchProgramaMutation();
+  const [pfeGuardar, { data: programaPFEGuardarRsp, isLoading: isSaving, isSuccess: isSaveSuccess, isError: isSaveError, error: saveError }] =
+    useAddProgramaMutation();
+  const [pfeActualizar, { data: programaPFEActualizarRsp, isLoading: isUpdating, isSuccess: isUpdtateSuccess, isError: isUpdateError, error: updateError }] =
+    useUpdateProgramaMutation();
 
   const {
     register,
@@ -64,6 +79,19 @@ export const PFE = () => {
   } = useForm<ValidationSchema>();
 
   /** EVENT HANDLERS */
+  const _handleSelectedRowChange = (e: number[]) => {
+    var newSelpagos: IPago[] = [];
+    if (programaPFErsp && programaPFErsp.Pagos) {
+      for (var i = 0; i < programaPFErsp.Pagos.length; i++) {
+        var pago = programaPFErsp.Pagos[i];
+        if (e.includes(pago.Id)) {
+          newSelpagos.push(pago);
+        }
+      }
+    }
+
+    setSelectedPagos(newSelpagos);
+  };
   const _handleBack = () => {
     nav("/operaciones/pfe");
   };
@@ -80,20 +108,60 @@ export const PFE = () => {
       return;
     }
 
-    console.log(formData);
+    setSelectedPagos([]);
 
     pfeBuscar(formData);
   });
 
+  const _handleSubmitSave = () => {
+    if (selectedPagos.length < 1) {
+      toast.error("Seleccione al menos un pago", { position: "top-right" });
+      return;
+    }
+
+    if (tiposCambio.length < 1) {
+      toast.error("Ingrese los tipos de cambio", { position: "top-right" });
+      return;
+    }
+
+    if (programaPFErsp) {
+      if (programaPFErsp.Id && programaPFErsp.Id > 0) {
+        let pfeProg = {
+          Id: programaPFErsp.Id,
+          Anio: programaPFErsp.Anio,
+          Periodo: programaPFErsp.Periodo,
+          EmpresaId: programaPFErsp.EmpresaId,
+          TiposCambio: tiposCambio,
+          Pagos: selectedPagos,
+        };
+
+        pfeActualizar(pfeProg);
+      } else {
+        let pfeProg = {
+          Anio: programaPFErsp.Anio,
+          Periodo: programaPFErsp.Periodo,
+          EmpresaId: programaPFErsp.EmpresaId,
+          TiposCambio: tiposCambio,
+          Pagos: selectedPagos,
+        };
+
+        pfeGuardar(pfeProg);
+      }
+    }
+  };
+
   /** EFFECT HOOKS */
   useEffect(() => {
+    if (isSuccess && programaPFErsp && programaPFErsp.Id && programaPFErsp.Id > 0) {
+      toast.success("Se encontró un programa guardado con anterioridad", { position: "top-right" });
+    }
+
     if (isSuccess && programaPFErsp && programaPFErsp.Pagos) {
       const uniqueCurrencies: { [key: string]: boolean } = {};
 
       for (var i = 0; i < programaPFErsp.Pagos.length; i++) {
         var pago = programaPFErsp.Pagos[i];
         if (pago.CartaCredito) {
-          console.log(pago.CartaCredito.MonedaId, pago.CartaCredito.Moneda);
           var monedaId = pago.CartaCredito.MonedaId;
           var moneda = pago.CartaCredito.Moneda;
 
@@ -113,6 +181,12 @@ export const PFE = () => {
       setProgramaMonedas(resultado);
     }
   }, [isSuccess]);
+
+  useEffect(() => {
+    if (isSaveSuccess) {
+      toast.success("Se guardó el programa correctamente", { position: "top-right" });
+    }
+  }, [isSaveSuccess]);
 
   useEffect(() => {
     let newYearOptions = [];
@@ -214,41 +288,83 @@ export const PFE = () => {
                           </a>
                         </td>
                         <td className="px-4 py-4">{item.Moneda}</td>
-                        <td className="px-4 py-4">24.75</td>
-                        <td className="px-4 py-4">35.95</td>
-                        <td className="px-4 py-4">99.99</td>
+                        <td className="px-4 py-4">
+                          {tiposCambio.map((i) => {
+                            if (i.MonedaId === item.MonedaId) {
+                              return i.PA;
+                            }
+                          })}
+                        </td>
+                        <td className="px-4 py-4">
+                          {tiposCambio.map((i) => {
+                            if (i.MonedaId === item.MonedaId) {
+                              return i.PA1;
+                            }
+                          })}
+                        </td>
+                        <td className="px-4 py-4">
+                          {tiposCambio.map((i) => {
+                            if (i.MonedaId === item.MonedaId) {
+                              return i.PA2;
+                            }
+                          })}
+                        </td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
-                {/* <Table className="text-xs" cellPadding={0} cellSpacing={0}>
-                  <Table.Head>
-                    <Table.HeadCell>&nbsp;</Table.HeadCell>
-                    <Table.HeadCell>Moneda</Table.HeadCell>
-                    <Table.HeadCell>PA</Table.HeadCell>
-                    <Table.HeadCell>PA+1</Table.HeadCell>
-                    <Table.HeadCell>PA+2</Table.HeadCell>
-                  </Table.Head>
-                  <Table.Body>
-                    {programaMonedas.map((item, index) => (
-                      <Table.Row key={index.toString()}>
-                        <Table.Cell>
-                          <a href="#">
-                            <FontAwesomeIcon icon={faFileEdit} className="h-6" />
-                          </a>
-                        </Table.Cell>
-                        <Table.Cell>{item.Moneda}</Table.Cell>
-                        <Table.Cell>0</Table.Cell>
-                        <Table.Cell>0</Table.Cell>
-                        <Table.Cell>0</Table.Cell>
-                      </Table.Row>
-                    ))}
-                  </Table.Body>
-                </Table> */}
               </div>
             </div>
           </form>
         </div>
+        {isSuccess && programaPFErsp && (
+          <div className="mb-4">
+            <h3>Pagos Programados</h3>
+
+            <div>
+              <DataGrid
+                showBorders={true}
+                showColumnLines={true}
+                showRowLines={true}
+                keyExpr="Id"
+                dataSource={programaPFErsp.Pagos}
+                onSelectedRowKeysChange={_handleSelectedRowChange}>
+                <Paging defaultPageSize={10} />
+                <HeaderFilter visible={true} />
+                <SearchPanel visible={true} />
+                <Selection mode="multiple" showCheckBoxesMode="always" />
+                <Export enabled={true} texts={txtsExport} allowExportSelectedData={true} />
+                <Column dataField="CartaCredito.NumCartaCredito" caption="Num. Carta" />
+                <Column dataField="CartaCredito.TipoCarta" />
+                <Column dataField="NumeroPago" />
+                <Column dataField="FechaVencimiento" dataType="datetime" format="yyyy-MM-dd" defaultSortOrder="desc" sortIndex={0} />
+                <Column dataField="MontoPago" dataType="number" format="currency" />
+                <Column dataField="CartaCredito.Moneda" />
+              </DataGrid>
+
+              <div className="mt-4 flex items-center gap-6 justify-end">
+                <a
+                  href="#"
+                  title="Guardar Pronóstico"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    _handleSubmitSave();
+                  }}>
+                  <FontAwesomeIcon size="2x" icon={faFloppyDisk} />
+                </a>
+
+                <a
+                  href="#"
+                  title="Eliminar Pronóstico"
+                  onClick={(e) => {
+                    e.preventDefault();
+                  }}>
+                  <FontAwesomeIcon size="2x" icon={faTrash} />
+                </a>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       <PFETIpoCambioModal
@@ -258,12 +374,20 @@ export const PFE = () => {
         handleClose={() => {
           setShowTipoCambioModal(false);
         }}
-        pa={pa}
-        pa1={pa1}
-        pa2={pa2}
-        setPa={setPa}
-        setPa2={setPa2}
-        setPa1={setPa1}
+        handleSubmit={(tipoCambio) => {
+          let newTiposCambio: IPFETipoCambio[] = [];
+
+          if (tiposCambio.find((tc) => tc.MonedaId === tipoCambio.MonedaId)) {
+            let index = tiposCambio.findIndex((tc) => tc.MonedaId === tipoCambio.MonedaId);
+            newTiposCambio = [...tiposCambio];
+            newTiposCambio[index] = tipoCambio;
+          } else {
+            newTiposCambio = [...tiposCambio, tipoCambio];
+          }
+
+          setTiposCambio(newTiposCambio);
+          setShowTipoCambioModal(false);
+        }}
       />
     </>
   );

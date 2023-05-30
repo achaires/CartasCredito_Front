@@ -1,3 +1,4 @@
+import { IPFETipoCambio } from "@/interfaces";
 import { Modal, Label, TextInput, Button } from "flowbite-react";
 import { useState } from "react";
 import Datepicker from "react-tailwindcss-datepicker";
@@ -7,21 +8,23 @@ interface Props {
   moneda: string;
   show: boolean;
   handleClose: () => void;
-  pa1: number;
-  pa2: number;
-  pa: number;
-  setPa: (val: number) => void;
-  setPa1: (val: number) => void;
-  setPa2: (val: number) => void;
+  handleSubmit: (tipoCambio: IPFETipoCambio) => void;
 }
 
-export const PFETIpoCambioModal = ({ show, handleClose, monedaId, moneda, pa, pa1, pa2, setPa, setPa1, setPa2 }: Props) => {
-  /* const [pa, setPa] = useState(0);
+export const PFETIpoCambioModal = ({ show, handleClose, handleSubmit, monedaId, moneda }: Props) => {
+  const [pa, setPa] = useState(0);
   const [pa1, setPa1] = useState(0);
-  const [pa2, setPa2] = useState(0); */
+  const [pa2, setPa2] = useState(0);
 
   const _submit = () => {
-    console.log(pa, pa1, pa2);
+    let newTipoCambio = {
+      MonedaId: monedaId,
+      PA: pa,
+      PA1: pa1,
+      PA2: pa2,
+    };
+
+    handleSubmit(newTipoCambio);
   };
 
   return (
