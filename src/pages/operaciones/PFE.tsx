@@ -55,9 +55,6 @@ export const PFE = () => {
   const [showTipoCambioModal, setShowTipoCambioModal] = useState(false);
   const [tipoCambioMonedaId, setTipoCambioMonedaId] = useState(0);
   const [tipoCambioMoneda, setTipoCambioMoneda] = useState("");
-  const [pa1, setPa1] = useState(0);
-  const [pa2, setPa2] = useState(0);
-  const [pa, setPa] = useState(0);
   const [selectedPagos, setSelectedPagos] = useState<Array<IPago>>([]);
 
   const [tiposCambio, setTiposCambio] = useState<IPFETipoCambio[]>([]);
@@ -126,6 +123,7 @@ export const PFE = () => {
 
     if (programaPFErsp) {
       if (programaPFErsp.Id && programaPFErsp.Id > 0) {
+        console.log("Actualizar programa", programaPFErsp.Id);
         let pfeProg = {
           Id: programaPFErsp.Id,
           Anio: programaPFErsp.Anio,
@@ -137,6 +135,7 @@ export const PFE = () => {
 
         pfeActualizar(pfeProg);
       } else {
+        console.log("Crear programa");
         let pfeProg = {
           Anio: programaPFErsp.Anio,
           Periodo: programaPFErsp.Periodo,
@@ -152,8 +151,32 @@ export const PFE = () => {
 
   /** EFFECT HOOKS */
   useEffect(() => {
+    if (isUpdtateSuccess) {
+      toast.success("Programa actualizado correctamente", { position: "top-right" });
+    }
+  }, []);
+
+  useEffect(() => {
     if (isSuccess && programaPFErsp && programaPFErsp.Id && programaPFErsp.Id > 0) {
       toast.success("Se encontró un programa guardado con anterioridad", { position: "top-right" });
+
+      // cargar programa de pagos existente
+      var progSelectedPagos: Array<IPago> = [];
+
+      if (programaPFErsp.Pagos) {
+        for (var i = 0; i < programaPFErsp.Pagos.length; i++) {
+          if (programaPFErsp.Pagos[i].PFEActivo) {
+            progSelectedPagos.push(programaPFErsp.Pagos[i]);
+          }
+        }
+      }
+
+      setSelectedPagos(progSelectedPagos);
+
+      // cargar tipos de cambio de programa
+      if (programaPFErsp.TiposCambio) {
+        setTiposCambio(programaPFErsp.TiposCambio);
+      }
     }
 
     if (isSuccess && programaPFErsp && programaPFErsp.Pagos) {
@@ -185,6 +208,7 @@ export const PFE = () => {
   useEffect(() => {
     if (isSaveSuccess) {
       toast.success("Se guardó el programa correctamente", { position: "top-right" });
+      _handleSubmitSearch();
     }
   }, [isSaveSuccess]);
 
@@ -328,16 +352,16 @@ export const PFE = () => {
                 showRowLines={true}
                 keyExpr="Id"
                 dataSource={programaPFErsp.Pagos}
+                selectedRowKeys={selectedPagos.map((i) => i.Id)}
                 onSelectedRowKeysChange={_handleSelectedRowChange}>
                 <Paging defaultPageSize={10} />
                 <HeaderFilter visible={true} />
-                <SearchPanel visible={true} />
                 <Selection mode="multiple" showCheckBoxesMode="always" />
                 <Export enabled={true} texts={txtsExport} allowExportSelectedData={true} />
                 <Column dataField="CartaCredito.NumCartaCredito" caption="Num. Carta" />
                 <Column dataField="CartaCredito.TipoCarta" />
                 <Column dataField="NumeroPago" />
-                <Column dataField="FechaVencimiento" dataType="datetime" format="yyyy-MM-dd" defaultSortOrder="desc" sortIndex={0} />
+                <Column dataField="FechaVencimiento" dataType="datetime" format="dd/MM/yyyy" defaultSortOrder="desc" sortIndex={0} />
                 <Column dataField="MontoPago" dataType="number" format="currency" />
                 <Column dataField="CartaCredito.Moneda" />
               </DataGrid>
@@ -353,14 +377,14 @@ export const PFE = () => {
                   <FontAwesomeIcon size="2x" icon={faFloppyDisk} />
                 </a>
 
-                <a
+                {/* <a
                   href="#"
                   title="Eliminar Pronóstico"
                   onClick={(e) => {
                     e.preventDefault();
                   }}>
                   <FontAwesomeIcon size="2x" icon={faTrash} />
-                </a>
+                </a> */}
               </div>
             </div>
           </div>

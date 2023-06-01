@@ -84,9 +84,16 @@ export const CartaCreditoEnmiendasHistorial = () => {
             <Export enabled={true} texts={txtsExport} allowExportSelectedData={true} />
             <Column dataField="DocumentoSwift" />
             <Column dataField="ImporteLC" caption="Monto Original LC" format="currency" dataType="number" alignment="right" />
-            <Column dataField="FechaLimiteEmbarque" caption="Fecha Límite de Embarque" dataType="datetime" format="yyyy-MM-dd" defaultSortOrder="asc" sortIndex={0} />
-            <Column dataField="FechaVencimiento" caption="Fecha Vencimiento" dataType="datetime" format="yyyy-MM-dd" defaultSortOrder="asc" sortIndex={0} />
-            <Column dataField="Creado" caption="Fecha de Registro" dataType="datetime" format="yyyy-MM-dd" defaultSortOrder="asc" sortIndex={0} />
+            <Column
+              dataField="FechaLimiteEmbarque"
+              caption="Fecha Límite de Embarque"
+              dataType="datetime"
+              format="dd/MM/yyyy"
+              defaultSortOrder="asc"
+              sortIndex={0}
+            />
+            <Column dataField="FechaVencimiento" caption="Fecha Vencimiento" dataType="datetime" format="dd/MM/yyyy" defaultSortOrder="asc" sortIndex={0} />
+            <Column dataField="Creado" caption="Fecha de Registro" dataType="datetime" format="dd/MM/yyyy" defaultSortOrder="asc" sortIndex={0} />
             {/* <Column dataField="NumCartaCredito" /> */}
           </DataGrid>
         </div>

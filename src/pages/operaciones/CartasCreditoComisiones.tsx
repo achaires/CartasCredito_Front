@@ -1,38 +1,10 @@
-import {
-  useLazyGetCartaComercialQuery,
-  useUpdateCartaComercialEstatusMutation,
-} from "@/apis/cartasCreditoApi";
-import {
-  AdminBreadcrumbs,
-  AdminLoadingActivity,
-  AdminPageHeader,
-  CartaComisionModal,
-  CartaPagoManualModal,
-  CartaPagoModal,
-  CartaSwiftModal,
-} from "@/components";
+import { useLazyGetCartaComercialQuery, useUpdateCartaComercialEstatusMutation } from "@/apis/cartasCreditoApi";
+import { AdminBreadcrumbs, AdminLoadingActivity, AdminPageHeader, CartaComisionModal, CartaPagoManualModal, CartaPagoModal, CartaSwiftModal } from "@/components";
 import { useAppDispatch } from "@/store";
 import { addToast } from "@/store/uiSlice";
-import {
-  faFileInvoiceDollar,
-  faCircleArrowLeft,
-  faUpload,
-  faDollarSign,
-  faCheckCircle,
-  faFileCirclePlus,
-} from "@fortawesome/free-solid-svg-icons";
+import { faFileInvoiceDollar, faCircleArrowLeft, faUpload, faDollarSign, faCheckCircle, faFileCirclePlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  Alert,
-  Button,
-  Label,
-  Modal,
-  TextInput,
-  Textarea,
-  Table,
-  Checkbox,
-  Radio,
-} from "flowbite-react";
+import { Alert, Button, Label, Modal, TextInput, Textarea, Table, Checkbox, Radio } from "flowbite-react";
 import { useCallback, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import numeral from "numeral";
@@ -40,9 +12,6 @@ import { EstatusButton } from "./CartasDeCreditoDetalle";
 import { ICartaCreditoComision, IPago } from "@/interfaces";
 import { CartaComisionPagoModal } from "@/components/CartaComisionPagoModal";
 import { apiHost } from "@/utils/apiConfig";
-import { useConvertirMutation } from "@/apis/conversionMonedaApi";
-
-//console.log(new Date().toISOString());
 
 export const CartasCreditoComisiones = () => {
   const routeParams = useParams();
@@ -50,31 +19,15 @@ export const CartasCreditoComisiones = () => {
 
   const [showPagoModal, setShowPagoModal] = useState(false);
   const [showPagoManualModal, setShowPagoManualModal] = useState(false);
-  const [selectedCartaComision, setSelectedCartaComision] =
-    useState<ICartaCreditoComision | null>(null);
+  const [selectedCartaComision, setSelectedCartaComision] = useState<ICartaCreditoComision | null>(null);
 
   const dispatch = useAppDispatch();
 
-  const [getCartaComercial, { data: cartaCreditoDetalle, isLoading }] =
-    useLazyGetCartaComercialQuery();
-  const [
-    convertirMoneda,
-    { data: conversionRes, isLoading: conversionIsLoading },
-  ] = useConvertirMutation();
+  const [getCartaComercial, { data: cartaCreditoDetalle, isLoading }] = useLazyGetCartaComercialQuery();
 
   const _handleBack = useCallback(() => {
     nav(`/operaciones/cartas-de-credito/${cartaCreditoDetalle?.Id}`);
   }, [cartaCreditoDetalle]);
-
-  /* useEffect(() => {
-    // prueba conversion
-    let date = new Date(2022, 3, 1);
-    convertirMoneda({
-      Fecha: date.toISOString(),
-      MonedaInput: "USD",
-      MonedaOutput: "MXP",
-    });
-  }, []); */
 
   useEffect(() => {
     if (routeParams.cartaCreditoId) {
@@ -103,11 +56,7 @@ export const CartasCreditoComisiones = () => {
           />
         </div>
         <div className="mb-4">
-          <AdminPageHeader
-            title="Cartas de Crédito"
-            subtitle="Comisiones"
-            icon={faFileInvoiceDollar}
-          />
+          <AdminPageHeader title="Cartas de Crédito" subtitle="Comisiones" icon={faFileInvoiceDollar} />
         </div>
 
         <div className="">
@@ -119,11 +68,7 @@ export const CartasCreditoComisiones = () => {
       </div>
 
       <div className="md:grid md:grid-cols-12 md:gap-4 mb-6 px-6">
-        <div className="col-span-3">
-          {cartaCreditoDetalle && cartaCreditoDetalle.Estatus && (
-            <EstatusButton estatus={cartaCreditoDetalle.Estatus} />
-          )}
-        </div>
+        <div className="col-span-3">{cartaCreditoDetalle && cartaCreditoDetalle.Estatus && <EstatusButton estatus={cartaCreditoDetalle.Estatus} />}</div>
         <div className="col-span-3 text-right">
           {/* @if (Model.DocumentoSwift != "")
                     {
@@ -139,92 +84,45 @@ export const CartasCreditoComisiones = () => {
         <div className="md:grid md:grid-cols-10 md:gap-4 mb-6 px-6">
           <div className="md:col-span-2">
             <Label value="Fecha de Apertura:" />
-            <TextInput
-              type="date"
-              defaultValue={cartaCreditoDetalle.FechaApertura}
-              disabled
-            />
+            <TextInput type="date" defaultValue={cartaCreditoDetalle.FechaApertura} disabled />
           </div>
           <div className="md:col-span-2">
             <Label value="No. Carta de Crédito:" />
-            <TextInput
-              type="text"
-              name="numCarta"
-              defaultValue={cartaCreditoDetalle.NumCartaCredito}
-              disabled
-            />
+            <TextInput type="text" name="numCarta" defaultValue={cartaCreditoDetalle.NumCartaCredito} disabled />
           </div>
           <div className="md:col-span-2">
             <Label value="Tipo de Carta:" />
-            <TextInput
-              type="text"
-              defaultValue={cartaCreditoDetalle.TipoCarta}
-              disabled
-            />
+            <TextInput type="text" defaultValue={cartaCreditoDetalle.TipoCarta} disabled />
           </div>
           <div className="md:col-span-2">
             <Label value="Banco:" />
-            <TextInput
-              type="text"
-              defaultValue={cartaCreditoDetalle.Banco}
-              disabled
-            />
+            <TextInput type="text" defaultValue={cartaCreditoDetalle.Banco} disabled />
           </div>
           <div className="md:col-span-2">
             <Label value="Proveedor:" />
-            <TextInput
-              type="text"
-              defaultValue={cartaCreditoDetalle.Proveedor}
-              disabled
-            />
+            <TextInput type="text" defaultValue={cartaCreditoDetalle.Proveedor} disabled />
           </div>
         </div>
         <div className="md:grid md:grid-cols-12 md:gap-4 mb-6 px-6">
           <div className="md:col-span-2">
             <Label value="Empresa:" />
-            <TextInput
-              type="text"
-              defaultValue={cartaCreditoDetalle.Empresa}
-              disabled
-            />
+            <TextInput type="text" defaultValue={cartaCreditoDetalle.Empresa} disabled />
           </div>
           <div className="md:col-span-2">
             <Label value="Moneda:" />
-            <TextInput
-              type="text"
-              defaultValue={cartaCreditoDetalle.Moneda}
-              disabled
-            />
+            <TextInput type="text" defaultValue={cartaCreditoDetalle.Moneda} disabled />
           </div>
           <div className="md:col-span-2">
             <Label value="Monto Original L/C:" />
-            <TextInput
-              type="text"
-              defaultValue={numeral(cartaCreditoDetalle.MontoOriginalLC).format(
-                "$0,0.00"
-              )}
-              disabled
-            />
+            <TextInput type="text" defaultValue={numeral(cartaCreditoDetalle.MontoOriginalLC).format("$0,0.00")} disabled />
           </div>
           <div className="md:col-span-2">
             <Label value="Pagos Efectuados:" />
-            <TextInput
-              type="text"
-              defaultValue={numeral(cartaCreditoDetalle.PagosEfectuados).format(
-                "$0,0.00"
-              )}
-              disabled
-            />
+            <TextInput type="text" defaultValue={numeral(cartaCreditoDetalle.PagosEfectuados).format("$0,0.00")} disabled />
           </div>
           <div className="md:col-span-2">
             <Label value="Pagos Programados:" />
-            <TextInput
-              type="text"
-              defaultValue={numeral(
-                cartaCreditoDetalle.PagosProgramados
-              ).format("$0,0.00")}
-              disabled
-            />
+            <TextInput type="text" defaultValue={numeral(cartaCreditoDetalle.PagosProgramados).format("$0,0.00")} disabled />
           </div>
           <div className="md:col-span-2">
             <Label value="Pagos Cancelados:" />
@@ -266,23 +164,14 @@ export const CartasCreditoComisiones = () => {
                   key={index.toString()}
                   onClick={(e) => {
                     setSelectedCartaComision(item);
-                  }}
-                >
-                  <Table.Cell
-                    className={item.EstatusClass ? item.EstatusClass : ""}
-                  >
-                    <Radio
-                      value={item.Id}
-                      onChange={(e) => setSelectedCartaComision(item)}
-                      checked={selectedCartaComision?.Id === item.Id}
-                    />
+                  }}>
+                  <Table.Cell className={item.EstatusClass ? item.EstatusClass : ""}>
+                    <Radio value={item.Id} onChange={(e) => setSelectedCartaComision(item)} checked={selectedCartaComision?.Id === item.Id} />
                   </Table.Cell>
                   <Table.Cell align="center">{item.NumeroComision}</Table.Cell>
                   <Table.Cell>{item.Comision}</Table.Cell>
                   <Table.Cell>{item.FechaCargo}</Table.Cell>
-                  <Table.Cell align="right">
-                    {numeral(item.Monto).format("$0,0.00")}
-                  </Table.Cell>
+                  <Table.Cell align="right">{numeral(item.Monto).format("$0,0.00")}</Table.Cell>
                   <Table.Cell>{item.Moneda}</Table.Cell>
                   {/* <Table.Cell>
                     {numeral(item.TipoCambio).format("$0,0.00")}
@@ -290,15 +179,11 @@ export const CartasCreditoComisiones = () => {
                   <Table.Cell>{item.FechaPago}</Table.Cell>
                   <Table.Cell align="right">
                     {item.PagoMonedaId !== cartaCreditoDetalle.MonedaId
-                      ? numeral(item.MontoPagado * item.TipoCambio).format(
-                          "$0,0.00"
-                        )
+                      ? numeral(item.MontoPagado * item.TipoCambio).format("$0,0.00")
                       : numeral(item.MontoPagado).format("$0,0.00")}
                   </Table.Cell>
                   <Table.Cell>{item.PagoMoneda}</Table.Cell>
-                  <Table.Cell align="right">
-                    {item.PagoId && item.PagoId > 0 ? item.PagoId : ""}
-                  </Table.Cell>
+                  <Table.Cell align="right">{item.PagoId && item.PagoId > 0 ? item.PagoId : ""}</Table.Cell>
                   <Table.Cell></Table.Cell>
                 </Table.Row>
               ))}
@@ -306,46 +191,34 @@ export const CartasCreditoComisiones = () => {
         </Table>
       </div>
 
-      <div
-        id="controles-footer"
-        className="fixed bottom-0 left-0 w-full bg-brandPrimary p-6 text-white flex items-center justify-center gap-12"
-      >
+      <div id="controles-footer" className="fixed bottom-0 left-0 w-full bg-brandPrimary p-6 text-white flex items-center justify-center gap-12">
         <a
           href="#"
           className="flex flex-col items-center justify-around gap-2"
           onClick={(e) => {
             e.preventDefault();
             setShowPagoModal(true);
-          }}
-        >
+          }}>
           <FontAwesomeIcon icon={faFileCirclePlus} className="h-6 text-white" />
           <span className="text-sm text-white">Registrar Comision</span>
         </a>
 
-        {selectedCartaComision !== null &&
-          selectedCartaComision.Estatus !== null && (
-            <>
-              <a
-                href="#"
-                className="flex flex-col items-center justify-around gap-2"
-                onClick={(e) => {
-                  e.preventDefault();
-                  setShowPagoManualModal(true);
-                }}
-              >
-                <FontAwesomeIcon
-                  icon={faCheckCircle}
-                  className="h-6 text-white"
-                />
-                <span className="text-sm text-white">Registro Manual</span>
-              </a>
-            </>
-          )}
+        {selectedCartaComision !== null && selectedCartaComision.Estatus !== null && (
+          <>
+            <a
+              href="#"
+              className="flex flex-col items-center justify-around gap-2"
+              onClick={(e) => {
+                e.preventDefault();
+                setShowPagoManualModal(true);
+              }}>
+              <FontAwesomeIcon icon={faCheckCircle} className="h-6 text-white" />
+              <span className="text-sm text-white">Registro Manual</span>
+            </a>
+          </>
+        )}
 
-        <Link
-          to={`/operaciones/cartas-de-credito/${cartaCreditoDetalle?.Id}/pagos`}
-          className="flex flex-col items-center justify-around gap-2"
-        >
+        <Link to={`/operaciones/cartas-de-credito/${cartaCreditoDetalle?.Id}/pagos`} className="flex flex-col items-center justify-around gap-2">
           <FontAwesomeIcon icon={faDollarSign} className="h-6 text-white" />
           <span className="text-sm text-white">Pagos</span>
         </Link>
@@ -356,29 +229,24 @@ export const CartasCreditoComisiones = () => {
         </a>  */}
       </div>
 
-      {cartaCreditoDetalle &&
-        cartaCreditoDetalle.BancoId &&
-        cartaCreditoDetalle.Id && (
-          <CartaComisionModal
-            show={showPagoModal}
-            handleClose={() => setShowPagoModal(false)}
-            cartaCreditoId={cartaCreditoDetalle.Id}
-            cartaBancoId={cartaCreditoDetalle.BancoId}
-          />
-        )}
+      {cartaCreditoDetalle && cartaCreditoDetalle.Id && (
+        <CartaComisionModal
+          show={showPagoModal}
+          handleClose={() => setShowPagoModal(false)}
+          cartaCreditoId={cartaCreditoDetalle.Id}
+          cartaBancoId={cartaCreditoDetalle.BancoId}
+        />
+      )}
 
-      {cartaCreditoDetalle &&
-        cartaCreditoDetalle.Id &&
-        cartaCreditoDetalle.MonedaId &&
-        selectedCartaComision && (
-          <CartaComisionPagoModal
-            cartaMonedaId={cartaCreditoDetalle.MonedaId}
-            cartaComision={selectedCartaComision}
-            show={showPagoManualModal}
-            handleClose={() => setShowPagoManualModal(false)}
-            monto={selectedCartaComision.Monto}
-          />
-        )}
+      {cartaCreditoDetalle && cartaCreditoDetalle.Id && cartaCreditoDetalle.MonedaId && selectedCartaComision && (
+        <CartaComisionPagoModal
+          cartaMonedaId={cartaCreditoDetalle.MonedaId}
+          cartaComision={selectedCartaComision}
+          show={showPagoManualModal}
+          handleClose={() => setShowPagoManualModal(false)}
+          monto={selectedCartaComision.Monto}
+        />
+      )}
     </>
   );
 };

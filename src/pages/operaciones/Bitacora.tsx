@@ -66,7 +66,7 @@ export const Bitacora = () => {
             <Export enabled={true} texts={txtsExport} allowExportSelectedData={true} />
             <Column dataField="Titulo" />
             <Column dataField="CreadoPor" caption="Usuario" />
-            <Column dataField="Creado" caption="Fecha Movimiento" dataType="datetime" format="yyyy-MM-dd HH:mm a" defaultSortOrder="asc" sortIndex={0} />
+            <Column dataField="Creado" caption="Fecha Movimiento" dataType="datetime" format="dd/MM/yyyy HH:mm a" defaultSortOrder="asc" sortIndex={0} />
             <Column caption="Detalle" cellRender={_detalleCellComponent} width={80} />
           </DataGrid>
         </div>

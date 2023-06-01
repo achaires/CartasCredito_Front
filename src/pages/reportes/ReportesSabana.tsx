@@ -183,7 +183,7 @@ export const ReportesSabana = () => {
               <Selection mode="multiple" showCheckBoxesMode="always" />
               <Export enabled={true} texts={txtsExport} allowExportSelectedData={true} />
               <Column dataField="TipoReporte" />
-              <Column dataField="Creado" dataType="datetime" format="yyyy-MM-dd HH:mm" defaultSortOrder="asc" sortIndex={0} />
+              <Column dataField="Creado" dataType="datetime" format="dd/MM/yyyy HH:mm" defaultSortOrder="asc" sortIndex={0} />
               <Column dataField="Descarga" cellRender={_filenameCellComponent} />
             </DataGrid>
           )}

@@ -24,6 +24,7 @@ export interface IPago {
   TipoCambio?: number;
   MonedaId?: number;
   ComisionId?: number;
+  PFEActivo?: boolean;
 }
 
 export interface IPagoComisionInsert {

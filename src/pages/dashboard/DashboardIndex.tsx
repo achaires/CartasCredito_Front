@@ -41,7 +41,7 @@ export const DashboardIndex = () => {
             <Column dataField="CartaCredito.Empresa" caption="Empresa" />
             <Column dataField="CartaCredito.Proveedor" caption="Proveedor" />
             <Column dataField="CartaCredito.DescripcionCartaCredito" caption="Descripción" />
-            <Column dataField="FechaVencimiento" caption="Fecha Vencimiento" dataType="datetime" format="yyyy-MM-dd" defaultSortOrder="asc" sortIndex={0} />
+            <Column dataField="FechaVencimiento" caption="Fecha Vencimiento" dataType="datetime" format="dd/MM/yyyy" defaultSortOrder="asc" sortIndex={0} />
             <Column dataField="MontoPago" caption="Monto Programado" format="currency" dataType="number" alignment="right" />
             <Column dataField="CartaCredito.Moneda" caption="Moneda" />
             <Column type="buttons">
@@ -64,7 +64,7 @@ export const DashboardIndex = () => {
             <Column dataField="CartaCredito.Empresa" caption="Empresa" />
             <Column dataField="CartaCredito.Proveedor" caption="Proveedor" />
             <Column dataField="CartaCredito.DescripcionCartaCredito" caption="Descripción" />
-            <Column dataField="FechaVencimiento" caption="Fecha Vencimiento" dataType="datetime" format="yyyy-MM-dd" defaultSortOrder="asc" sortIndex={0} />
+            <Column dataField="FechaVencimiento" caption="Fecha Vencimiento" dataType="datetime" format="dd/MM/yyyy" defaultSortOrder="asc" sortIndex={0} />
             <Column dataField="MontoPago" caption="Monto Programado" format="currency" dataType="number" alignment="right" />
             <Column dataField="CartaCredito.Moneda" caption="Moneda" />
             <Column type="buttons">
