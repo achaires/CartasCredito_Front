@@ -152,7 +152,7 @@ export const CartasDeCredito = () => {
         <div className="md:col-span-3">
           <Label value="Rango de Fecha" />
           <Datepicker
-            displayFormat="dd/MM/yyyy"
+            displayFormat="DD/MM/YYYY"
             value={{ startDate: dateStart, endDate: dateEnd }}
             onChange={_handleDateChange}
             showFooter={true}

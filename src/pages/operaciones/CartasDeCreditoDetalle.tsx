@@ -1,5 +1,6 @@
 import { useClonarCartaComercialMutation, useLazyGetCartaComercialQuery, useUpdateCartaComercialEstatusMutation } from "@/apis/cartasCreditoApi";
 import { AdminBreadcrumbs, AdminLoadingActivity, AdminPageHeader, CartaSwiftModal } from "@/components";
+import { ICartaComercial } from "@/interfaces";
 import { useAppDispatch } from "@/store";
 import { addToast } from "@/store/uiSlice";
 import { apiHost } from "@/utils/apiConfig";
@@ -80,6 +81,19 @@ export const CartasDeCreditoDetalle = () => {
   const [getCartaComercial, { data: cartaCreditoDetalle, isLoading }] = useLazyGetCartaComercialQuery();
   const [updateEstatus, { data: updatedCartaCredito, isSuccess: updateEstatusSuccess, isError: updateEstatusError }] = useUpdateCartaComercialEstatusMutation();
   const [clonarCarta, { data: clonData, isSuccess: clonSuccess, isError: clonError }] = useClonarCartaComercialMutation();
+
+  const _handleClickOpenSwift = (cartaCreditoDetalle: ICartaComercial) => {
+    console.log(cartaCreditoDetalle);
+    if (cartaCreditoDetalle.Enmiendas && cartaCreditoDetalle.Enmiendas[0].DocumentoSwift) {
+      const downloadLink = document.createElement("a");
+
+      downloadLink.href = cartaCreditoDetalle.Enmiendas[0].DocumentoSwift;
+
+      downloadLink.download = (cartaCreditoDetalle.NumCartaCredito || "Documento Swift") + ".pdf";
+
+      downloadLink.click();
+    }
+  };
 
   const _handleBack = useCallback(() => {
     nav(`/operaciones/cartas-de-credito`);
@@ -227,7 +241,13 @@ export const CartasDeCreditoDetalle = () => {
             </Button>
 
             {cartaCreditoDetalle && cartaCreditoDetalle.DocumentoSwift !== "" && (
-              <a target="_blank" className="bg-brandPrimary p-2 rounded text-sm" href={cartaCreditoDetalle.DocumentoSwift}>
+              <a
+                className="bg-brandPrimary p-2 rounded text-sm"
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  _handleClickOpenSwift(cartaCreditoDetalle);
+                }}>
                 <span className="text-white">Descargar Archivo Swift</span>
               </a>
             )}
@@ -425,7 +445,13 @@ export const CartasDeCreditoDetalle = () => {
           </Button>
 
           {cartaCreditoDetalle && cartaCreditoDetalle.DocumentoSwift !== "" && (
-            <a target="_blank" className="bg-brandPrimary p-2 rounded text-sm" href={cartaCreditoDetalle.DocumentoSwift}>
+            <a
+              className="bg-brandPrimary p-2 rounded text-sm"
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                _handleClickOpenSwift(cartaCreditoDetalle);
+              }}>
               <span className="text-white">Descargar Archivo Swift</span>
             </a>
           )}
