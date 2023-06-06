@@ -1,3 +1,4 @@
+import { useLazyGetSwiftBase64Query } from "@/apis";
 import { useClonarCartaComercialMutation, useLazyGetCartaComercialQuery, useUpdateCartaComercialEstatusMutation } from "@/apis/cartasCreditoApi";
 import { AdminBreadcrumbs, AdminLoadingActivity, AdminPageHeader, CartaSwiftModal } from "@/components";
 import { ICartaComercial } from "@/interfaces";
@@ -81,17 +82,11 @@ export const CartasDeCreditoDetalle = () => {
   const [getCartaComercial, { data: cartaCreditoDetalle, isLoading }] = useLazyGetCartaComercialQuery();
   const [updateEstatus, { data: updatedCartaCredito, isSuccess: updateEstatusSuccess, isError: updateEstatusError }] = useUpdateCartaComercialEstatusMutation();
   const [clonarCarta, { data: clonData, isSuccess: clonSuccess, isError: clonError }] = useClonarCartaComercialMutation();
+  const [getSwiftBase64, { data: swiftRsp, isSuccess: isSwiftSuccess, isError: isSwiftError }] = useLazyGetSwiftBase64Query();
 
   const _handleClickOpenSwift = (cartaCreditoDetalle: ICartaComercial) => {
-    console.log(cartaCreditoDetalle);
-    if (cartaCreditoDetalle.Enmiendas && cartaCreditoDetalle.Enmiendas[0].DocumentoSwift) {
-      const downloadLink = document.createElement("a");
-
-      downloadLink.href = cartaCreditoDetalle.Enmiendas[0].DocumentoSwift;
-
-      downloadLink.download = (cartaCreditoDetalle.NumCartaCredito || "Documento Swift") + ".pdf";
-
-      downloadLink.click();
+    if (cartaCreditoDetalle.Id) {
+      getSwiftBase64(cartaCreditoDetalle.Id);
     }
   };
 
@@ -118,6 +113,28 @@ export const CartasDeCreditoDetalle = () => {
       getCartaComercial(routeParams.cartaCreditoId);
     }
   }, [routeParams]);
+
+  useEffect(() => {
+    if (isSwiftSuccess && swiftRsp && swiftRsp.DataString) {
+      const linkSource = `data:application/pdf;base64,${swiftRsp.DataString}`;
+      const downloadLink = document.createElement("a");
+      const fileName = `${cartaCreditoDetalle?.NumCartaCredito || "swift"}.pdf`;
+      downloadLink.href = linkSource;
+      downloadLink.download = fileName;
+      downloadLink.click();
+    }
+
+    if (isSwiftError) {
+      dispatch(
+        addToast({
+          title: "Error",
+          message: "Ocurrió un error al descargar Swift",
+          type: "error",
+        })
+      );
+    }
+  }, [isSwiftSuccess, isSwiftError, swiftRsp])
+
 
   useEffect(() => {
     if (clonSuccess) {
