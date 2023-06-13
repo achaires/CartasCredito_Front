@@ -42,7 +42,6 @@ export const rootApi = createApi({
       const s = getState() as RootState;
 
       if (s.auth.accessToken) {
-        console.log("Querying with token:", s.auth.accessToken);
         headers.set("authorization", `Bearer ${s.auth.accessToken}`);
       }
 

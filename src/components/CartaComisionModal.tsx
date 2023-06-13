@@ -110,7 +110,7 @@ export const CartaComisionModal = ({ cartaCreditoId, show, cartaBancoId, handleC
               <div className="md:flex md:items-center md:gap-2">
                 <div className="mb-4 w-1/34">
                   <Label value="Fecha de Cargo" />
-                  <Datepicker displayFormat="dd/MM/yyyy" value={fechaCargo} onChange={_handleDateChange} showFooter={false} asSingle />
+                  <Datepicker displayFormat="DD/MM/YYYY" value={fechaCargo} onChange={_handleDateChange} showFooter={false} asSingle />
                 </div>
                 <div className="mb-4 w-2/3">
                   <Label value="Comision" />

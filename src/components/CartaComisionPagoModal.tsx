@@ -157,7 +157,7 @@ export const CartaComisionPagoModal = ({ show, cartaComision, cartaMonedaId, mon
               </div>
               <div className="mb-4">
                 <Label value="Fecha de Pago" />
-                <Datepicker displayFormat="dd/MM/yyyy" value={fechaPago} onChange={_handleDateChange} showFooter={false} asSingle />
+                <Datepicker displayFormat="DD/MM/YYYY" value={fechaPago} onChange={_handleDateChange} showFooter={false} asSingle />
               </div>
             </form>
           </div>

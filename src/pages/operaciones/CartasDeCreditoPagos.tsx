@@ -207,7 +207,9 @@ export const CartasDeCreditoPagos = () => {
         </a>  */}
       </div>
 
-      {cartaCreditoDetalle && cartaCreditoDetalle.Id && <CartaPagoModal show={showPagoModal} handleClose={() => setShowPagoModal(false)} cartaCreditoId={cartaCreditoDetalle.Id} />}
+      {cartaCreditoDetalle && cartaCreditoDetalle.Id && (
+        <CartaPagoModal show={showPagoModal} handleClose={() => setShowPagoModal(false)} cartaCreditoId={cartaCreditoDetalle.Id} />
+      )}
       {cartaCreditoDetalle && cartaCreditoDetalle.Id && selectedPago && (
         <CartaPagoManualModal
           moneda={cartaCreditoDetalle.Moneda ? cartaCreditoDetalle.Moneda : ""}
@@ -215,6 +217,9 @@ export const CartasDeCreditoPagos = () => {
           handleClose={() => setShowPagoManualModal(false)}
           pagoId={selectedPago.Id}
           monto={selectedPagoMonto}
+          setMonto={(monto) => {
+            setSelectedPagoMonto(monto);
+          }}
         />
       )}
     </>

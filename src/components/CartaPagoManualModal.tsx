@@ -10,11 +10,12 @@ type Props = {
   pagoId: number;
   show: boolean;
   handleClose: () => void;
+  setMonto: (nuevoMonto: number) => void;
   monto: number;
   moneda: string;
 };
 
-export const CartaPagoManualModal = ({ pagoId, show, monto, moneda, handleClose }: Props) => {
+export const CartaPagoManualModal = ({ pagoId, show, monto, moneda, handleClose, setMonto }: Props) => {
   const [fechaPago, setFechaPago] = useState({
     startDate: null,
     endDate: null,
@@ -25,7 +26,6 @@ export const CartaPagoManualModal = ({ pagoId, show, monto, moneda, handleClose 
   const [updatePago, { isLoading, isSuccess, isError, data }] = useUpdatePagoMutation();
 
   const _submit = () => {
-    console.log(fechaPago);
     if (!fechaPago.startDate) {
       dispatch(
         addToast({
@@ -42,6 +42,7 @@ export const CartaPagoManualModal = ({ pagoId, show, monto, moneda, handleClose 
       Id: pagoId,
       Estatus: 3,
       FechaPago: fechaPago.startDate ? fechaPago.startDate : "",
+      Monto: monto,
     });
   };
 
@@ -86,6 +87,10 @@ export const CartaPagoManualModal = ({ pagoId, show, monto, moneda, handleClose 
     setFechaPago(newValue);
   };
 
+  const _handleMontoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setMonto(Number(e.target.value));
+  };
+
   return (
     <>
       <Modal dismissible show={show} onClose={handleClose} size="md">
@@ -98,11 +103,11 @@ export const CartaPagoManualModal = ({ pagoId, show, monto, moneda, handleClose 
               </div>
               <div className="mb-4">
                 <Label value="Fecha de Pago" />
-                <Datepicker displayFormat="dd/MM/yyyy" value={fechaPago} onChange={_handleDateChange} showFooter={false} asSingle />
+                <Datepicker displayFormat="DD/MM/YYYY" value={fechaPago} onChange={_handleDateChange} showFooter={false} asSingle />
               </div>
               <div className="mb-4">
                 <Label value="Monto" />
-                <TextInput type="text" value={numeral(monto).format("$0,0.00")} disabled />
+                <TextInput type="text" value={monto} onChange={_handleMontoChange} />
               </div>
             </form>
           </div>

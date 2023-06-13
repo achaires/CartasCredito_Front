@@ -169,7 +169,6 @@ export const Compradores = () => {
             <Export enabled={true} texts={txtsExport} allowExportSelectedData={true} />
             <Column dataField="Nombre" />
             <Column dataField="Empresa" />
-            <Column dataField="TotalLinea" format="currency" dataType="number" />
             <Column caption="" cellRender={_toggleCellComponent} width={200} alignment="center" allowExporting={false} />
             <Column caption="" cellRender={_editCellComponent} width={60} alignment="center" allowExporting={false} />
           </DataGrid>

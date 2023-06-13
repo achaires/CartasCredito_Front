@@ -14,7 +14,6 @@ import { useNavigate, useParams } from "react-router-dom";
 
 type TInsertFormData = {
   Nombre: string;
-  TotalLinea: number;
   Descripcion: string;
 };
 
@@ -33,7 +32,8 @@ export const BancoAgregar = () => {
   const dispatch = useAppDispatch();
 
   const [getBancoDetalle, { data: bancoDetalle, isSuccess: bancoDetalleSuccess, isError: bancoDetalleError }] = useLazyGetBancoQuery();
-  const [addModel, { data: addModelData, isSuccess: isAddModelSuccess, isLoading: isAddModelLoading, isError: isAddModelError, error: addModelError }] = useAddBancoMutation();
+  const [addModel, { data: addModelData, isSuccess: isAddModelSuccess, isLoading: isAddModelLoading, isError: isAddModelError, error: addModelError }] =
+    useAddBancoMutation();
   const [updateModel, { data: updModelData, isSuccess: isUpdModelSuccess, isLoading: isUpdModelLoading, isError: isUpdModelError, error: updModelError }] =
     useUpdateBancoMutation();
   const [toggleContacto] = useToggleContactoMutation();
@@ -62,7 +62,7 @@ export const BancoAgregar = () => {
     if (editId > 0) {
       updateModel({ ...formData, Id: editId });
     } else {
-      addModel({ Nombre: formData.Nombre, Descripcion: formData.Descripcion, TotalLinea: formData.TotalLinea });
+      addModel({ Nombre: formData.Nombre, Descripcion: formData.Descripcion });
     }
   });
 
@@ -74,7 +74,6 @@ export const BancoAgregar = () => {
         .unwrap()
         .then((rsp) => {
           setValue("Nombre", rsp.Nombre);
-          setValue("TotalLinea", rsp.TotalLinea);
           setValue("Descripcion", rsp.Descripcion);
         })
         .catch((err) => {
@@ -119,11 +118,6 @@ export const BancoAgregar = () => {
                 <div className="mb-2">
                   <Label htmlFor="nombre" value="Nombre" />
                   <TextInput id="nombre" type="text" placeholder="Ingrese el nombre para el nuevo registro" required={true} {...register("Nombre")} />
-                </div>
-
-                <div className="mb-2">
-                  <Label htmlFor="totalLinea" value="Total Línea" />
-                  <TextInput id="totalLinea" type="number" placeholder="Ingrese el total de línea de crédito" required={true} {...register("TotalLinea")} />
                 </div>
               </div>
               <div className="md:col-span-6">

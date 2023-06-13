@@ -47,4 +47,5 @@ export interface IPagoUpdate {
   Id: number;
   Estatus: number;
   FechaPago: string;
+  Monto?: number;
 }

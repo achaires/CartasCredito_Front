@@ -96,7 +96,7 @@ export const CartaPagoModal = ({ cartaCreditoId, show, handleClose }: Props) => 
             <form>
               <div className="mb-4">
                 <Label value="Fecha de Vencimiento" />
-                <Datepicker displayFormat="dd/MM/yyyy" value={fechaVencimiento} onChange={_handleDateChange} showFooter={false} asSingle />
+                <Datepicker displayFormat="DD/MM/YYYY" value={fechaVencimiento} onChange={_handleDateChange} showFooter={false} asSingle />
               </div>
               <div className="mb-4">
                 <Label value="Monto" />

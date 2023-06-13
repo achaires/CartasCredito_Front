@@ -72,9 +72,9 @@ export const Bancos = () => {
     }
 
     if (editId > 0) {
-      updateModel({ Id: editId, Nombre: nombre, Descripcion: descripcion, TotalLinea: totalLinea });
+      updateModel({ Id: editId, Nombre: nombre, Descripcion: descripcion });
     } else {
-      addModel({ Nombre: nombre, Descripcion: descripcion, TotalLinea: totalLinea });
+      addModel({ Nombre: nombre, Descripcion: descripcion });
     }
   }, [editId, nombre, descripcion, totalLinea]);
 
@@ -202,18 +202,6 @@ export const Bancos = () => {
                 required={true}
                 onChange={(e) => setNombre(e.target.value)}
                 value={nombre}
-              />
-            </div>
-
-            <div className="mb-4">
-              <Label htmlFor="totalLinea" value="Total Línea" />
-              <TextInput
-                id="totalLinea"
-                type="number"
-                placeholder="Ingrese el total de línea de crédito"
-                required={true}
-                onChange={(e) => setTotalLinea(Number(e.target.value))}
-                value={totalLinea}
               />
             </div>
 

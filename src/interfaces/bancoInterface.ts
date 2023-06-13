@@ -15,7 +15,6 @@ export interface IBanco {
 
 export interface IBancoInsert {
   Nombre: string;
-  TotalLinea: number;
   Descripcion?: string | null;
 }
 
