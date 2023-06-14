@@ -21,8 +21,6 @@ export const CartasDeCreditoPagos = () => {
   const [selectedPago, setSelectedPago] = useState<IPago | null>(null);
   const [selectedPagoMonto, setSelectedPagoMonto] = useState(0);
 
-  const dispatch = useAppDispatch();
-
   const [getCartaComercial, { data: cartaCreditoDetalle, isLoading }] = useLazyGetCartaComercialQuery();
 
   const _handleBack = useCallback(() => {
@@ -111,19 +109,19 @@ export const CartasDeCreditoPagos = () => {
           </div>
           <div className="md:col-span-2">
             <Label value="Monto Original L/C:" />
-            <TextInput type="text" defaultValue={numeral(cartaCreditoDetalle.MontoOriginalLC).format("$0,0.00")} disabled />
+            <TextInput type="text" value={numeral(cartaCreditoDetalle.MontoOriginalLC).format("$0,0.00")} readOnly disabled />
           </div>
           <div className="md:col-span-2">
             <Label value="Pagos Efectuados:" />
-            <TextInput type="text" defaultValue={numeral(cartaCreditoDetalle.PagosEfectuados).format("$0,0.00")} disabled />
+            <TextInput type="text" value={numeral(cartaCreditoDetalle.PagosEfectuados).format("$0,0.00")} readOnly disabled />
           </div>
           <div className="md:col-span-2">
             <Label value="Pagos Programados:" />
-            <TextInput type="text" defaultValue={numeral(cartaCreditoDetalle.PagosProgramados).format("$0,0.00")} disabled />
+            <TextInput type="text" value={numeral(cartaCreditoDetalle.PagosProgramados).format("$0,0.00")} readOnly disabled />
           </div>
           <div className="md:col-span-2">
             <Label value="Pagos Cancelados:" />
-            <TextInput type="text" defaultValue="0.00" disabled />
+            <TextInput type="text" value="0.00" readOnly disabled />
           </div>
         </div>
       </form>

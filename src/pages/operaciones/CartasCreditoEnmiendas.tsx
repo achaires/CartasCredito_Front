@@ -24,7 +24,7 @@ const validationSchema = z
     DescripcionMercancia: z.string().nullable().optional(),
     ConsideracionesAdicionales: z.string().nullable().optional(),
     InstruccionesEspeciales: z.string().nullable().optional(),
-    DiasParaPresentarDocumentos: z.number(),
+    DiasParaPresentarDocumentos: z.number().default(0),
   })
   .refine(
     (args) => {
@@ -132,7 +132,7 @@ export const CartasCreditoEnmiendas = () => {
       setValue("ConsideracionesAdicionales", cartaCreditoDetalle.Enmiendas[0].ConsideracionesAdicionales);
       setValue("InstruccionesEspeciales", cartaCreditoDetalle.Enmiendas[0].InstruccionesEspeciales);
     }
-  }, [isGetDetalleSuccess]);
+  }, [isGetDetalleSuccess, cartaCreditoDetalle]);
 
   useEffect(() => {
     if (approveIsSuccess && approveData) {
@@ -247,7 +247,7 @@ export const CartasCreditoEnmiendas = () => {
                   Referencia de Carta de Crédito: <span>{cartaCreditoDetalle.NumCartaCredito}</span>
                 </p>
                 <p className="flex-1 flex items-center justify-between">
-                  Nombre del Contacto de Solicitante: <span>Test User</span>
+                  Nombre del Contacto de Solicitante:
                 </p>
               </div>
               <div className="md:col-span-4 md:col-start-9 flex items-center">
@@ -298,7 +298,7 @@ export const CartasCreditoEnmiendas = () => {
                         placeholderText="Seleccione Fecha"
                         onChange={(date) => field.onChange(date)}
                         selected={field.value}
-                        dateFormat="yyyy/MM/dd"
+                        dateFormat="dd/MM/yyyy"
                       />
                     )}
                   />
@@ -324,7 +324,7 @@ export const CartasCreditoEnmiendas = () => {
                         placeholderText="Seleccione Fecha"
                         onChange={(date) => field.onChange(date)}
                         selected={field.value}
-                        dateFormat="yyyy/MM/dd"
+                        dateFormat="dd/MM/yyyy"
                       />
                     )}
                   />

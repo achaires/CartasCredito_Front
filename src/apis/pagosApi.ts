@@ -12,7 +12,7 @@ export const pagosApiSlice = rootApi.injectEndpoints({
       query: () => `/dashboard/pagosprogramados`,
     }),
     addPago: builder.mutation<IRespuestaFormato, IPagoInsert>({
-      invalidatesTags: ["Pagos"],
+      invalidatesTags: ["Pagos", "CartasCreditoDetalle"],
       query: (data) => {
         return {
           url: `/pagos`,
@@ -22,7 +22,7 @@ export const pagosApiSlice = rootApi.injectEndpoints({
       },
     }),
     updatePago: builder.mutation<IRespuestaFormato, IPagoUpdate>({
-      invalidatesTags: ["Pagos"],
+      invalidatesTags: ["Pagos", "CartasCreditoDetalle"],
       query: (data) => {
         return {
           url: `/pagos/${data.Id}`,

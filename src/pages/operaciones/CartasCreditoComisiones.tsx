@@ -114,15 +114,15 @@ export const CartasCreditoComisiones = () => {
           </div>
           <div className="md:col-span-2">
             <Label value="Monto Original L/C:" />
-            <TextInput type="text" defaultValue={numeral(cartaCreditoDetalle.MontoOriginalLC).format("$0,0.00")} disabled />
+            <TextInput type="text" value={numeral(cartaCreditoDetalle.MontoOriginalLC).format("$0,0.00")} disabled readOnly />
           </div>
           <div className="md:col-span-2">
             <Label value="Pagos Efectuados:" />
-            <TextInput type="text" defaultValue={numeral(cartaCreditoDetalle.PagosEfectuados).format("$0,0.00")} disabled />
+            <TextInput type="text" value={numeral(cartaCreditoDetalle.PagosEfectuados).format("$0,0.00")} disabled readOnly />
           </div>
           <div className="md:col-span-2">
             <Label value="Pagos Programados:" />
-            <TextInput type="text" defaultValue={numeral(cartaCreditoDetalle.PagosProgramados).format("$0,0.00")} disabled />
+            <TextInput type="text" value={numeral(cartaCreditoDetalle.PagosProgramados).format("$0,0.00")} disabled readOnly />
           </div>
           <div className="md:col-span-2">
             <Label value="Pagos Cancelados:" />

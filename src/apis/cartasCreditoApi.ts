@@ -14,7 +14,7 @@ export const cartasCreditoApiSlice = rootApi.injectEndpoints({
       },
     }),
     getCartaComercial: builder.query<ICartaComercial, string>({
-      providesTags: ["CartasCreditoDetalle"],
+      providesTags: ["CartasCreditoDetalle", "Pagos"],
       query: (ccId) => {
         return {
           url: `/cartascredito/${ccId}`,
