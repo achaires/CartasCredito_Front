@@ -3,7 +3,7 @@ import loginBgImg from "../assets/img/cartas-login-bg-opt.png";
 import brandImg from "../assets/img/gis-logo-gris.png";
 import { useLazyGetCurrentUserQuery, useLazyLoginUserQuery } from "@/apis";
 import { toast } from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch } from "@/store";
 import { loggedIn, storeAccessToken } from "@/store/authSlice";
 
@@ -13,7 +13,7 @@ export const Login = () => {
   const [userName, setUserName] = useState("");
   const [userPass, setUserPass] = useState("");
 
-  const [loginUser, { data: loginRsp, isSuccess, isError, isLoading }] = useLazyLoginUserQuery();
+  const [loginUser, { data: loginRsp, isSuccess, isError, isLoading, error: loginError }] = useLazyLoginUserQuery();
   const [getCurrentUser, { data: getUserRsp, isSuccess: getUserSuccess, isLoading: getUserLoading, isError: getUserError }] = useLazyGetCurrentUserQuery();
 
   const dispatch = useAppDispatch();
@@ -29,9 +29,17 @@ export const Login = () => {
     }
 
     if (isError) {
-      toast.error("Verifique usuario y contraseña", { position: "top-right" });
+      // @ts-ignore
+      if (loginError && loginError.data && loginError.data === "LOGIN_GIS") {
+        toast.error("Verifique su cuenta GIS", { position: "top-right" });
+      }
+
+      // @ts-ignore
+      if (loginError && loginError.data && loginError.data === "LOGIN_APP") {
+        toast.error("Verifique usuario y contraseña", { position: "top-right" });
+      }
     }
-  }, [isLoading, isError, isSuccess]);
+  }, [isLoading, isError, isSuccess, loginRsp, loginError]);
 
   useEffect(() => {
     if (getUserSuccess && getUserRsp && getUserRsp.Activo) {
@@ -83,6 +91,12 @@ export const Login = () => {
             <button onClick={_handleLogin} className="block w-full py-3 text-base rounded-full bg-brandDark text-white">
               INICIAR SESIÓN
             </button>
+
+            <div className="mt-4 text-center">
+              <Link to="/actualizar-contrasena" className="text-sm">
+                Actualizar Contraseña
+              </Link>
+            </div>
           </div>
         </div>
       </div>

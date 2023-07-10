@@ -63,7 +63,7 @@ const router = createHashRouter([
     element: <Registro />,
   },
   {
-    path: "/recuperar-contrasena",
+    path: "/actualizar-contrasena",
     element: <Recover />,
   },
   {

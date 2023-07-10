@@ -41,6 +41,15 @@ export const authApiSlice = rootApi.injectEndpoints({
         };
       },
     }),
+    updateGISPassword: builder.mutation<IRespuestaFormato, { UserName: string; Password: string; }>({
+      query: (userData) => {
+        return {
+          url: `/invitaciones/actualizarcontrasena`,
+          method: "POST",
+          body: userData,
+        };
+      },
+    }),
     getCurrentUser: builder.query<IUser, void>({
       providesTags: ["UserDetail"],
       query: () => `/account/user`,
@@ -52,5 +61,5 @@ export const authApiSlice = rootApi.injectEndpoints({
   }),
 });
 
-export const { useLazyLoginUserQuery, useLazyGetCurrentUserQuery, useLogoutUserMutation, useRegisterUserMutation, useLazyValidateTokenQuery, useRegisterUserGISMutation } =
+export const { useLazyLoginUserQuery, useLazyGetCurrentUserQuery, useLogoutUserMutation, useRegisterUserMutation, useLazyValidateTokenQuery, useRegisterUserGISMutation, useUpdateGISPasswordMutation } =
   authApiSlice;

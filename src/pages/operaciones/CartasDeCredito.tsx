@@ -80,7 +80,7 @@ export const CartasDeCredito = () => {
   });
 
   useEffect(() => {
-    _handleFiltroSubmit();
+    //_handleFiltroSubmit();
   }, []);
 
   const _detailCellComponent = useCallback((rowData: ColumnCellTemplateData) => {
@@ -121,6 +121,10 @@ export const CartasDeCredito = () => {
       return <p>Pagada</p>;
     }
 
+    if (rowData.data && rowData.data.Estatus === 5) {
+      return <p>Cancelada</p>;
+    }
+
     return <p>Registrada</p>;
   }, []);
 
@@ -149,16 +153,6 @@ export const CartasDeCredito = () => {
       </div>
 
       <div className="mb-6 md:grid md:grid-cols-12 md:gap-4">
-        <div className="md:col-span-3">
-          <Label value="Rango de Fecha" />
-          <Datepicker
-            displayFormat="DD/MM/YYYY"
-            value={{ startDate: dateStart, endDate: dateEnd }}
-            onChange={_handleDateChange}
-            showFooter={true}
-            configs={{ footer: { cancel: "Cancelar", apply: "Aplicar" } }}
-          />
-        </div>
         <div className="md:col-span-3">
           <Label value="No. Carta Crédito" />
           <TextInput {...register("NumCarta")} />
@@ -206,7 +200,7 @@ export const CartasDeCredito = () => {
         </div>
         <div className="md:col-span-3">
           <Label value="Estatus de la Carta" />
-          <Select>
+          <Select {...register("Estatus")}>
             <option value={0}>Seleccione opción</option>
             <option value={1}>Registrada</option>
             <option value={2}>Emitida</option>
