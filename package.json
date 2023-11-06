@@ -18,6 +18,7 @@
     "@types/numeral": "^2.0.2",
     "@types/react-datepicker": "^4.10.0",
     "csstype": "^3.1.1",
+    "date-fns": "^2.30.0",
     "dayjs": "^1.11.7",
     "devextreme": "^22.2.4",
     "devextreme-react": "^22.2.4",

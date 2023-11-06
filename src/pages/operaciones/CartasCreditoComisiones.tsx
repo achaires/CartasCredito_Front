@@ -12,6 +12,9 @@ import { EstatusButton } from "./CartasDeCreditoDetalle";
 import { ICartaCreditoComision, IPago } from "@/interfaces";
 import { CartaComisionPagoModal } from "@/components/CartaComisionPagoModal";
 import { apiHost } from "@/utils/apiConfig";
+import es from "date-fns/locale/es";
+import { format } from "date-fns";
+const locale = es;
 
 export const CartasCreditoComisiones = () => {
   const routeParams = useParams();
@@ -170,13 +173,13 @@ export const CartasCreditoComisiones = () => {
                   </Table.Cell>
                   <Table.Cell align="center">{item.NumeroComision}</Table.Cell>
                   <Table.Cell>{item.Comision}</Table.Cell>
-                  <Table.Cell>{item.FechaCargo}</Table.Cell>
+                  <Table.Cell>{format(new Date(item.FechaCargo), "dd-MMMM-yyyy", { locale })}</Table.Cell>
                   <Table.Cell align="right">{numeral(item.Monto).format("$0,0.00")}</Table.Cell>
                   <Table.Cell>{item.Moneda}</Table.Cell>
                   {/* <Table.Cell>
                     {numeral(item.TipoCambio).format("$0,0.00")}
                   </Table.Cell> */}
-                  <Table.Cell>{item.FechaPago}</Table.Cell>
+                  <Table.Cell>{item.FechaPago !== null && format(new Date(item.FechaPago), "dd-MMMM-yyyy", { locale })}</Table.Cell>
                   <Table.Cell align="right">
                     {item.PagoMonedaId !== cartaCreditoDetalle.MonedaId
                       ? numeral(item.MontoPagado * item.TipoCambio).format("$0,0.00")

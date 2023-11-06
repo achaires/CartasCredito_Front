@@ -11,6 +11,9 @@ import numeral from "numeral";
 import { EstatusButton } from "./CartasDeCreditoDetalle";
 import { IPago } from "@/interfaces";
 import { apiHost } from "@/utils/apiConfig";
+import es from "date-fns/locale/es";
+import { format } from "date-fns";
+const locale = es;
 
 export const CartasDeCreditoPagos = () => {
   const routeParams = useParams();
@@ -161,9 +164,9 @@ export const CartasDeCreditoPagos = () => {
                     <Radio value={item.Id} onChange={(e) => setSelectedPago(item)} checked={selectedPago?.Id === item.Id} />
                   </Table.Cell>
                   <Table.Cell>{item.NumeroPago}</Table.Cell>
-                  <Table.Cell>{item.FechaVencimiento}</Table.Cell>
+                  <Table.Cell>{format(new Date(item.FechaVencimiento), "dd-MMMM-yyyy", { locale })}</Table.Cell>
                   <Table.Cell align="right">{numeral(item.MontoPago).format("$0,0.00")}</Table.Cell>
-                  <Table.Cell>{item.FechaPago}</Table.Cell>
+                  <Table.Cell>{item.FechaPago && format(new Date(item.FechaPago), "dd-MMMM-yyyy", { locale })}</Table.Cell>
                   <Table.Cell align="right">{numeral(item.MontoPagado).format("$0,0.00")}</Table.Cell>
                   <Table.Cell>{item.NumeroFactura}</Table.Cell>
                 </Table.Row>

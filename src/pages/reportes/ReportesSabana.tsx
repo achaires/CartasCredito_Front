@@ -9,8 +9,6 @@ import DataGrid, { Column, Export, HeaderFilter, Paging, SearchPanel, Selection 
 import { ColumnCellTemplateData } from "devextreme/ui/data_grid";
 import { useConvertirMutation } from "@/apis/conversionMonedaApi";
 import Datepicker from "react-tailwindcss-datepicker";
-/* import PivotGrid, { FieldChooser } from "devextreme-react/pivot-grid";
-import PivotGridDataSource from "devextreme/ui/pivot_grid/data_source"; */
 
 const txtsExport = {
   exportAll: "Exportar Todo",
@@ -26,8 +24,6 @@ export const ReportesSabana = () => {
 
   const [empresaId, setEmpresaId] = useState(0);
   const [tipoReporteId, setTipoReporteId] = useState(0);
-  /* const [fechaInicio, setFechaInicio] = useState("");
-  const [fechaFin, setFechaFin] = useState(""); */
   const [fechaDivisas, setFechaDivisas] = useState({
     startDate: null,
     endDate: null,
@@ -137,28 +133,21 @@ export const ReportesSabana = () => {
               <option value="1">Análisis Ejecutivo de Cartas</option>
               <option value="8">Análisis Cartas de Crédito</option>
               <option value="2">Comisiones por Tipo de Comisión</option>
-              {/* <option value="3">Cartas de Crédito Stand By</option>
+              <option value="3">Cartas de Crédito Stand By</option>
               <option value="4">Vencimientos de Cartas de Crédito</option>
               <option value="5">Comisiones de Cartas de Crédito por Estatus</option>
               <option value="6">Líneas de Crédito Disponibles</option>
-              <option value="7">Total Outstanding</option> */}
+              <option value="7">Total Outstanding</option>
+              {/* <option value="9">Comisiones</option> */}
             </Select>
           </div>
           <div className="flex-1 mb-4 lg:mb-0">
             <Label value="Rango de Fecha" />
-            {/* <TextInput
-              type="date"
-              onChange={(e) => setFechaInicio(e.target.value)}
-            /> */}
             <Datepicker displayFormat="DD-MM-YYYY" value={fechaRango} onChange={_handleDateChange} showFooter={false} />
           </div>
           <div className="flex-1 mb-4 lg:mb-0">
             <Label value="Conversión de Divisas" />
-            <Datepicker displayFormat="DD-MM-YYYY" value={fechaDivisas} onChange={_handleDivisaDateChange} showFooter={false} asSingle />
-            {/* <TextInput
-              type="date"
-              onChange={(e) => _onFechaDivisasChange(e.target.value)}
-            /> */}
+            <Datepicker displayFormat="DD-MM-YYYY" value={fechaDivisas} onChange={_handleDivisaDateChange} showFooter={false} asSingle useRange={false} />
           </div>
         </div>
 
@@ -167,12 +156,6 @@ export const ReportesSabana = () => {
         <div className="flex-1 mb-4 lg:mb-0">
           <Button onClick={(e) => _onSubmit()}>Generar Reporte</Button>
         </div>
-
-        {/* {(isLoadingReporteAnalisisCartas || isLoadingComisionesPorTipoComision) && (
-          <div className="mb-6 flex items-center justify-center">
-            <Spinner size="xl" />
-          </div>
-        )} */}
 
         <div className="mb-6">
           {reportesRsp && !isLoadingReportes && (
@@ -183,7 +166,7 @@ export const ReportesSabana = () => {
               <Selection mode="multiple" showCheckBoxesMode="always" />
               <Export enabled={true} texts={txtsExport} allowExportSelectedData={true} />
               <Column dataField="TipoReporte" />
-              <Column dataField="Creado" dataType="datetime" format="dd/MM/yyyy HH:mm" defaultSortOrder="asc" sortIndex={0} />
+              <Column dataField="Creado" dataType="datetime" format="dd/MM/yyyy HH:mm" defaultSortOrder="desc" sortIndex={0} />
               <Column dataField="Descarga" cellRender={_filenameCellComponent} />
             </DataGrid>
           )}

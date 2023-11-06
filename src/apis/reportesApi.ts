@@ -17,7 +17,7 @@ export const reportesApiSlice = rootApi.injectEndpoints({
       invalidatesTags: ["Reportes"],
       query: (data) => {
         return {
-          url: `/reportes/generar`,
+          url: `/reportes2/generar`,
           body: data,
           method: "POST",
         };
