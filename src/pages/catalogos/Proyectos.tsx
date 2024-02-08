@@ -61,13 +61,16 @@ export const Proyectos = () => {
   const _handleEdit = (modelId: number) => {
     let editModel = catalogoData?.find((i) => i.Id === modelId);
 
-    if (editModel) {
+      if (editModel) {
+          console.log(editModel);
       setEditId(editModel.Id);
       setValue("EmpresaId", editModel.EmpresaId);
       setValue("Nombre", editModel.Nombre);
       setValue("Descripcion", editModel.Descripcion);
-      setValue("FechaApertura", editModel.FechaApertura);
-      setValue("FechaCierre", editModel.FechaCierre);
+          setValue("FechaApertura", editModel.FechaAperturaStr);
+          setValue("FechaCierre", editModel.FechaCierreStr);
+          setValue("FechaAperturaStr", editModel.FechaAperturaStr);
+          setValue("FechaCierreStr", editModel.FechaCierreStr);
 
       setShowAddForm(true);
     } else {
@@ -75,35 +78,51 @@ export const Proyectos = () => {
     }
   };
 
-  const _handleSubmit = handleSubmit((formData) => {
-    if (editId > 0) {
-      updateModelo({ ...formData, Id: editId });
-    } else {
-      addModelo(formData);
-    }
+    const _handleSubmit = handleSubmit((formData) => {
+
+        if (formData.FechaAperturaStr == "") {
+            dispatch(addToast({ title: "Ocurrió un Error", message: "Ingresa una fecha de apertura válida", type: "error" }));
+            return;
+        }
+        if (formData.FechaCierreStr == "") {
+            dispatch(addToast({ title: "Ocurrió un Error", message: "Ingresa una fecha de cierre válida", type: "error" }));
+            return;
+        }
+
+        formData.FechaApertura = formData.FechaAperturaStr;
+        formData.FechaCierre = formData.FechaCierreStr;
+        if (editId > 0) {
+          updateModelo({ ...formData, Id: editId });
+        } else {
+          addModelo(formData);
+        }
   });
 
   /* EFFECT HOOKS */
   useEffect(() => {
     if (rsp && rsp.DataInt !== null && rsp.DataInt > 0) {
       dispatch(addToast({ title: "Éxito", message: "Registro agregado con éxito", type: "success" }));
-      _handleHideModal();
+        _handleHideModal();
+        return;
     }
 
     if (updateRsp && updateRsp.DataInt !== null && updateRsp.DataInt > 0) {
       dispatch(addToast({ title: "Éxito", message: "Registro actualizado con éxito", type: "success" }));
-      _handleHideModal();
+        _handleHideModal();
+        return;
     }
 
     if (rsp && rsp.DataInt !== null && rsp.DataInt === 0) {
       if (rsp.Errors && rsp.Errors[0]) {
-        dispatch(addToast({ title: "Ocurrió un Error", message: rsp.Errors[0], type: "error" }));
+          dispatch(addToast({ title: "Ocurrió un Error", message: rsp.Errors[0], type: "error" }));
+          return;
       }
     }
 
     if (addError) {
       console.error(addError);
-      dispatch(addToast({ title: "Error", message: "Ocurrió un error al agregar", type: "error" }));
+        dispatch(addToast({ title: "Error", message: "Ocurrió un error al agregar", type: "error" }));
+        return;
     }
   }, [rsp, addError, updateRsp]);
 
@@ -167,8 +186,8 @@ export const Proyectos = () => {
             <Export enabled={true} texts={txtsExport} allowExportSelectedData={true} />
             <Column dataField="Nombre" />
             <Column dataField="FechaApertura" dataType="datetime" />
-            <Column dataField="FechaCierre" dataType="datetime" />
-            <Column caption="" cellRender={_toggleCellComponent} width={200} alignment="center" allowExporting={false} />
+                      <Column dataField="FechaCierre" dataType="datetime" />
+                      <Column dataField="Activo" caption="" cellRender={_toggleCellComponent} width={200} alignment="center" allowExporting={false} defaultSortIndex={0} defaultSortOrder="desc" />
             <Column caption="" cellRender={_editCellComponent} width={60} alignment="center" allowExporting={false} />
           </DataGrid>
         </div>
@@ -183,7 +202,7 @@ export const Proyectos = () => {
               </div>
               <div className="md:grid md:grid-cols-12 md:gap-4">
                 <div className="md:col-span-4">
-                  <Label htmlFor="empresaId" value="Empresa" />
+                                  <Label htmlFor="empresaId" value="Empresa *" />
                   <Select id="empresaId" required={true} {...register("EmpresaId")}>
                     <option value={0}>Seleccione opción</option>
                     {catEmpresas
@@ -198,12 +217,12 @@ export const Proyectos = () => {
                   </Select>
                 </div>
                 <div className="md:col-span-4">
-                  <Label value="Fecha Apertura" />
-                  <TextInput type="date" {...register("FechaApertura")} />
+                                  <Label value="Fecha Apertura *" />
+                                  <TextInput type="date" {...register("FechaAperturaStr")} />
                 </div>
                 <div className="md:col-span-4">
-                  <Label value="Fecha Cierre" />
-                  <TextInput type="date" {...register("FechaCierre")} />
+                                  <Label value="Fecha Cierre *" />
+                  <TextInput type="date" {...register("FechaCierreStr")} />
                 </div>
               </div>
               <div>

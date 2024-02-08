@@ -81,24 +81,28 @@ export const TiposDeActivo = () => {
     if (rsp && rsp.DataInt !== null && rsp.DataInt > 0) {
       dispatch(addToast({ title: "Éxito", message: "Registro agregado con éxito", type: "success" }));
       _reset();
-      setShowAddForm(false);
+        setShowAddForm(false);
+        return;
     }
 
     if (updateRsp && updateRsp.DataInt !== null && updateRsp.DataInt > 0) {
       dispatch(addToast({ title: "Éxito", message: "Registro actualizado con éxito", type: "success" }));
       _reset();
-      setShowAddForm(false);
+        setShowAddForm(false);
+        return;
     }
 
     if (rsp && rsp.DataInt !== null && rsp.DataInt === 0) {
       if (rsp.Errors && rsp.Errors[0]) {
-        dispatch(addToast({ title: "Ocurrió un Error", message: rsp.Errors[0], type: "error" }));
+          dispatch(addToast({ title: "Ocurrió un Error", message: rsp.Errors[0], type: "error" }));
+          return;
       }
     }
 
     if (addError) {
       console.error(addError);
-      dispatch(addToast({ title: "Error", message: "Ocurrió un error al agregar", type: "success" }));
+        dispatch(addToast({ title: "Error", message: "Ocurrió un error al agregar", type: "success" }));
+        return;
     }
   }, [rsp, addError, updateRsp]);
 
@@ -162,7 +166,7 @@ export const TiposDeActivo = () => {
             <Export enabled={true} texts={txtsExport} allowExportSelectedData={true} />
             <Column dataField="Nombre" />
             <Column dataField="Descripcion" />
-            <Column caption="" cellRender={_toggleCellComponent} width={200} alignment="center" allowExporting={false} />
+                      <Column dataField="Activo" caption="" cellRender={_toggleCellComponent} width={200} alignment="center" allowExporting={false} defaultSortIndex={0} defaultSortOrder="desc"  />
             <Column caption="" cellRender={_editCellComponent} width={60} alignment="center" allowExporting={false} />
           </DataGrid>
         </div>
@@ -171,7 +175,7 @@ export const TiposDeActivo = () => {
           <Modal.Header>Agregar Registro</Modal.Header>
           <Modal.Body>
             <div className="mb-4">
-              <Label htmlFor="nombre" value="Nombre" />
+                          <Label htmlFor="nombre" value="Nombre *" />
               <TextInput
                 id="nombre"
                 type="text"
@@ -183,7 +187,7 @@ export const TiposDeActivo = () => {
             </div>
 
             <div className="mb-4">
-              <Label htmlFor="responsable" value="Responsable" />
+                          <Label htmlFor="responsable" value="Responsable *" />
               <TextInput
                 id="responsable"
                 type="text"

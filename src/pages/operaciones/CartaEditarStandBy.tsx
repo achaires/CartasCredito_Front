@@ -18,6 +18,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import DatePicker from "react-datepicker";
 import { IComprador } from "@/interfaces";
+import { CustomSpinner } from "@/components";
+import { useGetTiposCoberturaQuery } from "../../apis";
 
 // Fix DatePicker + React Hook Form: https://github.com/Hacker0x01/react-datepicker/issues/2165#issuecomment-696095748
 
@@ -34,7 +36,9 @@ const validationSchema = z.object({
   FechaVencimiento: z.date().refine((fv) => fv.toString()),
   /* Incoterm: z.string().min(1), */
   ConsideracionesReclamacion: z.string().min(1),
-  ConsideracionesAdicionales: z.string().min(1),
+    ConsideracionesAdicionales: z.string().min(1),
+    BancoCorresponsalId: z.number().min(1),
+    TipoCoberturaId: z.number().min(1),
 });
 
 type ValidationSchema = z.infer<typeof validationSchema>;
@@ -65,12 +69,15 @@ export const CartaEditarStandBy = () => {
   const { data: catBancos } = useGetBancosQuery();
   const { data: catEmpresas } = useGetEmpresasQuery();
   const { data: catMonedas } = useGetMonedasQuery();
-  const { data: catCompradores } = useGetCompradoresQuery();
+    const { data: catCompradores } = useGetCompradoresQuery();
+    const { data: catCobertura } = useGetTiposCoberturaQuery();
 
   const [getCartaComercial, { data: cartaCreditoDetalle, isLoading: isLoadingDetalle, isSuccess: isSuccessDetalle }] = useLazyGetCartaComercialQuery();
   const [updateCartaStandBy, { data: responseData, isSuccess, isError, isLoading, error }] = useUpdateCartaStandByMutation();
 
   const dispatch = useAppDispatch();
+
+    const [cargaTerminada, setCargaTerminada] = useState(false);
 
   const _handleBack = useCallback(() => {
     nav(-1);
@@ -88,31 +95,43 @@ export const CartaEditarStandBy = () => {
   }, [routeParams]);
 
   useEffect(() => {
-    if (isSuccessDetalle && cartaCreditoDetalle) {
-      setValue("TipoStandBy", cartaCreditoDetalle.TipoStandBy || "");
-      setValue("BancoId", cartaCreditoDetalle.BancoId || 0);
-      setValue("EmpresaId", cartaCreditoDetalle.EmpresaId || 0);
-      setValue("MonedaId", cartaCreditoDetalle.MonedaId || 0);
-      setValue("CompradorId", cartaCreditoDetalle.CompradorId || 0);
-      setValue("MontoOriginalLC", cartaCreditoDetalle.MontoOriginalLC || 0);
-      setValue("ConsideracionesAdicionales", cartaCreditoDetalle.ConsideracionesAdicionales || "");
-      setValue("ConsideracionesReclamacion", cartaCreditoDetalle.ConsideracionesReclamacion || "");
+      const timer = setTimeout(() => {
+          console.log('This will run after 1 second!');
+          if (isSuccessDetalle && cartaCreditoDetalle) {
+              setValue("TipoStandBy", cartaCreditoDetalle.TipoStandBy || "");
+              setValue("BancoId", cartaCreditoDetalle.BancoId || 0);
+              setValue("BancoCorresponsalId", cartaCreditoDetalle.BancoCorresponsalId || 0);
+              setValue("TipoCoberturaId", cartaCreditoDetalle.TipoCoberturaId || 0);
+              setValue("EmpresaId", cartaCreditoDetalle.EmpresaId || 0);
+              setValue("MonedaId", cartaCreditoDetalle.MonedaId || 0);
+              //setValue("CompradorId", cartaCreditoDetalle.CompradorId || 0);
+              setValue("MontoOriginalLC", cartaCreditoDetalle.MontoOriginalLC || 0);
+              setValue("ConsideracionesAdicionales", cartaCreditoDetalle.ConsideracionesAdicionales || "");
+              setValue("ConsideracionesReclamacion", cartaCreditoDetalle.ConsideracionesReclamacion || "");
 
-      if (cartaCreditoDetalle.FechaApertura) {
-        var faDate = new Date(cartaCreditoDetalle.FechaApertura);
-        setValue("FechaApertura", faDate);
-      }
+              /*--*/
+              const timer2 = setTimeout(() => {
+                  setValue("CompradorId", cartaCreditoDetalle.CompradorId || 0);
+              }, 700);
+              /*--*/
 
-      if (cartaCreditoDetalle.FechaLimiteEmbarque) {
-        var fle = new Date(cartaCreditoDetalle.FechaLimiteEmbarque);
-        setValue("FechaLimiteEmbarque", fle);
-      }
+              if (cartaCreditoDetalle.FechaApertura) {
+                  var faDate = new Date(cartaCreditoDetalle.FechaApertura);
+                  setValue("FechaApertura", faDate);
+              }
 
-      if (cartaCreditoDetalle.FechaVencimiento) {
-        var fv = new Date(cartaCreditoDetalle.FechaVencimiento);
-        setValue("FechaVencimiento", fv);
-      }
-    }
+              if (cartaCreditoDetalle.FechaLimiteEmbarque) {
+                  var fle = new Date(cartaCreditoDetalle.FechaLimiteEmbarque);
+                  setValue("FechaLimiteEmbarque", fle);
+              }
+
+              if (cartaCreditoDetalle.FechaVencimiento) {
+                  var fv = new Date(cartaCreditoDetalle.FechaVencimiento);
+                  setValue("FechaVencimiento", fv);
+              }
+          }
+          setCargaTerminada(true);
+      }, 3000);
   }, [isSuccessDetalle]);
 
   useEffect(() => {
@@ -160,8 +179,19 @@ export const CartaEditarStandBy = () => {
     }
   }, [isSuccess, isError, isLoading, error, responseData]);
 
+    const renderDetalle = (
+        <div>
+        </div>
+    );
+    const UnrenderDetalle = (
+        <div>
+            <CustomSpinner />
+        </div>
+    );
+
   return (
-    <>
+      <>
+          {!cargaTerminada ? UnrenderDetalle : renderDetalle}
       <div className="p-6">
         <div className="mb-4">
           <AdminBreadcrumbs
@@ -229,7 +259,36 @@ export const CartaEditarStandBy = () => {
                 </option>
               ))}
           </Select>
-        </div>
+              </div>
+
+
+              <div className="md:col-span-3">
+                  <Label value="Banco Corresponsal" />
+                      <Select {...register("BancoCorresponsalId", { valueAsNumber: true })} color={`${formErrors.BancoCorresponsalId && "failure"}`}>
+                      <option value={0}>Seleccione Opción</option>
+                      {catBancos
+                          ?.filter((c) => c.Activo)
+                          .map((item, index) => (
+                              <option value={item.Id} key={index.toString()}>
+                                  {item.Nombre}
+                              </option>
+                          ))}
+                  </Select>
+              </div>
+
+              <div className="md:col-span-3">
+                  <Label value="Tipo de cobertura" />
+                  <Select {...register("TipoCoberturaId", { valueAsNumber: true })} color={`${formErrors.TipoCoberturaId && "failure"}`}>
+                      <option value={0}>Seleccione Opción</option>
+                      {catCobertura
+                          ?.filter((c) => c.Activo)
+                          .map((item, index) => (
+                              <option value={item.Id} key={index.toString()}>
+                                  {item.Nombre}
+                              </option>
+                          ))}
+                  </Select>
+              </div>
 
         <div className="md:col-span-3">
           <Label value="Empresa" />

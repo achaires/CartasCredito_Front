@@ -163,7 +163,7 @@ export const Comisiones = () => {
             <Export enabled={true} texts={txtsExport} allowExportSelectedData={true} />
             <Column dataField="Nombre" />
             <Column dataField="Descripcion" />
-            <Column caption="" cellRender={_toggleCellComponent} width={200} alignment="center" allowExporting={false} />
+                      <Column dataField="Activo" caption="" cellRender={_toggleCellComponent} width={200} alignment="center" allowExporting={false} defaultSortIndex={0} defaultSortOrder="desc"  />
             <Column caption="" cellRender={_editCellComponent} width={60} alignment="center" allowExporting={false} />
           </DataGrid>
         </div>
@@ -172,7 +172,7 @@ export const Comisiones = () => {
           <Modal.Header>Agregar Registro</Modal.Header>
           <Modal.Body>
             <div className="mb-2">
-              <Label htmlFor="nombre" value="Nombre" />
+              <Label htmlFor="nombre" value="Nombre *" />
               <TextInput id="nombre" type="text" placeholder="" required={true} onChange={(e) => setNombre(e.target.value)} value={nombre} />
             </div>
             <div>

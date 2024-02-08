@@ -31,9 +31,18 @@ export const Empresas = () => {
   const [divisionId, setDivisionId] = useState(1);
   const [nombre, setNombre] = useState("");
   const [rfc, setRfc] = useState("");
-  const [descripcion, setDescripcion] = useState("");
+    const [descripcion, setDescripcion] = useState("");
 
-  const _handleShowModal = useCallback(() => {
+    const _reset = useCallback(() => {
+        setEditId(0);
+        setDivisionId(0);
+        setNombre("");
+        setRfc("");
+        setDescripcion("");
+    }, []);
+
+    const _handleShowModal = useCallback(() => {
+        _reset();
     setShowAddForm(true);
   }, [showAddForm]);
 
@@ -172,7 +181,7 @@ export const Empresas = () => {
             <Column dataField="Nombre" />
             <Column dataField="Division" />
             <Column dataField="RFC" />
-            <Column caption="" cellRender={_toggleCellComponent} width={200} alignment="center" allowExporting={false} />
+                      <Column dataField="Activo" caption="" cellRender={_toggleCellComponent} width={200} alignment="center" allowExporting={false} defaultSortIndex={0} defaultSortOrder="desc" />
             <Column caption="" cellRender={_editCellComponent} width={60} alignment="center" allowExporting={false} />
           </DataGrid>
         </div>
@@ -181,7 +190,7 @@ export const Empresas = () => {
           <Modal.Header>Agregar Empresa</Modal.Header>
           <Modal.Body>
             <div className="mb-4">
-              <Label htmlFor="divisionId" value="División" />
+                          <Label htmlFor="divisionId" value="División *" />
               <Select
                 id="divisionId"
                 required={true}
@@ -203,12 +212,12 @@ export const Empresas = () => {
             </div>
 
             <div className="mb-4">
-              <Label htmlFor="nombre" value="Nombre" />
+                          <Label htmlFor="nombre" value="Nombre *" />
               <TextInput id="nombre" type="text" placeholder="Ingrese el nombre de la empresa" required={true} onChange={(e) => setNombre(e.target.value)} value={nombre} />
             </div>
 
             <div className="mb-4">
-              <Label htmlFor="rfc" value="RFC" />
+                          <Label htmlFor="rfc" value="RFC *" />
               <TextInput id="rfc" type="text" placeholder="Ingrese el rfc de la empresa" required={true} onChange={(e) => setRfc(e.target.value)} value={rfc} />
             </div>
 

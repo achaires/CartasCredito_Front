@@ -30,7 +30,14 @@ export const Divisiones = () => {
   const [nombre, setNombre] = useState("");
   const [descripcion, setDescripcion] = useState("");
 
-  const _handleShowModal = useCallback(() => {
+    const _reset = useCallback(() => {
+        setEditId(0);
+        setNombre("");
+        setDescripcion("");
+    }, [editId, nombre, descripcion]);
+
+    const _handleShowModal = useCallback(() => {
+        _reset();
     setShowAddForm(true);
   }, [showAddForm]);
 
@@ -157,7 +164,7 @@ export const Divisiones = () => {
             <Export enabled={true} texts={txtsExport} allowExportSelectedData={true} />
             <Column dataField="Nombre" />
             <Column dataField="Descripcion" />
-            <Column caption="" cellRender={_toggleCellComponent} width={200} alignment="center" allowExporting={false} />
+                      <Column dataField="Activo" caption="" cellRender={_toggleCellComponent} width={200} alignment="center" allowExporting={false} defaultSortIndex={0} defaultSortOrder="desc" />
             <Column caption="" cellRender={_editCellComponent} width={60} alignment="center" allowExporting={false} />
           </DataGrid>
         </div>
@@ -166,7 +173,7 @@ export const Divisiones = () => {
           <Modal.Header>Agregar División</Modal.Header>
           <Modal.Body>
             <div className="mb-4">
-              <Label htmlFor="nombre" value="Nombre" />
+                          <Label htmlFor="nombre" value="Nombre *" />
               <TextInput id="nombre" type="text" placeholder="Ingrese el nombre para la división" required={true} onChange={(e) => setNombre(e.target.value)} value={nombre} />
             </div>
 

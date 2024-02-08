@@ -87,7 +87,7 @@ export const CartasCreditoComisiones = () => {
         <div className="md:grid md:grid-cols-10 md:gap-4 mb-6 px-6">
           <div className="md:col-span-2">
             <Label value="Fecha de Apertura:" />
-            <TextInput type="date" defaultValue={cartaCreditoDetalle.FechaApertura} disabled />
+            <TextInput type="text" defaultValue={cartaCreditoDetalle.FechaApertura_str} disabled />
           </div>
           <div className="md:col-span-2">
             <Label value="No. Carta de Crédito:" />
@@ -173,13 +173,13 @@ export const CartasCreditoComisiones = () => {
                   </Table.Cell>
                   <Table.Cell align="center">{item.NumeroComision}</Table.Cell>
                   <Table.Cell>{item.Comision}</Table.Cell>
-                  <Table.Cell>{format(new Date(item.FechaCargo), "dd-MMMM-yyyy", { locale })}</Table.Cell>
+                  <Table.Cell>{format(new Date(item.FechaCargo), "dd/MM/yyyy", { locale })}</Table.Cell>
                   <Table.Cell align="right">{numeral(item.Monto).format("$0,0.00")}</Table.Cell>
                   <Table.Cell>{item.Moneda}</Table.Cell>
                   {/* <Table.Cell>
                     {numeral(item.TipoCambio).format("$0,0.00")}
                   </Table.Cell> */}
-                  <Table.Cell>{item.FechaPago !== null && format(new Date(item.FechaPago), "dd-MMMM-yyyy", { locale })}</Table.Cell>
+                  <Table.Cell>{item.FechaPago !== null && format(new Date(item.FechaPago), "dd/MM/yyyy", { locale })}</Table.Cell>
                   <Table.Cell align="right">
                     {item.PagoMonedaId !== cartaCreditoDetalle.MonedaId
                       ? numeral(item.MontoPagado * item.TipoCambio).format("$0,0.00")
@@ -243,8 +243,9 @@ export const CartasCreditoComisiones = () => {
 
       {cartaCreditoDetalle && cartaCreditoDetalle.Id && cartaCreditoDetalle.MonedaId && selectedCartaComision && (
         <CartaComisionPagoModal
-          cartaMonedaId={cartaCreditoDetalle.MonedaId}
-          cartaComision={selectedCartaComision}
+                  cartaMonedaId={cartaCreditoDetalle.MonedaId}
+                  cartaComision={selectedCartaComision}
+                  comisionMonedaId={selectedCartaComision.MonedaId}
           show={showPagoManualModal}
           handleClose={() => setShowPagoManualModal(false)}
           monto={selectedCartaComision.Monto}

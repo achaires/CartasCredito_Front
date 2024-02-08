@@ -17,7 +17,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Datepicker from "react-tailwindcss-datepicker";
 import { apiHost } from "@/utils/apiConfig";
 
-import DataGrid, { Column, Export, HeaderFilter, Paging, SearchPanel, Selection } from "devextreme-react/data-grid";
+import DataGrid, { Column, Export, HeaderFilter, Paging, SearchPanel, Selection, Format  } from "devextreme-react/data-grid";
 import { ColumnCellTemplateData } from "devextreme/ui/data_grid";
 
 const txtsExport = {
@@ -258,7 +258,9 @@ export const CartasDeCredito = () => {
             <Column dataField="Empresa" />
             <Column dataField="Banco" />
             <Column dataField="Moneda" />
-            <Column dataField="MontoOriginalLC" dataType="number" format="currency" />
+                      <Column dataField="MontoOriginalLC" dataType="number">
+                          <Format type="currency" precision="2" />
+                      </Column>
             <Column caption="Estatus" cellRender={_estatusCellComponent} />
             <Column caption="" cellRender={_detailCellComponent} width={80} />
           </DataGrid>

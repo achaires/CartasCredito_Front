@@ -82,7 +82,7 @@ export const CartasDeCreditoPagos = () => {
         <div className="md:grid md:grid-cols-10 md:gap-4 mb-6 px-6">
           <div className="md:col-span-2">
             <Label value="Fecha de Apertura:" />
-            <TextInput type="text" defaultValue={cartaCreditoDetalle.FechaApertura} disabled />
+            <TextInput type="text" defaultValue={cartaCreditoDetalle.FechaApertura_str} disabled />
           </div>
           <div className="md:col-span-2">
             <Label value="No. Carta de Crédito:" />
@@ -164,9 +164,9 @@ export const CartasDeCreditoPagos = () => {
                     <Radio value={item.Id} onChange={(e) => setSelectedPago(item)} checked={selectedPago?.Id === item.Id} />
                   </Table.Cell>
                   <Table.Cell>{item.NumeroPago}</Table.Cell>
-                  <Table.Cell>{format(new Date(item.FechaVencimiento), "dd-MMMM-yyyy", { locale })}</Table.Cell>
+                  <Table.Cell>{format(new Date(item.FechaVencimiento), "dd/MM/yyyy", { locale })}</Table.Cell>
                   <Table.Cell align="right">{numeral(item.MontoPago).format("$0,0.00")}</Table.Cell>
-                  <Table.Cell>{item.FechaPago && format(new Date(item.FechaPago), "dd-MMMM-yyyy", { locale })}</Table.Cell>
+                  <Table.Cell>{item.FechaPago && format(new Date(item.FechaPago), "dd/MM/yyyy", { locale })}</Table.Cell>
                   <Table.Cell align="right">{numeral(item.MontoPagado).format("$0,0.00")}</Table.Cell>
                   <Table.Cell>{item.NumeroFactura}</Table.Cell>
                 </Table.Row>

@@ -31,13 +31,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import DatePicker from "react-datepicker";
 import { IComprador } from "@/interfaces";
+import { useGetTiposCoberturaQuery } from "../../../apis";
 
 // Fix DatePicker + React Hook Form: https://github.com/Hacker0x01/react-datepicker/issues/2165#issuecomment-696095748
 
 const validationSchema = z.object({
   TipoCartaId: z.number().min(1),
-  TipoStandBy: z.string().min(1),
-  BancoId: z.number().min(1),
+    TipoStandBy: z.string().min(1),
+    BancoId: z.number().min(1),
   EmpresaId: z.number().min(1),
   MonedaId: z.number().min(1),
   CompradorId: z.number().min(1),
@@ -47,7 +48,9 @@ const validationSchema = z.object({
   FechaVencimiento: z.date().refine((fv) => fv.toString()),
   /* Incoterm: z.string().min(1), */
   ConsideracionesReclamacion: z.string().min(1),
-  ConsideracionesAdicionales: z.string().min(1),
+    ConsideracionesAdicionales: z.string().min(1),
+    BancoCorresponsalId: z.number().min(1),
+    TipoCoberturaId: z.number().min(1),
 });
 
 type ValidationSchema = z.infer<typeof validationSchema>;
@@ -82,7 +85,8 @@ export const NuevaCartaStandBy = () => {
   const { data: catBancos } = useGetBancosQuery();
   const { data: catEmpresas } = useGetEmpresasQuery();
   const { data: catMonedas } = useGetMonedasQuery();
-  const { data: catCompradores } = useGetCompradoresQuery();
+    const { data: catCompradores } = useGetCompradoresQuery();
+    const { data: catCobertura } = useGetTiposCoberturaQuery();
 
   const [
     addCarta,
@@ -244,6 +248,34 @@ export const NuevaCartaStandBy = () => {
               ))}
           </Select>
         </div>
+
+             <div className="md:col-span-3">
+                <Label value="Banco Corresponsal" />
+                <Select {...register("BancoCorresponsalId", { valueAsNumber: true })}>
+                <option value={0}>Seleccione Opción</option>
+                {catBancos
+                    ?.filter((c) => c.Activo)
+                    .map((item, index) => (
+                    <option value={item.Id} key={index.toString()}>
+                        {item.Nombre}
+                    </option>
+                    ))}
+                </Select>
+              </div>
+
+              <div className="md:col-span-3">
+                  <Label value="Tipo de cobertura" />
+                  <Select {...register("TipoCoberturaId", { valueAsNumber: true })}>
+                      <option value={0}>Seleccione Opción</option>
+                      {catCobertura
+                          ?.filter((c) => c.Activo)
+                          .map((item, index) => (
+                              <option value={item.Id} key={index.toString()}>
+                                  {item.Nombre}
+                              </option>
+                          ))}
+                  </Select>
+              </div>
 
         <div className="md:col-span-3">
           <Label value="Empresa" />

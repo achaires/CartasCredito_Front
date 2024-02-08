@@ -18,3 +18,23 @@
 }
 
 @import "react-datepicker/dist/react-datepicker.css";
+
+.customDatepicker {
+}
+
+.customDatepicker .lg\:w-10{
+    width: 2rem;
+    height: 2rem;
+}
+
+.customDatepicker .grid.grid-cols-7.border-b.border-gray-300.py-2 {
+    padding: 0;
+}
+
+.customDatepicker .flex.items-center.border.border-gray-300.rounded-md.px-2 {
+    padding: 0;
+}
+
+.customDatepicker .min-h-\[285px\] {
+    min-height: 228px;
+}

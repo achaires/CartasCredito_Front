@@ -3,6 +3,7 @@ import gisLogo from "../../assets/img/gis-logo-gris.png";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { AdminLoadingActivity } from "@/components";
+import numeral from "numeral";
 
 const curDate = new Date();
 
@@ -16,13 +17,15 @@ export const CartaCreditoImprimir = () => {
     }
   }, [routeParams]);
 
-  if (isLoading || !cartaCreditoDetalle) {
-    return (
-      <div>
-        <AdminLoadingActivity />
-      </div>
-    );
-  }
+    if (isLoading || !cartaCreditoDetalle) {
+        return (
+            <div>
+                <AdminLoadingActivity />
+            </div>
+        );
+    } else {
+        console.log("aaaaa");
+    }
 
   if (!isLoading && cartaCreditoDetalle && cartaCreditoDetalle.TipoCarta === "StandBy") {
     return (
@@ -49,12 +52,23 @@ export const CartaCreditoImprimir = () => {
                 <td className="font-bold text-lg" colSpan={3}>
                   Datos generales
                 </td>
-              </tr>
-              <tr className="border-b border-black">
-                <td className="w-1/2 border-r border-black">
-                  <strong>Banco:</strong> {cartaCreditoDetalle.Banco}
-                </td>
-              </tr>
+                        </tr>
+                        <tr className="border-b border-black">
+                            <td className="w-1/2 border-r border-black">
+                                <strong>Banco:</strong> {cartaCreditoDetalle.Banco}
+                            </td>
+                        </tr>
+                        <tr className="border-b border-black">
+
+                            <td className="w-1/2 border-r border-black">
+                                <strong>Banco Corresponsal:</strong> {cartaCreditoDetalle.BancoCorresponsal}
+                            </td>
+                        </tr>
+                        <tr className="border-b border-black">
+                            <td className="w-1/2 border-r border-black">
+                                <strong>Tipo de Cobertura:</strong> {cartaCreditoDetalle.TipoCobertura}
+                            </td>
+                        </tr>
               <tr className="border-b border-black">
                 <td className="w-1/2 border-r border-black" colSpan={2}>
                   <strong>Comprador:</strong> {cartaCreditoDetalle.Comprador}
@@ -67,14 +81,14 @@ export const CartaCreditoImprimir = () => {
               </tr>
               <tr className="border-b border-black">
                 <td className="w-1/2 border-r border-black">
-                  <strong>Pagos efectuados:</strong> {cartaCreditoDetalle.PagosEfectuados}
+                  <strong>Pagos efectuados:</strong> {numeral(cartaCreditoDetalle.PagosEfectuados).format("$0,0.00")}
                   <br />
-                  <strong>Saldo insoluto:</strong> {cartaCreditoDetalle.SaldoInsoluto}
+                                <strong>Saldo insoluto:</strong> {numeral(cartaCreditoDetalle.SaldoInsoluto).format("$0,0.00")}
                 </td>
                 <td className="w-1/2 border-r border-black" colSpan={2}>
-                  <strong>Pagos programados:</strong> {cartaCreditoDetalle.PagosProgramados}
+                                <strong>Pagos programados:</strong> {numeral(cartaCreditoDetalle.PagosProgramados).format("$0,0.00")}
                   <br />
-                  <strong>Monto dispuesto:</strong> {cartaCreditoDetalle.MontoDispuesto}
+                                <strong>Monto dispuesto:</strong> {numeral(cartaCreditoDetalle.MontoDispuesto).format("$0,0.00")}
                 </td>
               </tr>
               <tr className="border-b border-black">
@@ -84,15 +98,15 @@ export const CartaCreditoImprimir = () => {
               </tr>
               <tr className="border-b border-black">
                 <td className="w-1/2 border-r border-black">
-                  <strong>Fecha de apertura:</strong> {cartaCreditoDetalle.FechaApertura}
+                  <strong>Fecha de apertura:</strong> {cartaCreditoDetalle.FechaApertura_str}
                 </td>
                 <td className="w-1/2 border-r border-black" colSpan={2}>
-                  <strong>Fecha de vencimiento:</strong> {cartaCreditoDetalle.FechaVencimiento?.toString()}
+                  <strong>Fecha de vencimiento:</strong> {cartaCreditoDetalle.FechaVencimiento_str?.toString()}
                 </td>
               </tr>
               <tr className="border-b border-black">
                 <td className="w-1/2 border-r border-black" colSpan={2}>
-                  <strong>Fecha límite de embarque:</strong> {cartaCreditoDetalle.FechaLimiteEmbarque?.toString()}
+                  <strong>Fecha límite de embarque:</strong> {cartaCreditoDetalle.FechaLimiteEmbarque_str?.toString()}
                 </td>
               </tr>
               <tr className="border-b border-black">
@@ -138,10 +152,10 @@ export const CartaCreditoImprimir = () => {
                 Datos generales
               </td>
             </tr>
-            <tr className="border-b border-black">
-              <td className="w-1/2 border-r border-black">
-                <strong>Banco:</strong> {cartaCreditoDetalle.Banco}
-              </td>
+                      <tr className="border-b border-black">
+                          <td className="w-1/2 border-r border-black">
+                              <strong>Banco:</strong> {cartaCreditoDetalle.Banco}
+                          </td>
               <td className="w-1/2 border-r border-black" colSpan={2}>
                 <strong>Proveedor:</strong> {cartaCreditoDetalle.Proveedor}
               </td>
@@ -177,10 +191,10 @@ export const CartaCreditoImprimir = () => {
             </tr>
             <tr className="border-b border-black">
               <td className="w-1/2 border-r border-black">
-                <strong>Monto orden compra:</strong> {cartaCreditoDetalle.MontoOrdenCompra}
+                              <strong>Monto orden compra:</strong> {numeral(cartaCreditoDetalle.MontoOrdenCompra).format("$0,0.00")}
               </td>
               <td className="border-r border-black">
-                <strong>Monto original L/C:</strong> {cartaCreditoDetalle.MontoOriginalLC}
+                              <strong>Monto original L/C:</strong> {numeral(cartaCreditoDetalle.MontoOriginalLC).format("$0,0.00")}
               </td>
               <td className="border-r border-black">
                 <strong>Tolerancia:</strong> {cartaCreditoDetalle.PorcentajeTolerancia}
@@ -188,14 +202,14 @@ export const CartaCreditoImprimir = () => {
             </tr>
             <tr className="border-b border-black">
               <td className="w-1/2 border-r border-black">
-                <strong>Pagos efectuados:</strong> {cartaCreditoDetalle.PagosEfectuados}
+                              <strong>Pagos efectuados:</strong> {numeral(cartaCreditoDetalle.PagosEfectuados).format("$0,0.00")}
                 <br />
-                <strong>Saldo insoluto:</strong> {cartaCreditoDetalle.SaldoInsoluto}
+                              <strong>Saldo insoluto:</strong> {numeral(cartaCreditoDetalle.SaldoInsoluto).format("$0,0.00")}
               </td>
               <td className="w-1/2 border-r border-black" colSpan={2}>
-                <strong>Pagos programados:</strong> {cartaCreditoDetalle.PagosProgramados}
+                              <strong>Pagos programados:</strong> {numeral(cartaCreditoDetalle.PagosProgramados).format("$0,0.00")}
                 <br />
-                <strong>Monto dispuesto:</strong> {cartaCreditoDetalle.MontoDispuesto}
+                              <strong>Monto dispuesto:</strong> {numeral(cartaCreditoDetalle.MontoDispuesto).format("$0,0.00")}
               </td>
             </tr>
             <tr className="border-b border-black">
@@ -205,10 +219,10 @@ export const CartaCreditoImprimir = () => {
             </tr>
             <tr className="border-b border-black">
               <td className="w-1/2 border-r border-black">
-                <strong>Fecha de apertura:</strong> {cartaCreditoDetalle.FechaApertura}
+                <strong>Fecha de apertura:</strong> {cartaCreditoDetalle.FechaApertura_str}
               </td>
               <td className="w-1/2 border-r border-black" colSpan={2}>
-                <strong>Fecha de vencimiento:</strong> {cartaCreditoDetalle.FechaVencimiento?.toString()}
+                <strong>Fecha de vencimiento:</strong> {cartaCreditoDetalle.FechaVencimiento_str?.toString()}
               </td>
             </tr>
             <tr className="border-b border-black">
@@ -216,7 +230,7 @@ export const CartaCreditoImprimir = () => {
                 <strong>Incoterm:</strong> {cartaCreditoDetalle.Incoterm}
               </td>
               <td className="w-1/2 border-r border-black" colSpan={2}>
-                <strong>Fecha límite de embarque:</strong> {cartaCreditoDetalle.FechaLimiteEmbarque?.toString()}
+                <strong>Fecha límite de embarque:</strong> {cartaCreditoDetalle.FechaLimiteEmbarque_str?.toString()}
               </td>
             </tr>
             <tr className="border-b border-black">
@@ -299,7 +313,7 @@ export const CartaCreditoImprimir = () => {
                     <strong className="block">Banco corresponsal:</strong> {cartaCreditoDetalle.BancoCorresponsal}
                   </div>
                   <div className="flex-1">
-                    <strong className="block">Confirmar banco notificador:</strong> {cartaCreditoDetalle.CondicionesPago}
+                                      <strong className="block">Confirmaci&oacute;n banco notificador:</strong> {cartaCreditoDetalle.ConfirmacionBancoNotificador}
                   </div>
                 </div>
               </td>
@@ -309,10 +323,10 @@ export const CartaCreditoImprimir = () => {
               <td className="border-r border-black" colSpan={3}>
                 <div className="flex">
                   <div className="flex-1">
-                    <strong className="block">Seguro por cuenta:</strong> {cartaCreditoDetalle.CondicionesPago}
+                                      <strong className="block">Seguro por cuenta:</strong> {cartaCreditoDetalle.SeguroPorCuenta}
                   </div>
                   <div className="flex-1">
-                    <strong className="block">Gastos y comisiones de corresponsal:</strong> {cartaCreditoDetalle.BancoCorresponsal}
+                                      <strong className="block">Gastos y comisiones de corresponsal:</strong> {cartaCreditoDetalle.GastosComisionesCorresponsal}
                   </div>
                   <div className="flex-1">
                     <strong className="block">Tipo de emisión:</strong> {cartaCreditoDetalle.TipoEmision}

@@ -1,7 +1,7 @@
 import { useGetPagosProgramadosQuery, useGetPagosVencidosQuery } from "@/apis";
 import { AdminBreadcrumbs, AdminPageHeader } from "@/components";
 import { faFileInvoiceDollar } from "@fortawesome/free-solid-svg-icons";
-import DataGrid, { Export, Selection, Button, Column, FilterRow, Grouping, GroupPanel, HeaderFilter, Pager, Paging, SearchPanel } from "devextreme-react/data-grid";
+import DataGrid, { Export, Selection, Button, Column, FilterRow, Grouping, GroupPanel, HeaderFilter, Pager, Paging, SearchPanel, Format } from "devextreme-react/data-grid";
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -27,8 +27,32 @@ export const DashboardIndex = () => {
           <AdminBreadcrumbs links={[{ name: "Dashboard", href: "#" }]} />
         </div>
 
+              <div className="mb-0">
+                  <AdminPageHeader title="Pagos Vencidos" icon={faFileInvoiceDollar} />
+              </div>
+
+              <div className="mb-6">
+                  <DataGrid showBorders={true} showColumnLines={true} showRowLines={true} keyExpr="Id" dataSource={pagosVencidos}>
+                      <HeaderFilter visible={true} />
+                      <Paging defaultPageSize={10} />
+                      <Selection mode="multiple" showCheckBoxesMode="always" />
+                      <Export enabled={true} texts={txtsExport} allowExportSelectedData={true} />
+                      <Column dataField="CartaCredito.NumCartaCredito" caption="Num. Carta Crédito" />
+                      <Column dataField="CartaCredito.Empresa" caption="Empresa" />
+                      <Column dataField="CartaCredito.Proveedor" caption="Proveedor" />
+                      <Column dataField="FechaVencimiento" caption="Fecha Vencimiento" dataType="datetime" format="dd/MM/yyyy" defaultSortOrder="asc" sortIndex={0} />
+                      <Column dataField="MontoPago" caption="Monto Programado" dataType="number" alignment="right">
+                          <Format type="currency" precision="2" />
+                      </Column>
+                      <Column dataField="CartaCredito.Moneda" caption="Moneda" />
+                      <Column type="buttons">
+                          <Button name="Detalle" icon="find" hint="Ver Detalle" onClick={_handleDetalleClick} />
+                      </Column>
+                  </DataGrid>
+              </div>
+
         <div className="mb-0">
-          <AdminPageHeader title="Pagos Programados" icon={faFileInvoiceDollar} />
+                  <AdminPageHeader title="Programa de Vencimientos" icon={faFileInvoiceDollar} />
         </div>
 
         <div className="mb-6">
@@ -40,9 +64,10 @@ export const DashboardIndex = () => {
             <Column dataField="CartaCredito.NumCartaCredito" caption="Num. Carta Crédito" />
             <Column dataField="CartaCredito.Empresa" caption="Empresa" />
             <Column dataField="CartaCredito.Proveedor" caption="Proveedor" />
-            <Column dataField="CartaCredito.DescripcionCartaCredito" caption="Descripción" />
             <Column dataField="FechaVencimiento" caption="Fecha Vencimiento" dataType="datetime" format="dd/MM/yyyy" defaultSortOrder="asc" sortIndex={0} />
-            <Column dataField="MontoPago" caption="Monto Programado" format="currency" dataType="number" alignment="right" />
+            <Column dataField="MontoPago" caption="Monto Programado" dataType="number" alignment="right">
+                <Format type="currency" precision="2" />
+            </Column>
             <Column dataField="CartaCredito.Moneda" caption="Moneda" />
             <Column type="buttons">
               <Button name="Detalle" icon="find" hint="Ver Detalle" onClick={_handleDetalleClick} />
@@ -50,28 +75,6 @@ export const DashboardIndex = () => {
           </DataGrid>
         </div>
 
-        <div className="mb-0">
-          <AdminPageHeader title="Programa de Vencimientos" icon={faFileInvoiceDollar} />
-        </div>
-
-        <div className="mb-6">
-          <DataGrid showBorders={true} showColumnLines={true} showRowLines={true} keyExpr="Id" dataSource={pagosVencidos}>
-            <HeaderFilter visible={true} />
-            <Paging defaultPageSize={10} />
-            <Selection mode="multiple" showCheckBoxesMode="always" />
-            <Export enabled={true} texts={txtsExport} allowExportSelectedData={true} />
-            <Column dataField="CartaCredito.NumCartaCredito" caption="Num. Carta Crédito" />
-            <Column dataField="CartaCredito.Empresa" caption="Empresa" />
-            <Column dataField="CartaCredito.Proveedor" caption="Proveedor" />
-            <Column dataField="CartaCredito.DescripcionCartaCredito" caption="Descripción" />
-            <Column dataField="FechaVencimiento" caption="Fecha Vencimiento" dataType="datetime" format="dd/MM/yyyy" defaultSortOrder="asc" sortIndex={0} />
-            <Column dataField="MontoPago" caption="Monto Programado" format="currency" dataType="number" alignment="right" />
-            <Column dataField="CartaCredito.Moneda" caption="Moneda" />
-            <Column type="buttons">
-              <Button name="Detalle" icon="find" hint="Ver Detalle" onClick={_handleDetalleClick} />
-            </Column>
-          </DataGrid>
-        </div>
       </div>
     </>
   );

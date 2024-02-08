@@ -172,7 +172,7 @@ export const Proveedores = () => {
             <Column dataField="Empresa" />
             <Column dataField="Pais" caption="País" />
             <Column dataField="Descripcion" caption="Domicilio" />
-            <Column caption="" cellRender={_toggleCellComponent} width={200} alignment="center" allowExporting={false} />
+                      <Column dataField="Activo" caption="" cellRender={_toggleCellComponent} width={200} alignment="center" allowExporting={false} defaultSortIndex={0} defaultSortOrder="desc" />
             <Column caption="" cellRender={_editCellComponent} width={60} alignment="center" allowExporting={false} />
           </DataGrid>
         </div>
@@ -183,7 +183,7 @@ export const Proveedores = () => {
             <div className="md:grid md:grid-cols-12 md:gap-4">
               <div className="md:col-span-6">
                 <div className="mb-2">
-                  <Label htmlFor="empresaId" value="Empresa" />
+                                  <Label htmlFor="empresaId" value="Empresa *" />
                   <Select {...register("EmpresaId", { required: true })} defaultValue={0}>
                     <option value={0}>Seleccione Opción</option>
                     {catEmpresas
@@ -198,16 +198,16 @@ export const Proveedores = () => {
                   </Select>
                 </div>
                 <div className="mb-2">
-                  <Label htmlFor="nombre" value="Nombre" />
+                                  <Label htmlFor="nombre" value="Nombre *" />
                   <TextInput defaultValue="" type="text" {...register("Nombre", { required: true })} />
                 </div>
               </div>
               <div className="md:col-span-6">
                 <div className="mb-2">
-                  <Label htmlFor="pais" value="País" />
+                                  <Label htmlFor="pais" value="País *" />
                   <TextInput defaultValue="" type="text" {...register("Pais", { required: true })} />
                 </div>
-                <Label htmlFor="descripcion" value="Domicilio" />
+                              <Label htmlFor="descripcion" value="Domicilio *" />
                 <Textarea defaultValue="" rows={1} {...register("Descripcion", { required: true })} />
               </div>
             </div>

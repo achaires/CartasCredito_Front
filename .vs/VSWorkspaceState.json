@@ -1,0 +1,14 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\src",
+    "\\src\\apis",
+    "\\src\\pages",
+    "\\src\\pages\\catalogos",
+    "\\src\\pages\\dashboard",
+    "\\src\\pages\\reportes",
+    "\\src\\pages\\usuarios"
+  ],
+  "SelectedNode": "\\src\\pages\\catalogos\\Compradores.tsx",
+  "PreviewInSolutionExplorer": false
+}

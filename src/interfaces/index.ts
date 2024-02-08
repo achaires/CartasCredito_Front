@@ -27,3 +27,4 @@ export * from './tipoCoberturaInterface';
 export * from './tipoComisionInterface';
 export * from './tipoPersonaFiscalInterface';
 export * from './userInterface';
+export * from './tipoCambioInterface';

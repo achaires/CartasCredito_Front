@@ -102,8 +102,8 @@ export const CartaPagoManualModal = ({ pagoId, show, monto, moneda, handleClose,
                 <strong>Moneda:</strong> {moneda}
               </div>
               <div className="mb-4">
-                <Label value="Fecha de Pago" />
-                <Datepicker displayFormat="DD/MM/YYYY" value={fechaPago} onChange={_handleDateChange} showFooter={false} asSingle />
+                              <Label value="Fecha de Pago" />
+                              <Datepicker displayFormat="DD/MM/YYYY" popoverDirection="down" containerClassName="customDatepicker" value={fechaPago} onChange={_handleDateChange} showFooter={false} asSingle />
               </div>
               <div className="mb-4">
                 <Label value="Monto" />

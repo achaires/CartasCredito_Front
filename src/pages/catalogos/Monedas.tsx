@@ -162,7 +162,7 @@ export const Monedas = () => {
             <Column dataField="Nombre" />
             <Column dataField="Abbr" />
             <Column dataField="Descripcion" />
-            <Column caption="" cellRender={_toggleCellComponent} width={200} alignment="center" allowExporting={false} />
+                      <Column dataField="Activo" caption="" cellRender={_toggleCellComponent} width={200} alignment="center" allowExporting={false} defaultSortIndex={0} defaultSortOrder="desc" />
             <Column caption="" cellRender={_editCellComponent} width={60} alignment="center" allowExporting={false} />
           </DataGrid>
         </div>
@@ -171,7 +171,7 @@ export const Monedas = () => {
           <Modal.Header>Agregar Registro</Modal.Header>
           <Modal.Body>
             <div className="mb-4">
-              <Label htmlFor="nombre" value="Nombre" />
+                          <Label htmlFor="nombre" value="Nombre *" />
               <TextInput
                 id="nombre"
                 type="text"
@@ -183,7 +183,7 @@ export const Monedas = () => {
             </div>
 
             <div className="mb-4">
-              <Label htmlFor="abbr" value="Abreviatura" />
+                          <Label htmlFor="abbr" value="Abreviatura *" />
               <TextInput id="abbr" type="text" placeholder="Ingrese el nombre para el nuevo elemento" required={true} onChange={(e) => setAbbr(e.target.value)} value={abbr} />
             </div>
 

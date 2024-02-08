@@ -45,7 +45,8 @@ export const LineasDeCredito = () => {
     setCuenta("");
   }, [editId, bancoId, empresaId, monto, cuenta]);
 
-  const _handleShowModal = useCallback(() => {
+    const _handleShowModal = useCallback(() => {
+        _reset();
     setShowAddForm(true);
   }, [showAddForm]);
 
@@ -72,7 +73,17 @@ export const LineasDeCredito = () => {
     }
   };
 
-  const _handleSubmit = useCallback(() => {
+    const _handleSubmit = useCallback(() => {
+
+        if (empresaId < 1) {
+            dispatch(addToast({ title: "Ocurrió un Error", message: "Selecciona una empresa", type: "error" }));
+            return;
+        }
+        if (bancoId < 1) {
+            dispatch(addToast({ title: "Ocurrió un Error", message: "Selecciona un banco", type: "error" }));
+            return;
+        }
+
     if (editId > 0) {
       updateModelo({ Id: editId, BancoId: bancoId, EmpresaId: empresaId, Monto: monto, Cuenta: cuenta });
     } else {
@@ -167,7 +178,7 @@ export const LineasDeCredito = () => {
             <Column dataField="Banco" />
             <Column dataField="Cuenta" />
             <Column dataField="Monto" format="currency" dataType="number" />
-            <Column caption="" cellRender={_toggleCellComponent} width={200} alignment="center" allowExporting={false} />
+                      <Column dataField="Activo" caption="" cellRender={_toggleCellComponent} width={200} alignment="center" allowExporting={false} defaultSortIndex={0} defaultSortOrder="desc" />
             <Column caption="" cellRender={_editCellComponent} width={60} alignment="center" allowExporting={false} />
           </DataGrid>
         </div>
@@ -176,7 +187,7 @@ export const LineasDeCredito = () => {
           <Modal.Header>Agregar Registro</Modal.Header>
           <Modal.Body>
             <div className="mb-2">
-              <Label value="Empresa" />
+                          <Label value="Empresa *" />
               <Select value={empresaId} onChange={(e) => setEmpresaId(Number(e.target.value))}>
                 <option value={0}>Seleccione opción</option>
                 {empresasCat &&
@@ -191,7 +202,7 @@ export const LineasDeCredito = () => {
             </div>
 
             <div className="mb-2">
-              <Label value="Banco" />
+                          <Label value="Banco *" />
               <Select value={bancoId} onChange={(e) => setBancoId(Number(e.target.value))}>
                 <option value={0}>Seleccione opción</option>
                 {bancosCat &&

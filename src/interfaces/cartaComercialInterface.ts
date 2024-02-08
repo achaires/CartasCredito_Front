@@ -1,4 +1,5 @@
 import { ICartaCreditoComision } from "./cartaComisionesInterface";
+import { ICartaCreditoDocumentoANegociar } from "./cartacreditodocumentoanegociar";
 import { IPago } from "./cartaPagoInterface";
 import { IEnmienda } from "./enmiendasInterface";
 
@@ -69,6 +70,16 @@ export interface ICartaComercial {
   Pagos?: IPago[] | null;
   Comisiones?: ICartaCreditoComision[] | null;
   Enmiendas?: IEnmienda[] | null;
+    FechaLimiteEmbarque_str?: string;
+    FechaVencimiento_str?: string;
+    FechaApertura_str?: string;
+    DocumentoANegociar?: ICartaCreditoDocumentoANegociar[];
+
+    Creado_str?: string;
+    Actualizado_str?: string;
+    Estado?: string;
+    TipoCoberturaId?: number;
+    TipoCobertura?: string;
 }
 
 export interface ICartaStandBy {
@@ -84,7 +95,11 @@ export interface ICartaStandBy {
   FechaLimiteEmbarque: string;
   FechaVencimiento: string;
   ConsideracionesAdicionales: string;
-  ConsideracionesReclamacion: string;
+    ConsideracionesReclamacion: string;
+    BancoCorresponsalId?: number;
+    BancoCorresponsal?: string;
+    TipoCoberturaId?: number;
+    TipoCobertura?: string;
 }
 
 export interface ICartaCreditoFiltrar {

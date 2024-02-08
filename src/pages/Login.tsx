@@ -20,7 +20,14 @@ export const Login = () => {
 
   const _handleLogin = () => {
     loginUser({ UserName: userName, Password: userPass });
-  };
+    };
+
+      // @ts-ignore
+    const _handleKeyDown = (e) => {
+        if (e.keyCode === 13) {
+            loginUser({ UserName: userName, Password: userPass });
+        }
+    };
 
   useEffect(() => {
     if (isSuccess && loginRsp) {
@@ -82,15 +89,17 @@ export const Login = () => {
             <input
               type="password"
               className="border rounded border-gray-300 text-sm py-2 px-2 w-full block"
+              onKeyDown={_handleKeyDown}
               onChange={(e) => {
                 setUserPass(e.target.value);
               }}
+
             />
           </div>
           <div>
             <button
               disabled={isLoading}
-              onClick={_handleLogin}
+                          onClick={_handleLogin}
               className={`flex items-center justify-center w-full py-3 text-base rounded-full ${isLoading ? `bg-gray-400 text-white` : `bg-brandDark text-white`} `}>
               {isLoading && (
                 <svg

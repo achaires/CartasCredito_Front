@@ -44,7 +44,8 @@ export const Compradores = () => {
     setTipoPersonaFiscalId(0);
   }, [editId, nombre, descripcion, empresaId, tipoPersonaFiscalId]);
 
-  const _handleShowModal = useCallback(() => {
+    const _handleShowModal = useCallback(() => {
+        _reset();
     setShowAddForm(true);
   }, [showAddForm]);
 
@@ -71,11 +72,20 @@ export const Compradores = () => {
     }
   };
 
-  const _handleSubmit = useCallback(() => {
+    const _handleSubmit = useCallback(() => {
+        if (empresaId < 1) {
+            dispatch(addToast({ title: "Ocurrió un Error", message: "Selecciona una empresa", type: "error" }));
+            return;
+        }
+        if (tipoPersonaFiscalId < 1) {
+            dispatch(addToast({ title: "Ocurrió un Error", message: "Selecciona un tipo de persona fiscal", type: "error" }));
+            return;
+        }
     if (nombre.length < 1) {
       dispatch(addToast({ title: "Ocurrió un Error", message: "Ingrese el nombre del elemento", type: "error" }));
       return;
-    }
+      }
+
 
     if (editId > 0) {
       updateModelo({ Id: editId, Nombre: nombre, Descripcion: descripcion, EmpresaId: empresaId, TipoPersonaFiscalId: tipoPersonaFiscalId });
@@ -169,7 +179,7 @@ export const Compradores = () => {
             <Export enabled={true} texts={txtsExport} allowExportSelectedData={true} />
             <Column dataField="Nombre" />
             <Column dataField="Empresa" />
-            <Column caption="" cellRender={_toggleCellComponent} width={200} alignment="center" allowExporting={false} />
+                      <Column dataField="Activo" caption="" cellRender={_toggleCellComponent} width={200} alignment="center" allowExporting={false} defaultSortIndex={0} defaultSortOrder="desc" />
             <Column caption="" cellRender={_editCellComponent} width={60} alignment="center" allowExporting={false} />
           </DataGrid>
         </div>
@@ -178,14 +188,18 @@ export const Compradores = () => {
           <Modal.Header>Agregar Registro</Modal.Header>
           <Modal.Body>
             <div className="mb-4">
-              <Label htmlFor="empresaId" value="Empresa" />
+                          <Label htmlFor="empresaId" value="Empresa *" />
               <Select
                 id="empresaId"
                 required={true}
                 value={empresaId}
                 onChange={(e) => {
                   setEmpresaId(Number(e.target.value));
-                }}>
+                              }}>
+
+                              <option key="0" value="0">
+                                  Seleccionar
+                              </option>
                 {catEmpresas
                   ?.filter((d) => d.Activo)
                   .map((item, index) => {
@@ -199,7 +213,7 @@ export const Compradores = () => {
             </div>
 
             <div className="mb-4">
-              <Label htmlFor="tipoPersonaFiscalId" value="Tipo Persona Fiscal" />
+                          <Label htmlFor="tipoPersonaFiscalId" value="Tipo Persona Fiscal *" />
               <Select
                 id="tipoPersonaFiscalId"
                 required={true}
@@ -207,7 +221,10 @@ export const Compradores = () => {
                 onChange={(e) => {
                   console.log(e.target.value);
                   setTipoPersonaFiscalId(Number(e.target.value));
-                }}>
+                              }}>
+                              <option key="0" value="0">
+                                  Seleccionar
+                              </option>
                 {catTiposPersonaFiscal
                   ?.filter((d) => d.Activo)
                   .map((item, index) => {
@@ -221,7 +238,7 @@ export const Compradores = () => {
             </div>
 
             <div className="mb-4">
-              <Label htmlFor="nombre" value="Nombre" />
+                          <Label htmlFor="nombre" value="Nombre *" />
               <TextInput
                 id="nombre"
                 type="text"

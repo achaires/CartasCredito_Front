@@ -9,7 +9,9 @@ export interface IProyecto {
   CreadoPor: string;
   Creado: string;
   Actualizado: string;
-  Eliminado: string;
+    Eliminado: string;
+    FechaAperturaStr: string;
+    FechaCierreStr: string;
 }
 
 export interface IProyectoInsert {
@@ -17,7 +19,9 @@ export interface IProyectoInsert {
   Nombre: string;
   Descripcion?: string;
   FechaApertura: string;
-  FechaCierre: string;
+    FechaCierre: string;
+    FechaAperturaStr: string;
+    FechaCierreStr: string;
 }
 
 export interface IProyectoUpdate extends IProyectoInsert {

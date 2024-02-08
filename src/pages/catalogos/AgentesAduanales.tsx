@@ -236,7 +236,7 @@ export const AgentesAduanales = () => {
             <Export enabled={true} texts={txtsExport} allowExportSelectedData={true} />
             <Column dataField="Nombre" />
             <Column dataField="Descripcion" caption="Dirección" />
-            <Column caption="" cellRender={_toggleCellComponent} width={200} alignment="center" allowExporting={false} />
+                      <Column dataField="Activo" caption="" cellRender={_toggleCellComponent} width={200} alignment="center" allowExporting={false} defaultSortIndex={0} defaultSortOrder="desc"  />
             <Column caption="" cellRender={_editCellComponent} width={60} alignment="center" allowExporting={false} />
           </DataGrid>
         </div>
@@ -249,13 +249,13 @@ export const AgentesAduanales = () => {
               <div className="md:grid md:grid-cols-12 gap-4">
                 <div className="md:col-span-6">
                   <div className="mb-4">
-                    <Label htmlFor="nombre" value="Nombre" />
+                    <Label htmlFor="nombre" value="Nombre *" />
                     <TextInput id="nombre" type="text" placeholder="Ingrese el nombre para el nuevo elemento" required={true} {...register("Nombre")} />
                   </div>
                 </div>
                 <div className="md:col-span-6">
                   <div>
-                    <Label htmlFor="direccion" value="Dirección" />
+                                      <Label htmlFor="direccion" value="Dirección *" />
                     <Textarea id="direccion" placeholder="" required={false} rows={4} {...register("Descripcion")} />
                   </div>
                 </div>
@@ -267,27 +267,27 @@ export const AgentesAduanales = () => {
 
               <div className="md:grid md:grid-cols-12 md:gap-4">
                 <div className="md:col-span-4">
-                  <Label htmlFor="nombre" value="Nombre" />
+                                  <Label htmlFor="nombre" value="Nombre *" />
                   <TextInput type="text" required {...register("Contacto.Nombre")} />
                 </div>
                 <div className="md:col-span-4">
-                  <Label htmlFor="ApellidoPaterno" value="Apellido Paterno" />
+                                  <Label htmlFor="ApellidoPaterno" value="Apellido Paterno *" />
                   <TextInput type="text" required {...register("Contacto.ApellidoPaterno")} />
                 </div>
                 <div className="md:col-span-4">
-                  <Label htmlFor="ApellidoMaterno" value="Apellido Materno" />
+                                  <Label htmlFor="ApellidoMaterno" value="Apellido Materno *" />
                   <TextInput type="text" required {...register("Contacto.ApellidoMaterno")} />
                 </div>
                 <div className="md:col-span-4">
-                  <Label htmlFor="Telefono" value="Teléfono" />
+                                  <Label htmlFor="Telefono" value="Teléfono *" />
                   <TextInput type="text" required {...register("Contacto.Telefono")} />
                 </div>
                 <div className="md:col-span-4">
-                  <Label htmlFor="Email" value="Email" />
+                                  <Label htmlFor="Email" value="Email *" />
                   <TextInput type="text" {...register("Contacto.Email")} />
                 </div>
                 <div className="md:col-span-4">
-                  <Label htmlFor="Fax" value="Fax" />
+                                  <Label htmlFor="Fax" value="Fax *" />
                   <TextInput type="text" {...register("Contacto.Fax")} />
                 </div>
               </div>

@@ -20,6 +20,7 @@ import { Controller, useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { InformationCircleIcon } from "@heroicons/react/24/solid";
+import { CustomSpinner } from "@/components";
 
 import { z } from "zod";
 import DatePicker from "react-datepicker";
@@ -50,8 +51,8 @@ const validationSchema = z
     FechaApertura: z.date().refine((fa) => fa.toString()),
     FechaLimiteEmbarque: z.date().refine((fle) => fle.toString()),
     FechaVencimiento: z.date().refine((fv) => fv.toString()),
-    Incoterm: z.string().min(1),
-    EmbarquesParciales: z.string().min(1),
+      Incoterm: z.string().min(1),
+      EmbarquesParciales: z.string().min(1),
     Transbordos: z.string().min(1),
     PuntoEmbarque: z.string().min(1),
     PuntoDesembarque: z.string().min(1),
@@ -67,7 +68,8 @@ const validationSchema = z
     SeguroPorCuenta: z.string().min(1),
     GastosComisionesCorresponsal: z.string().min(1),
     ConfirmacionBancoNotificador: z.string().min(1),
-    TipoEmision: z.string().min(1),
+      TipoEmision: z.string().min(1),
+      NumeroPeriodos: z.number().min(1),
   })
   .refine(
     (args) => {
@@ -136,7 +138,10 @@ export const CartaCreditoEditar = () => {
   const [availableCompradores, setAvailableCompradores] = useState<Array<IComprador>>([]);
   const watchEmpresa = watch("EmpresaId");
 
-  const dispatch = useAppDispatch();
+    const dispatch = useAppDispatch();
+
+
+    const [cargaTerminada, setCargaTerminada] = useState(false);
 
   const _handleBack = useCallback(() => {
     nav(-1);
@@ -185,7 +190,7 @@ export const CartaCreditoEditar = () => {
 
   const _handleSubmit = handleSubmit((formData) => {
     //@ts-ignore
-    updateCarta({ Id: cartaCreditoDetalle?.Id, ...formData });
+      updateCarta({ DocumentoANegociar: docsAgregados, Id: cartaCreditoDetalle?.Id, ...formData });
   });
 
   useEffect(() => {
@@ -194,57 +199,83 @@ export const CartaCreditoEditar = () => {
     }
   }, [routeParams]);
 
-  useEffect(() => {
-    if (isSuccessDetalle && cartaCreditoDetalle) {
-      setValue("TipoActivoId", cartaCreditoDetalle.TipoActivoId || 0);
-      setValue("ProyectoId", cartaCreditoDetalle.ProyectoId || 0);
-      setValue("BancoId", cartaCreditoDetalle.BancoId || 0);
-      setValue("ProveedorId", cartaCreditoDetalle.ProveedorId || 0);
-      setValue("EmpresaId", cartaCreditoDetalle.EmpresaId || 0);
-      setValue("AgenteAduanalId", cartaCreditoDetalle.AgenteAduanalId || 0);
-      setValue("MonedaId", cartaCreditoDetalle.MonedaId || 0);
-      setValue("TipoPago", cartaCreditoDetalle.TipoPago || "");
-      setValue("Responsable", cartaCreditoDetalle.Responsable || "");
-      setValue("CompradorId", cartaCreditoDetalle.CompradorId || 0);
-      setValue("PorcentajeTolerancia", cartaCreditoDetalle.PorcentajeTolerancia || 0);
-      setValue("NumOrdenCompra", cartaCreditoDetalle.NumOrdenCompra || "");
-      setValue("CostoApertura", cartaCreditoDetalle.CostoApertura || 0);
-      setValue("MontoOrdenCompra", cartaCreditoDetalle.MontoOrdenCompra || 0);
-      setValue("MontoOriginalLC", cartaCreditoDetalle.MontoOriginalLC || 0);
-      setValue("Incoterm", cartaCreditoDetalle.Incoterm || "");
-      setValue("EmbarquesParciales", cartaCreditoDetalle.EmbarquesParciales || "");
-      setValue("Transbordos", cartaCreditoDetalle.Transbordos || "");
-      setValue("PuntoEmbarque", cartaCreditoDetalle.PuntoEmbarque || "");
-      setValue("PuntoDesembarque", cartaCreditoDetalle.PuntoDesembarque || "");
-      setValue("DescripcionMercancia", cartaCreditoDetalle.DescripcionMercancia || "");
-      setValue("DescripcionCartaCredito", cartaCreditoDetalle.DescripcionCartaCredito || "");
-      setValue("PagoCartaAceptacion", cartaCreditoDetalle.PagoCartaAceptacion || "");
-      setValue("ConsignacionMercancia", cartaCreditoDetalle.ConsignacionMercancia || "");
-      setValue("ConsideracionesAdicionales", cartaCreditoDetalle.ConsideracionesAdicionales || "");
-      setValue("DiasParaPresentarDocumentos", cartaCreditoDetalle.DiasParaPresentarDocumentos || 0);
-      setValue("DiasPlazoProveedor", cartaCreditoDetalle.DiasPlazoProveedor || 0);
-      setValue("CondicionesPago", cartaCreditoDetalle.CondicionesPago || "");
-      setValue("BancoCorresponsalId", cartaCreditoDetalle.BancoCorresponsalId || 0);
-      setValue("SeguroPorCuenta", cartaCreditoDetalle.SeguroPorCuenta || "");
-      setValue("GastosComisionesCorresponsal", cartaCreditoDetalle.GastosComisionesCorresponsal || "");
-      setValue("ConfirmacionBancoNotificador", cartaCreditoDetalle.ConfirmacionBancoNotificador || "");
-      setValue("TipoEmision", cartaCreditoDetalle.TipoEmision || "");
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            console.log('This will run after 1 second!');
+            if (isSuccessDetalle && cartaCreditoDetalle) {
+                setValue("TipoActivoId", cartaCreditoDetalle.TipoActivoId || 0);
+                setValue("ProyectoId", cartaCreditoDetalle.ProyectoId || 0);
+                setValue("BancoId", cartaCreditoDetalle.BancoId || 0);
+                setValue("ProveedorId", cartaCreditoDetalle.ProveedorId || 0);
+                setValue("EmpresaId", cartaCreditoDetalle.EmpresaId || 0);
+                setValue("AgenteAduanalId", cartaCreditoDetalle.AgenteAduanalId || 0);
+                setValue("MonedaId", cartaCreditoDetalle.MonedaId || 0);
+                setValue("TipoPago", cartaCreditoDetalle.TipoPago || "");
+                setValue("Responsable", cartaCreditoDetalle.Responsable || "");
+                setValue("PorcentajeTolerancia", cartaCreditoDetalle.PorcentajeTolerancia || 0);
+                setValue("NumOrdenCompra", cartaCreditoDetalle.NumOrdenCompra || "");
+                setValue("CostoApertura", cartaCreditoDetalle.CostoApertura || 0);
+                setValue("MontoOrdenCompra", cartaCreditoDetalle.MontoOrdenCompra || 0);
+                setValue("MontoOriginalLC", cartaCreditoDetalle.MontoOriginalLC || 0);
+                setValue("Incoterm", cartaCreditoDetalle.Incoterm || "");
+                setValue("EmbarquesParciales", cartaCreditoDetalle.EmbarquesParciales || "");
+                setValue("Transbordos", cartaCreditoDetalle.Transbordos || "");
+                setValue("PuntoEmbarque", cartaCreditoDetalle.PuntoEmbarque || "");
+                setValue("PuntoDesembarque", cartaCreditoDetalle.PuntoDesembarque || "");
+                setValue("DescripcionMercancia", cartaCreditoDetalle.DescripcionMercancia || "");
+                setValue("DescripcionCartaCredito", cartaCreditoDetalle.DescripcionCartaCredito || "");
+                setValue("PagoCartaAceptacion", cartaCreditoDetalle.PagoCartaAceptacion || "");
+                setValue("ConsignacionMercancia", cartaCreditoDetalle.ConsignacionMercancia || "");
+                setValue("ConsideracionesAdicionales", cartaCreditoDetalle.ConsideracionesAdicionales || "");
+                setValue("DiasParaPresentarDocumentos", cartaCreditoDetalle.DiasParaPresentarDocumentos || 0);
+                setValue("DiasPlazoProveedor", cartaCreditoDetalle.DiasPlazoProveedor || 0);
+                setValue("CondicionesPago", cartaCreditoDetalle.CondicionesPago || "");
+                setValue("BancoCorresponsalId", cartaCreditoDetalle.BancoCorresponsalId || 0);
+                setValue("SeguroPorCuenta", cartaCreditoDetalle.SeguroPorCuenta || "");
+                setValue("GastosComisionesCorresponsal", cartaCreditoDetalle.GastosComisionesCorresponsal || "");
+                setValue("ConfirmacionBancoNotificador", cartaCreditoDetalle.ConfirmacionBancoNotificador || "");
+                setValue("TipoEmision", cartaCreditoDetalle.TipoEmision || "");
+                setValue("NumeroPeriodos", cartaCreditoDetalle.NumeroPeriodos || 0);
 
-      if (cartaCreditoDetalle.FechaApertura) {
-        var faDate = new Date(cartaCreditoDetalle.FechaApertura);
-        setValue("FechaApertura", faDate);
-      }
+                if (cartaCreditoDetalle.DocumentoANegociar != null) {
+                    let newDocsAgregados = Array<DocAgregado>();
+                    for (var i = 0; i < cartaCreditoDetalle.DocumentoANegociar?.length; i++) {
+                        newDocsAgregados.push({
+                            DocId: cartaCreditoDetalle.DocumentoANegociar[i].IdDocumento,
+                            Copias: cartaCreditoDetalle.DocumentoANegociar[i].Copias,
+                            Originales: cartaCreditoDetalle.DocumentoANegociar[i].Originales,
+                            Nombre: cartaCreditoDetalle.DocumentoANegociar[i].Nombre,
+                        });
 
-      if (cartaCreditoDetalle.FechaLimiteEmbarque) {
-        var fle = new Date(cartaCreditoDetalle.FechaLimiteEmbarque);
-        setValue("FechaLimiteEmbarque", fle);
-      }
+                        setDocsAgregados(newDocsAgregados);
+                    }
+                }
 
-      if (cartaCreditoDetalle.FechaVencimiento) {
-        var fv = new Date(cartaCreditoDetalle.FechaVencimiento);
-        setValue("FechaVencimiento", fv);
-      }
-    }
+                /*--*/
+                const timer2 = setTimeout(() => {
+                    setValue("CompradorId", cartaCreditoDetalle.CompradorId || 0);
+                }, 700);
+                /*--*/
+                if (cartaCreditoDetalle.FechaApertura) {
+                    var faDate = new Date(cartaCreditoDetalle.FechaApertura);
+                    setValue("FechaApertura", faDate);
+                }
+
+                if (cartaCreditoDetalle.FechaLimiteEmbarque) {
+                    var fle = new Date(cartaCreditoDetalle.FechaLimiteEmbarque);
+                    setValue("FechaLimiteEmbarque", fle);
+                }
+
+                if (cartaCreditoDetalle.FechaVencimiento) {
+                    var fv = new Date(cartaCreditoDetalle.FechaVencimiento);
+                    setValue("FechaVencimiento", fv);
+                }
+
+                setCargaTerminada(true);
+            }
+        }, 3000);
+
+
   }, [isSuccessDetalle]);
 
   useEffect(() => {
@@ -291,9 +322,64 @@ export const CartaCreditoEditar = () => {
       }
     }
   }, [isSuccess, isError, isLoading, error, responseData]);
+    /*
+    var cargado = false;
+    if (isLoading || !cartaCreditoDetalle ||
+        !catTiposActivo ||
+        !catProyectos ||
+        !catBancos ||
+        !catProveedores ||
+        !catEmpresas ||
+        !catAgentesAduanales ||
+        !catMonedas ||
+        !catCompradores ||
+        !catDocumentos ||
+        !catUsuarios) {
+        console.log("falta algun catalogo")
+    } else {
+        if (!cargado) {
+            cargado = true;
+            console.log("carta cargada inicio---------------------------------------------");
+            console.log(cartaCreditoDetalle, catTiposActivo,
+                catProyectos,
+                catBancos,
+                catProveedores,
+                catEmpresas,
+                catAgentesAduanales,
+                catMonedas,
+                catCompradores,
+                catDocumentos,
+                catUsuarios);
+
+            console.log("carta cargada fin---------------------------------------------");
+        }
+    }*/
+
+    /*if (isLoading || !cartaCreditoDetalle) {
+        console.log("b");
+        return (
+            <div>
+                <AdminLoadingActivity />
+            </div>
+        );
+    } else {
+        console.log("aaaaa");
+    }*/
+
+
+    const renderDetalle = (
+        <div>
+        </div>
+    );
+    const UnrenderDetalle = (
+        <div>
+            <CustomSpinner />
+        </div>
+    );
 
   return (
-    <>
+      <>
+          {!cargaTerminada ? UnrenderDetalle : renderDetalle}
       <div className="p-6">
         <div className="mb-4">
           <AdminBreadcrumbs
@@ -433,8 +519,8 @@ export const CartaCreditoEditar = () => {
           <Label value="Tipo de Pago" />
           <Select {...register("TipoPago")}>
             <option value="0">Seleccione Opción</option>
-            <option value="Estándar">Estándar</option>
-            <option value="A Terceros">A Terceros</option>
+                      <option value="Estandar">Estandar</option>
+            <option value="Terceros">Terceros</option>
             <option value="Otros">Otros</option>
           </Select>
         </div>
@@ -636,7 +722,7 @@ export const CartaCreditoEditar = () => {
         </div>
         <div className="md:col-span-3">
           <Label value="Número de Periodos" />
-          <TextInput type="number" />
+            <TextInput type="number" {...register("NumeroPeriodos", { valueAsNumber: true })} />
         </div>
         <div className="md:col-span-3">
           <Label value="Banco Corresponsal" />
@@ -668,7 +754,7 @@ export const CartaCreditoEditar = () => {
           </Select>
         </div>
         <div className="md:col-span-3">
-          <Label value="Confirmar banco notificador" />
+                  <Label value="Confirmación Banco Notificador" />
           <Select {...register("ConfirmacionBancoNotificador")}>
             <option>Seleccione opción</option>
             <option>Requerido</option>
@@ -679,9 +765,9 @@ export const CartaCreditoEditar = () => {
           <Label value="Tipo de Emisión" />
           <Select {...register("TipoEmision")}>
             <option>Seleccione Tipo de Emisión</option>
-            <option value="Línea de Crédito">Línea de Crédito</option>
-            <option value="Provisión de Fondos">Provisión de Fondos</option>
-            <option value="Provisión de Tesorería">Provisión de Tesorería</option>
+            <option value="Líneas de crédito">Líneas de crédito</option>
+                      <option value="Provisión de fondos">Provisión de fondos</option>
+                      <option value="Provisión de tesorería">Provisión de tesorería</option>
           </Select>
         </div>
       </div>
@@ -704,11 +790,11 @@ export const CartaCreditoEditar = () => {
           </div>
           <div className="md:col-span-2">
             <Label value="Copias" />
-            <TextInput onChange={(e) => setDocCopias(Number(e.target.value))} value={Number(docCopias)} />
+                      <TextInput type="number" onChange={(e) => setDocCopias(Number(e.target.value))} value={Number(docCopias)} />
           </div>
           <div className="md:col-span-2">
             <Label value="Originales" />
-            <TextInput onChange={(e) => setDocOriginales(Number(e.target.value))} value={Number(docOriginales)} />
+                      <TextInput type="number" onChange={(e) => setDocOriginales(Number(e.target.value))} value={Number(docOriginales)} />
           </div>
           <div className="md:col-span-2 pt-4">
             <Button onClick={_docAgregar}>Agregar</Button>

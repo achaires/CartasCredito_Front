@@ -377,10 +377,10 @@ const NuevaCartaComercial = () => {
         <div className="md:col-span-3">
           <Label value="Tipo de Pago" />
           <Select {...register("TipoPago")}>
-            <option value="0">Seleccione Opción</option>
-            <option value="Estándar">Estándar</option>
-            <option value="A Terceros">A Terceros</option>
-            <option value="Otros">Otros</option>
+                      <option value="0">Seleccione Opción</option>
+                      <option value="Estandar">Estandar</option>
+                      <option value="Terceros">Terceros</option>
+                      <option value="Otros">Otros</option>
           </Select>
         </div>
 
@@ -624,9 +624,9 @@ const NuevaCartaComercial = () => {
           <Label value="Tipo de Emisión" />
           <Select {...register("TipoEmision")}>
             <option>Seleccione Tipo de Emisión</option>
-            <option value="Línea de Crédito">Línea de Crédito</option>
-            <option value="Provisión de Fondos">Provisión de Fondos</option>
-            <option value="Provisión de Tesorería">Provisión de Tesorería</option>
+                      <option value="Líneas de crédito">Líneas de crédito</option>
+                      <option value="Provisión de fondos">Provisión de fondos</option>
+                      <option value="Provisión de tesorería">Provisión de tesorería</option>
           </Select>
         </div>
       </div>

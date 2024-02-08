@@ -9,8 +9,10 @@ export interface IReporte {
 
 export interface IReporteRequest {
   TipoReporteId: number;
-  EmpresaId: number | null;
-  FechaInicio: string;
-  FechaFin: string;
+    EmpresaId: number | null;
+    FechaInicio: string | null;
+    FechaFin: string | null;
+    FechaVencimientoInicio: string | null;
+    FechaVencimientoFin: string | null;
   FechaDivisas: string;
 }

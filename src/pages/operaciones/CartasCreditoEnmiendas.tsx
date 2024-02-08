@@ -220,7 +220,7 @@ export const CartasCreditoEnmiendas = () => {
           />
         </div>
         <div className="mb-4">
-          <AdminPageHeader title="Cartas de Crédito" subtitle="Emiendas" icon={faFileInvoiceDollar} />
+          <AdminPageHeader title="Cartas de Crédito" subtitle="Enmiendas" icon={faFileInvoiceDollar} />
         </div>
 
         <div className="mb-4 flex items-center justify-start gap-4">
@@ -283,7 +283,7 @@ export const CartasCreditoEnmiendas = () => {
             <div className="md:grid md:grid-cols-12 md:gap-12">
               <div className="md:col-span-5 flex items-center justify-between gap-4">
                 <Label value="Fecha de Vencimiento" />
-                <TextInput value={cartaCreditoDetalle.FechaVencimiento?.toString()} disabled />
+                <TextInput value={cartaCreditoDetalle.FechaVencimiento_str?.toString()} disabled />
               </div>
               <div className="md:col-span-5 md:col-start-7 flex items-center justify-between gap-4">
                 <Label value="Nueva Fecha de Vencimiento" />
@@ -309,7 +309,7 @@ export const CartasCreditoEnmiendas = () => {
             <div className="md:grid md:grid-cols-12 md:gap-12">
               <div className="md:col-span-5 flex items-center justify-between gap-4">
                 <Label value="Fecha Límite de Embarque" />
-                <TextInput value={cartaCreditoDetalle.FechaLimiteEmbarque?.toString()} disabled />
+                <TextInput value={cartaCreditoDetalle.FechaLimiteEmbarque_str?.toString()} disabled />
               </div>
               <div className="md:col-span-5 md:col-start-7 flex items-center justify-between gap-4">
                 <Label value="Nueva Fecha Límite de Embarque" />

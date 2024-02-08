@@ -17,9 +17,9 @@ const txtsExport = {
 };
 
 export const ReportesSabana = () => {
-  const { data: empresas, isLoading, error } = useGetEmpresasQuery();
-  const [getReportes, { data: reportesRsp, isLoading: isLoadingReportes, error: getReportesError }] = useLazyGetReportesQuery();
-  const [generarReporte, { data: genReporteRsp, isLoading: isLoadingGenReporte, error: genReporteError }] = useGenerarReporteMutation();
+    const { data: empresas, isLoading, error } = useGetEmpresasQuery();
+    const [getReportes, { data: reportesRsp, isLoading: isLoadingReportes, error: getReportesError }] = useLazyGetReportesQuery();
+    const [generarReporte, { data: genReporteRsp, isLoading: isLoadingGenReporte, error: genReporteError }] = useGenerarReporteMutation();
   const [convertirMoneda, { data: conversionRes, isLoading: conversionIsLoading }] = useConvertirMutation();
 
   const [empresaId, setEmpresaId] = useState(0);
@@ -34,6 +34,12 @@ export const ReportesSabana = () => {
     endDate: null,
   });
 
+
+    const [fechaVencimiento, setFechaVencimiento] = useState({
+        startDate: null,
+        endDate: null,
+    });
+
   // @ts-ignore
   const _handleDateChange = (newValue) => {
     setFechaRango(newValue);
@@ -42,7 +48,12 @@ export const ReportesSabana = () => {
   // @ts-ignore
   const _handleDivisaDateChange = (newValue) => {
     setFechaDivisas(newValue);
-  };
+    };
+
+      // @ts-ignore
+    const _handleVencimientoDateChange = (newValue) => {
+        setFechaVencimiento(newValue);
+    };
 
   const _onFechaDivisasChange = (val: string) => {
     // @ts-ignore
@@ -56,11 +67,19 @@ export const ReportesSabana = () => {
       return;
     }
 
-    if (fechaRango.startDate === null || fechaRango.endDate === null) {
-      toast.error("Seleccione rango de fecha");
+      /*if (tipoReporteId != 3 && tipoReporteId != 4) {
+          if (fechaRango.startDate === null || fechaRango.endDate === null) {
+              toast.error("Seleccione rango de fecha");
 
-      return;
-    }
+              return;
+          }
+      } else {
+          if (fechaVencimiento.startDate === null || fechaVencimiento.endDate === null) {
+              toast.error("Seleccione rango de fecha de vencimiento");
+
+              return;
+          }
+      }*/
 
     generarReporte({
       EmpresaId: empresaId,
@@ -68,6 +87,8 @@ export const ReportesSabana = () => {
       FechaInicio: fechaRango.startDate,
       FechaFin: fechaRango.endDate,
       FechaDivisas: fechaDivisas.startDate ?? "",
+        FechaVencimientoInicio: fechaVencimiento.startDate,
+        FechaVencimientoFin: fechaVencimiento.endDate,
     });
   };
 
@@ -137,7 +158,9 @@ export const ReportesSabana = () => {
               <option value="4">Vencimientos de Cartas de Crédito</option>
               <option value="5">Comisiones de Cartas de Crédito por Estatus</option>
               <option value="6">Líneas de Crédito Disponibles</option>
-              <option value="7">Total Outstanding</option>
+                          <option value="7">Total Outstanding</option>
+                          <option value="9">Comisiones de Cartas de Crédito (MXP)</option>
+                          <option value="10">Resumen de Cartas de Crédito</option>
               {/* <option value="9">Comisiones</option> */}
             </Select>
           </div>
@@ -149,6 +172,10 @@ export const ReportesSabana = () => {
             <Label value="Conversión de Divisas" />
             <Datepicker displayFormat="DD-MM-YYYY" value={fechaDivisas} onChange={_handleDivisaDateChange} showFooter={false} asSingle useRange={false} />
           </div>
+          <div className="flex-1 mb-4 lg:mb-0">
+            <Label value="Filtro de vencimiento" />
+            <Datepicker displayFormat="DD-MM-YYYY" value={fechaVencimiento} onChange={_handleVencimientoDateChange} showFooter={false} />
+          </div>
         </div>
 
         {!conversionIsLoading && conversionRes && <div className="mb-6">Utilizando tipo de cambio: {conversionRes?.DataString}</div>}
@@ -157,8 +184,15 @@ export const ReportesSabana = () => {
           <Button onClick={(e) => _onSubmit()}>Generar Reporte</Button>
         </div>
 
+
+              {isLoadingGenReporte && (
+                  <div className="mb-6 flex items-center justify-center">
+                      <Spinner size="xl" />
+                  </div>
+              )}
+
         <div className="mb-6">
-          {reportesRsp && !isLoadingReportes && (
+           {reportesRsp && !isLoadingReportes && (
             <DataGrid showBorders={true} showColumnLines={true} showRowLines={true} keyExpr="Id" dataSource={reportesRsp}>
               <Paging defaultPageSize={10} />
               <HeaderFilter visible={true} />

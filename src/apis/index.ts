@@ -29,3 +29,4 @@ export * from './tiposCobertura';
 export * from './tiposComisionApi';
 export * from './tiposPersonaFiscal';
 export * from './usersApi';
+export * from './tipoCambioApi';

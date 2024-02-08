@@ -116,13 +116,13 @@ export const BancoAgregar = () => {
             <div className="md:grid md:grid-cols-12 md:gap-6 mb-6">
               <div className="md:col-span-6">
                 <div className="mb-2">
-                  <Label htmlFor="nombre" value="Nombre" />
+                                  <Label htmlFor="nombre" value="Nombre *" />
                   <TextInput id="nombre" type="text" placeholder="Ingrese el nombre para el nuevo registro" required={true} {...register("Nombre")} />
                 </div>
               </div>
               <div className="md:col-span-6">
                 <div>
-                  <Label htmlFor="descripcion" value="Descripción" />
+                                  <Label htmlFor="descripcion" value="Descripción" />
                   <Textarea {...register("Descripcion")} id="descripcion" placeholder="" required={false} rows={4} />
                 </div>
               </div>

@@ -7,7 +7,7 @@ import { addToast } from "@/store/uiSlice";
 import { apiHost } from "@/utils/apiConfig";
 import { faFileInvoiceDollar, faCircleArrowLeft, faUpload, faDollarSign, faCheckCircle, faPlusCircle, faFilePen, faPrint } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Alert, Button, Label, Modal, TextInput, Textarea } from "flowbite-react";
+import { Alert, Button, Label, Modal, Table, TextInput, Textarea } from "flowbite-react";
 import numeral from "numeral";
 import { useCallback, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -15,7 +15,12 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 type EstatusButtonProps = {
   estatus: number;
 };
-
+type DocAgregado = {
+    DocId: number;
+    Originales: number;
+    Copias: number;
+    Nombre?: string;
+};
 export const EstatusButton = ({ estatus }: EstatusButtonProps) => {
   var btn = (
     <Button size="sm" className="bg-brandPrimary">
@@ -71,6 +76,7 @@ export const EstatusButton = ({ estatus }: EstatusButtonProps) => {
 };
 
 export const CartasDeCreditoDetalle = () => {
+    /**/
   const routeParams = useParams();
   const nav = useNavigate();
 
@@ -82,7 +88,9 @@ export const CartasDeCreditoDetalle = () => {
   const [getCartaComercial, { data: cartaCreditoDetalle, isLoading }] = useLazyGetCartaComercialQuery();
   const [updateEstatus, { data: updatedCartaCredito, isSuccess: updateEstatusSuccess, isError: updateEstatusError }] = useUpdateCartaComercialEstatusMutation();
   const [clonarCarta, { data: clonData, isSuccess: clonSuccess, isError: clonError }] = useClonarCartaComercialMutation();
-  const [getSwiftBase64, { data: swiftRsp, isSuccess: isSwiftSuccess, isError: isSwiftError }] = useLazyGetSwiftBase64Query();
+    const [getSwiftBase64, { data: swiftRsp, isSuccess: isSwiftSuccess, isError: isSwiftError }] = useLazyGetSwiftBase64Query();
+
+    const [docsAgregados, setDocsAgregados] = useState<Array<DocAgregado>>([]);
 
   const _handleClickOpenSwift = (cartaCreditoDetalle: ICartaComercial) => {
     if (cartaCreditoDetalle.Id) {
@@ -218,9 +226,44 @@ export const CartasDeCreditoDetalle = () => {
     }
   }, [updateEstatusSuccess, updateEstatusError, updatedCartaCredito]);
 
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            console.log('This will run after 1 second!');
+            if (cartaCreditoDetalle) {
+                if (cartaCreditoDetalle.DocumentoANegociar != null) {
+                    let newDocsAgregados = Array<DocAgregado>();
+                    for (var i = 0; i < cartaCreditoDetalle.DocumentoANegociar?.length; i++) {
+                        newDocsAgregados.push({
+                            DocId: cartaCreditoDetalle.DocumentoANegociar[i].IdDocumento,
+                            Copias: cartaCreditoDetalle.DocumentoANegociar[i].Copias,
+                            Originales: cartaCreditoDetalle.DocumentoANegociar[i].Originales,
+                            Nombre: cartaCreditoDetalle.DocumentoANegociar[i].Nombre,
+                        });
+
+                        setDocsAgregados(newDocsAgregados);
+                    }
+                }
+            }
+        }, 3000);
+
+
+    }, [isLoading]);
+
   if (isLoading || !cartaCreditoDetalle) {
     return <AdminLoadingActivity />;
-  }
+    }
+
+    const datosFecha = (
+        <div className="ctm-fechas">
+            <br />
+            <span>Estado: {cartaCreditoDetalle.Estado}</span>
+            <br />
+            <span>Fecha de registro: {cartaCreditoDetalle.Creado_str}</span>
+            <br />
+            <span>Fecha de ultima actualización: {cartaCreditoDetalle.Actualizado_str}</span>
+        </div>
+    );
 
   if (cartaCreditoDetalle && cartaCreditoDetalle.TipoCarta === "StandBy") {
     return (
@@ -251,7 +294,10 @@ export const CartasDeCreditoDetalle = () => {
         </div>
 
         <div className="md:grid md:grid-cols-12 md:gap-4 mb-6 px-6">
-          <div className="col-span-3">{cartaCreditoDetalle && cartaCreditoDetalle.Estatus && <EstatusButton estatus={cartaCreditoDetalle.Estatus} />}</div>
+                <div className="col-span-3">
+                    {cartaCreditoDetalle && cartaCreditoDetalle.Estatus && <EstatusButton estatus={cartaCreditoDetalle.Estatus} />}
+                    {datosFecha}
+                </div>
           <div className="col-span-9 flex justify-end gap-4 items-center">
             <Button className="bg-brandPrimary hover:bg-brandDark rounded-md" size="sm" onClick={() => _handleClonar()}>
               Usar Como Plantilla
@@ -288,7 +334,15 @@ export const CartasDeCreditoDetalle = () => {
             <div className="md:col-span-3">
               <Label value="Banco:" />
               <TextInput type="text" value={cartaCreditoDetalle.Banco} disabled />
-            </div>
+                    </div>
+                    <div className="md:col-span-3">
+                        <Label value="Banco Corresponsal:" />
+                        <TextInput type="text" value={cartaCreditoDetalle.BancoCorresponsal} disabled />
+                    </div>
+                    <div className="md:col-span-3">
+                        <Label value="Tipo de Cobertura:" />
+                        <TextInput type="text" value={cartaCreditoDetalle.TipoCobertura} disabled />
+                    </div>
             <div className="md:col-span-3">
               <Label value="Empresa:" />
               <TextInput type="text" value={cartaCreditoDetalle.Empresa} disabled />
@@ -307,15 +361,15 @@ export const CartasDeCreditoDetalle = () => {
             </div>
             <div className="md:col-span-3">
               <Label value="Fecha de Apertura:" />
-              <TextInput type="text" value={cartaCreditoDetalle.FechaApertura?.toString()} disabled />
+              <TextInput type="text" value={cartaCreditoDetalle.FechaApertura_str?.toString()} disabled />
             </div>
             <div className="md:col-span-3">
               <Label value="Fecha Límite de Embarque:" />
-              <TextInput type="text" value={cartaCreditoDetalle.FechaLimiteEmbarque?.toString()} disabled />
+              <TextInput type="text" value={cartaCreditoDetalle.FechaLimiteEmbarque_str?.toString()} disabled />
             </div>
             <div className="md:col-span-3">
               <Label value="Fecha de Vencimiento:" />
-              <TextInput type="text" value={cartaCreditoDetalle.FechaVencimiento?.toString()} disabled />
+              <TextInput type="text" value={cartaCreditoDetalle.FechaVencimiento_str?.toString()} disabled />
             </div>
           </div>
 
@@ -455,7 +509,8 @@ export const CartasDeCreditoDetalle = () => {
       </div>
 
       <div className="md:grid md:grid-cols-12 md:gap-4 mb-6 px-6">
-        <div className="col-span-3">{cartaCreditoDetalle && cartaCreditoDetalle.Estatus && <EstatusButton estatus={cartaCreditoDetalle.Estatus} />}</div>
+              <div className="col-span-3">{cartaCreditoDetalle && cartaCreditoDetalle.Estatus && <EstatusButton estatus={cartaCreditoDetalle.Estatus} />}
+                  {datosFecha}</div>
         <div className="col-span-9 flex justify-end gap-4 items-center">
           <Button className="bg-brandPrimary hover:bg-brandDark rounded-md" size="sm" onClick={() => _handleClonar()}>
             Usar Como Plantilla
@@ -563,19 +618,19 @@ export const CartasDeCreditoDetalle = () => {
           </div>
           <div className="md:col-span-3">
             <Label value="Fecha de Apertura:" />
-            <TextInput type="text" value={cartaCreditoDetalle.FechaApertura?.toString()} disabled />
+            <TextInput type="text" value={cartaCreditoDetalle.FechaApertura_str?.toString()} disabled />
           </div>
           <div className="md:col-span-3">
-            <Label value="Icoterm:" />
+            <Label value="Incoterm:" />
             <TextInput type="text" value={cartaCreditoDetalle.Incoterm?.toString()} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Fecha Límite de Embarque:" />
-            <TextInput type="text" value={cartaCreditoDetalle.FechaLimiteEmbarque?.toString()} disabled />
+                      <TextInput type="text" value={cartaCreditoDetalle.FechaLimiteEmbarque_str?.toString()} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Fecha de Vencimiento:" />
-            <TextInput type="text" value={cartaCreditoDetalle.FechaVencimiento?.toString()} disabled />
+                      <TextInput type="text" value={cartaCreditoDetalle.FechaVencimiento_str?.toString()} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Embarques Parciales:" />
@@ -657,15 +712,35 @@ export const CartasDeCreditoDetalle = () => {
             <TextInput type="text" value={cartaCreditoDetalle.GastosComisionesCorresponsal} disabled />
           </div>
           <div className="md:col-span-3">
-            <Label value="Confirmar Banco Notificador" />
+                      <Label value="Confirmación Banco Notificador" />
             <TextInput type="text" value={cartaCreditoDetalle.ConfirmacionBancoNotificador} disabled />
           </div>
           <div className="md:col-span-3">
             <Label value="Tipo de Emisión" />
             <TextInput type="text" value={cartaCreditoDetalle.TipoEmision} disabled />
           </div>
-        </div>
+              </div>
+
+              <Table className="mt-6">
+                  <Table.Head>
+                      <Table.HeadCell>Documentos a negociar</Table.HeadCell>
+                      <Table.HeadCell>Copias</Table.HeadCell>
+                      <Table.HeadCell>Originales</Table.HeadCell>
+                  </Table.Head>
+                  <Table.Body>
+                      {docsAgregados.map((item, index) => {
+                          return (
+                              <Table.Row key={index.toString()}>
+                                  <Table.Cell width="60%">{item.Nombre}</Table.Cell>
+                                  <Table.Cell>{item.Copias}</Table.Cell>
+                                  <Table.Cell>{item.Originales}</Table.Cell>
+                              </Table.Row>
+                          );
+                      })}
+                  </Table.Body>
+              </Table>
       </form>
+
 
       <div id="controles-footer" className="fixed bottom-0 left-0 w-full bg-brandPrimary p-6 text-white flex items-center justify-center gap-12">
         {/* <a href="#" className="flex flex-col items-center justify-around gap-2">
@@ -708,7 +783,7 @@ export const CartasDeCreditoDetalle = () => {
             </a>
           </>
         )}
-
+    
         {cartaCreditoDetalle && cartaCreditoDetalle.Estatus && Number(cartaCreditoDetalle.Estatus) !== 21 && (
           <Link to={`/operaciones/cartas-de-credito/${cartaCreditoDetalle.Id}/enmiendas`} className="flex flex-col items-center justify-around gap-2">
             <FontAwesomeIcon icon={faFilePen} className="h-6 text-white" />
